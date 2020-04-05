@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "685812975791",
+    "firebase_url": "https://project-tas.firebaseio.com",
+    "project_id": "project-tas",
+    "storage_bucket": "project-tas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685812975791:android:1dabe2024395aca770ec5a",
+        "android_client_info": {
+          "package_name": "hu.kohazidaniel.tas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685812975791-d1p2dtmmmvrrg0896ebtjrjiqt1r3roo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSM_OWt179SoEAsZ1w0nECuPGKGCPNjBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685812975791-d1p2dtmmmvrrg0896ebtjrjiqt1r3roo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

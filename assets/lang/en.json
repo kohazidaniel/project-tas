@@ -1,0 +1,20 @@
+{
+    "email": "Email",
+    "password": "Password",
+    "login": "Login",
+    "signup": "Sign up",
+    "back": "Back",
+    "full_name": "Name",
+    "validation_messages": {
+        "missing_email": "Missing email",
+        "missing_password": "Missing password",
+        "missing_full_name": "Missing name",
+        "weak_password": "Password must be at least 6 characters long",
+        "invalid_email": "Your email is invalid",
+        "email_already_in_use": "Email is already in use on different account",
+        "wrong_password": "Your password is wrong",
+        "user_not_found": "User with this email doesn't exist",
+        "user_disabled": "User with this email has been disabled",
+        "default": "An undefined Error happened"
+    }
+}

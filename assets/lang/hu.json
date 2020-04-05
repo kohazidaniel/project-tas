@@ -1,0 +1,20 @@
+{
+    "email": "Email",
+    "password": "Jelszó",
+    "login": "Bejelentkezés",
+    "signup": "Regisztráció",
+    "back": "Vissza",
+    "full_name": "Név",
+    "validation_messages": {
+        "missing_email": "Hiányzó email",
+        "missing_password": "Hiányzó jelszó",
+        "missing_full_name": "Hiányzó név",
+        "weak_password": "A jelszónak legalább 6 karakter hosszúnak kell lennie",
+        "invalid_email": "Helytelen email",
+        "email_already_in_use": "Ez az email már használatban van",
+        "wrong_password": "Helytelen jelszó",
+        "user_not_found": "Nem szerepel fiók ezzel az e-mail-címmel",
+        "user_disabled": "A fiók fel lett függesztve",
+        "default": "Valami hiba történt"
+    }
+}
