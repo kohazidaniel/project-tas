@@ -52,7 +52,6 @@ class SignUpView extends StatelessWidget {
                 controller: passwordController,
                 validationMessage: model.signUpPasswordErrorMessage,
               ),
-              verticalSpaceMedium,
               BusyButton(
                 title: FlutterI18n.translate(context, "signup"),
                 busy: model.busy,

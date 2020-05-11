@@ -5,6 +5,7 @@ import 'package:flutter_i18n/loaders/file_translation_loader.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/services/dialog_service.dart';
+import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/startup_view.dart';
 import 'managers/dialog_manager.dart';
 import 'ui/router.dart';
@@ -40,8 +41,10 @@ class MyApp extends StatelessWidget {
       ),
       navigatorKey: locator<NavigationService>().navigationKey,
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 9, 202, 172),
-        backgroundColor: Color.fromARGB(255, 26, 27, 30),
+        primaryColor: primaryColor,
+        backgroundColor: backgroundColor,
+        accentColor: primaryColor,
+        accentColorBrightness: Brightness.light,
         textTheme: Theme.of(context).textTheme.apply(
               fontFamily: 'Open Sans',
             ),

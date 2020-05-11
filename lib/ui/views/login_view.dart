@@ -62,7 +62,6 @@ class LoginView extends StatelessWidget {
                       controller: passwordController,
                       validationMessage: model.loginPasswordErrorMessage,
                     ),
-                    verticalSpaceMedium,
                     BusyButton(
                       title: FlutterI18n.translate(context, "login"),
                       busy: model.busy,

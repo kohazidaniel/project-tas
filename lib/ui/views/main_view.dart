@@ -1,0 +1,151 @@
+import 'dart:developer';
+
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flutter/material.dart';
+import 'package:provider_architecture/provider_architecture.dart';
+import 'package:tas/constants/route_names.dart';
+import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/views/cart_view.dart';
+import 'package:tas/ui/views/favourite_view.dart';
+import 'package:tas/ui/views/home_view.dart';
+import 'package:tas/ui/views/profile_view.dart';
+import 'package:tas/ui/widgets/badge.dart';
+import 'package:tas/viewmodels/main_view_model.dart';
+
+class MainView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new WillPopScope(
+      child: ViewModelProvider<MainViewModel>.withConsumer(
+          viewModel: MainViewModel(),
+          builder: (context, model, child) => Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  centerTitle: true,
+                  title: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 35,
+                        width: 35,
+                        child: FlareActor(
+                          "assets/flare/beer_drink.flr",
+                          alignment: Alignment.center,
+                          fit: BoxFit.contain,
+                          animation: "normal",
+                        ),
+                      ),
+                      Text(
+                        'TAS',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: primaryColor),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: backgroundColor,
+                  elevation: 0.0,
+                  actions: <Widget>[
+                    IconButton(
+                        color: primaryColor,
+                        icon: IconBadge(
+                          icon: Icons.notifications,
+                          size: 22.0,
+                          badgeValue: 0,
+                        ),
+                        onPressed: () {
+                          model.navigationService.navigateTo(NotificationViewRoute);
+                        }),
+                  ],
+                ),
+                body: PageView(
+                  physics: NeverScrollableScrollPhysics(),
+                  controller: model.pageController,
+                  onPageChanged: model.onPageChanged,
+                  children: <Widget>[
+                    HomeView(),
+                    FavouriteView(),
+                    CartView(),
+                    ProfileView()
+                  ],
+                ),
+                bottomNavigationBar: BottomAppBar(
+                  child: new Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SizedBox(width: 7),
+                      IconButton(
+                        icon: Icon(
+                          Icons.home,
+                          size: 24.0,
+                        ),
+                        color: model.page == 0
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
+                        onPressed: () => model.pageController.jumpToPage(0),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.favorite,
+                          size: 24.0,
+                        ),
+                        color: model.page == 1
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
+                        onPressed: () => model.pageController.jumpToPage(1),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.search,
+                          size: 0,
+                          color: backgroundColor,
+                        ),
+                        onPressed: () => {},
+                      ),
+                      IconButton(
+                        icon: IconBadge(
+                          icon: Icons.local_bar,
+                          size: 24.0,
+                          badgeValue: 0,
+                        ),
+                        color: model.page == 2
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
+                        onPressed: () => model.pageController.jumpToPage(2),
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.person,
+                          size: 24.0,
+                        ),
+                        color: model.page == 3
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
+                        onPressed: () => model.pageController.jumpToPage(3),
+                      ),
+                      SizedBox(width: 7),
+                    ],
+                  ),
+                  color: backgroundColor,
+                  shape: CircularNotchedRectangle(),
+                ),
+                floatingActionButtonAnimator:
+                    FloatingActionButtonAnimator.scaling,
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerDocked,
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: primaryColor,
+                  elevation: 4.0,
+                  child: Icon(
+                    Icons.search,
+                    color: backgroundColor,
+                  ),
+                  onPressed: () => log("pressed"),
+                ),
+              )),
+      onWillPop: () async => false,
+    );
+  }
+}

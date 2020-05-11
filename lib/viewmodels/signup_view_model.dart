@@ -61,7 +61,7 @@ class SignUpViewModel extends BaseModel {
 
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(HomeViewRoute);
+        _navigationService.navigateTo(MainViewRoute);
       } else {
         signUpPasswordErrorMessage =
             FlutterI18n.translate(context, "validation_messages.default");

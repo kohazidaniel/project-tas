@@ -32,6 +32,7 @@ dependencies:
     flare_flutter: ^2.0.2
     flutter_i18n: ^0.13.0
     cloud_firestore: ^0.13.4+2
+    animations: ^1.0.0+5
 
 dev_dependencies:
     flutter_test:
@@ -52,6 +53,7 @@ flutter:
         - assets/flare/beer_drink.flr
         - assets/lang/hu.json
         - assets/lang/en.json
+        - assets/images/cm4.jpg
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.io/assets-and-images/#resolution-aware.

@@ -1,7 +1,8 @@
-import 'package:tas/ui/views/home_view.dart';
+import 'package:tas/ui/views/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/ui/views/login_view.dart';
+import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/views/signup_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -16,10 +17,15 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: SignUpView(),
       );
-    case HomeViewRoute:
+    case MainViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: HomeView(),
+        viewToShow: MainView(),
+      );
+    case NotificationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: NotificationView(),
       );
     default:
       return MaterialPageRoute(

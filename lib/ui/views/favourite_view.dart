@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-class HomeView extends StatelessWidget {
+
+class FavouriteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("Kezdőlap"),
+      child: Text("Kedvencek"),
     );
   }
 }
