@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/viewmodels/notifications_view_model.dart';
@@ -22,7 +23,7 @@ class NotificationView extends StatelessWidget {
                 ),
                 centerTitle: true,
                 title: Text(
-                  "Notifications",
+                  FlutterI18n.translate(context, "notifications"),
                   style: TextStyle(color: primaryColor),
                 ),
                 elevation: 0.0,

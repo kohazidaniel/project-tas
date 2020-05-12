@@ -33,6 +33,8 @@ dependencies:
     flutter_i18n: ^0.13.0
     cloud_firestore: ^0.13.4+2
     animations: ^1.0.0+5
+    carousel_slider: ^2.1.0
+    font_awesome_flutter: ^8.8.1
 
 dev_dependencies:
     flutter_test:

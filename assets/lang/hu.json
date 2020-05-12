@@ -11,6 +11,8 @@
     "select_language": "Válassz nyelvet",
     "english": "Angol",
     "hungarian": "Magyar",
+    "notifications": "Értesítések",
+    "item": "darab",
     "validation_messages": {
         "missing_email": "Hiányzó email",
         "missing_password": "Hiányzó jelszó",

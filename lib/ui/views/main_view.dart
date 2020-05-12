@@ -1,13 +1,12 @@
-import 'dart:developer';
-
+import 'package:animations/animations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:tas/constants/route_names.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/cart_view.dart';
 import 'package:tas/ui/views/favourite_view.dart';
 import 'package:tas/ui/views/home_view.dart';
+import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/views/profile_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/viewmodels/main_view_model.dart';
@@ -47,16 +46,30 @@ class MainView extends StatelessWidget {
                   backgroundColor: backgroundColor,
                   elevation: 0.0,
                   actions: <Widget>[
-                    IconButton(
-                        color: primaryColor,
-                        icon: IconBadge(
-                          icon: Icons.notifications,
-                          size: 22.0,
-                          badgeValue: 0,
+                    OpenContainer(
+                      transitionType: model.transitionType,
+                      openBuilder: (BuildContext context, VoidCallback _) {
+                        return NotificationView();
+                      },
+                      closedElevation: 0.0,
+                      closedShape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(50 / 2),
                         ),
-                        onPressed: () {
-                          model.navigationService.navigateTo(NotificationViewRoute);
-                        }),
+                      ),
+                      openColor: primaryColor,
+                      closedBuilder:
+                          (BuildContext context, VoidCallback openContainer) {
+                        return Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: IconBadge(
+                              icon: Icons.notifications,
+                              size: 22.0,
+                              badgeValue: 0,
+                              color: primaryColor,
+                            ));
+                      },
+                    ),
                   ],
                 ),
                 body: PageView(
@@ -106,7 +119,7 @@ class MainView extends StatelessWidget {
                       ),
                       IconButton(
                         icon: IconBadge(
-                          icon: Icons.local_bar,
+                          icon: Icons.shopping_cart,
                           size: 24.0,
                           badgeValue: 0,
                         ),
@@ -142,7 +155,7 @@ class MainView extends StatelessWidget {
                     Icons.search,
                     color: backgroundColor,
                   ),
-                  onPressed: () => log("pressed"),
+                  onPressed: () => {},
                 ),
               )),
       onWillPop: () async => false,

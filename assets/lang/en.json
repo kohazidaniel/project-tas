@@ -10,6 +10,8 @@
     "select_language": "Select language",
     "english": "English",
     "hungarian": "Hungarian",
+    "notifications": "Notifications",
+    "item": "item",
     "account_information": "Account information",
     "validation_messages": {
         "missing_email": "Missing email",
