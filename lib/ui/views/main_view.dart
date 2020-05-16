@@ -97,7 +97,9 @@ class MainView extends StatelessWidget {
                         color: model.page == 0
                             ? primaryColor
                             : primaryColor.withOpacity(0.5),
-                        onPressed: () => model.pageController.jumpToPage(0),
+                        onPressed: () => model.pageController.animateToPage(0,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut),
                       ),
                       IconButton(
                         icon: Icon(
@@ -107,7 +109,9 @@ class MainView extends StatelessWidget {
                         color: model.page == 1
                             ? primaryColor
                             : primaryColor.withOpacity(0.5),
-                        onPressed: () => model.pageController.jumpToPage(1),
+                        onPressed: () => model.pageController.animateToPage(1,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut),
                       ),
                       IconButton(
                         icon: Icon(
@@ -121,12 +125,14 @@ class MainView extends StatelessWidget {
                         icon: IconBadge(
                           icon: Icons.shopping_cart,
                           size: 24.0,
-                          badgeValue: 0,
+                          badgeValue: 5,
                         ),
                         color: model.page == 2
                             ? primaryColor
                             : primaryColor.withOpacity(0.5),
-                        onPressed: () => model.pageController.jumpToPage(2),
+                        onPressed: () => model.pageController.animateToPage(2,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut),
                       ),
                       IconButton(
                         icon: Icon(
@@ -136,7 +142,9 @@ class MainView extends StatelessWidget {
                         color: model.page == 3
                             ? primaryColor
                             : primaryColor.withOpacity(0.5),
-                        onPressed: () => model.pageController.jumpToPage(3),
+                        onPressed: () => model.pageController.animateToPage(3,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut),
                       ),
                       SizedBox(width: 7),
                     ],

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:tas/constants/route_names.dart';
+import 'package:tas/locator.dart';
+import 'package:tas/services/navigation_service.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
 
 class GridCard extends StatelessWidget {
+
+  final NavigationService _navigationService = locator<NavigationService>();
 
   final String name;
   final String img;
@@ -90,7 +96,7 @@ class GridCard extends StatelessWidget {
                 ),
 
                 Text(
-                  " $rating ($raters Értékelés)",
+                  "$rating ($raters ${FlutterI18n.translate(context, "review")})",
                   style: TextStyle(
                     fontSize: 11.0,
                   ),
@@ -104,6 +110,7 @@ class GridCard extends StatelessWidget {
         ],
       ),
       onTap: (){
+        _navigationService.navigateTo(PlaceDetailsViewRoute);
       },
     );
   }

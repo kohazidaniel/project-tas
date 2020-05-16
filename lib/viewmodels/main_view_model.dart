@@ -7,7 +7,8 @@ import 'package:tas/viewmodels/base_model.dart';
 class MainViewModel extends BaseModel {
   final NavigationService _navigationService = locator<NavigationService>();
   final PageController _pageController = PageController();
-  final ContainerTransitionType _transitionType = ContainerTransitionType.fadeThrough;
+  final ContainerTransitionType _transitionType =
+      ContainerTransitionType.fadeThrough;
   int _page = 0;
 
   ContainerTransitionType get transitionType => _transitionType;

@@ -7,7 +7,7 @@ class NavigationService {
   GlobalKey<NavigatorState> get navigationKey => _navigationKey;
 
   // Kivesz a veremből egy útvonalat
-  bool pop() {
+  void pop() {
     return _navigationKey.currentState.pop();
   }
 

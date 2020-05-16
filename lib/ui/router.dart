@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/ui/views/login_view.dart';
 import 'package:tas/ui/views/notification_view.dart';
+import 'package:tas/ui/views/place_details_view.dart';
 import 'package:tas/ui/views/signup_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -27,6 +28,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: NotificationView(),
       );
+    case PlaceDetailsViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: PlaceDetailsView(),
+      );
     default:
       return MaterialPageRoute(
           builder: (_) => Scaffold(
@@ -37,30 +43,34 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 }
 
 PageRoute _getPageRoute({String routeName, Widget viewToShow}) {
-  return _FadeRoute(child: viewToShow, routeName: routeName);
+  return SlideRightRoute(widget: viewToShow);
 }
 
-class _FadeRoute extends PageRouteBuilder {
-  final Widget child;
-  final String routeName;
-  _FadeRoute({this.child, this.routeName})
-      : super(
-          settings: RouteSettings(name: routeName),
-          pageBuilder: (
-            BuildContext context,
+class SlideRightRoute extends PageRouteBuilder {
+  final Widget widget;
+  SlideRightRoute({this.widget})
+      : super(pageBuilder: (BuildContext context, Animation<double> animation,
+            Animation<double> secondaryAnimation) {
+          return widget;
+        }, transitionsBuilder: (BuildContext context,
             Animation<double> animation,
             Animation<double> secondaryAnimation,
-          ) =>
-              child,
-          transitionsBuilder: (
-            BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child,
-          ) =>
-              FadeTransition(
-            opacity: animation,
+            Widget child) {
+          return new SlideTransition(
+            position: new Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(
+                parent: animation,
+                curve: Interval(
+                  0.00,
+                  0.50,
+                  curve: Curves.easeInOutQuad,
+                ),
+              ),
+            ),
             child: child,
-          ),
-        );
+          );
+        });
 }

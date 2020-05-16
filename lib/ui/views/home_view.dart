@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tas/ui/shared/app_colors.dart';
@@ -37,7 +38,7 @@ class HomeView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "Kiemelt helyek",
+                          FlutterI18n.translate(context, "recommended_places"),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
@@ -63,7 +64,7 @@ class HomeView extends StatelessWidget {
                     ),
                     verticalSpaceSmall,
                     Text(
-                      "Kategóriák",
+                      FlutterI18n.translate(context, "categories"),
                       style: TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.w800,
@@ -91,7 +92,7 @@ class HomeView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Text(
-                          "Helyek a közelben",
+                          FlutterI18n.translate(context, "places_nearby"),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
