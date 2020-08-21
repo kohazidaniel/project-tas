@@ -7,8 +7,8 @@ import 'package:tas/viewmodels/favourite_view_model.dart';
 
 final List<String> imgList = [
   "https://etterem.hu/img/max960/p1343n/1362941577-3763.jpg",
-  "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/50822266_609808429469138_4704702644847902720_o.jpg?_nc_cat=107&_nc_sid=e3f864&_nc_ohc=oZovCR1K5JUAX8NW1dC&_nc_ht=scontent-frt3-1.xx&oh=3d5c108b8adf8fa2848952b0c9ced361&oe=5EE005F3",
-  "https://scontent-frt3-1.xx.fbcdn.net/v/t1.0-9/31120_122420111114653_4554442_n.jpg?_nc_cat=102&_nc_sid=09cbfe&_nc_ohc=NL_RN1qT2O4AX87N_7S&_nc_ht=scontent-frt3-1.xx&oh=b5aa96fc4f14f9a502b3bebd161916be&oe=5EE03FF3"
+  "https://drinkunion.hu/attachment/0001/861_copy_3_telthaz.jpg",
+  "https://etterem.hu/img/x/p406n/1353704056-2962.jpg"
 ];
 
 class FavouriteView extends StatelessWidget {
