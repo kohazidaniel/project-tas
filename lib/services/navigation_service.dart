@@ -17,7 +17,7 @@ class NavigationService {
         .pushNamed(routeName, arguments: arguments);
   }
 
-  // A bejelentkezési felületre navigál, és kivaszi az összes korábbi útvonalat a veremből
+  // A bejelentkezési felületre navigál, és kiveszi az összes korábbi útvonalat a veremből
   Future<dynamic> navigateToLoginPage() {
     return _navigationKey.currentState.pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => LoginView()),

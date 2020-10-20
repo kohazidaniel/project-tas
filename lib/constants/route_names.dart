@@ -3,4 +3,7 @@ const String SignUpViewRoute = "SignUpView";
 const String MainViewRoute = "MainView";
 const String NotificationViewRoute = "NotificationView";
 const String PlaceDetailsViewRoute = "PlaceDetailsView";
+const String RestaurantMainViewRoute = "RestaurantMainView";
+const String StartUpViewRoute = "StartUpView";
+const String NewRestaurantStepperViewRoute = "NewRestaurantStepperView";
 // Generate the views here

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
-import 'package:tas/viewmodels/profile_view_model.dart';
+import 'package:tas/viewmodels/customer/profile_view_model.dart';
 
 class ProfileView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<ProfileViewModel>.withConsumer(
@@ -125,8 +124,7 @@ class ProfileView extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    subtitle:
-                        Text(model.getLanguage(context)),
+                    subtitle: Text(model.getLanguage(context)),
                     trailing: IconButton(
                       icon: Icon(
                         Icons.edit,

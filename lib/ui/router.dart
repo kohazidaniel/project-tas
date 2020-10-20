@@ -1,10 +1,13 @@
-import 'package:tas/ui/views/main_view.dart';
+import 'package:tas/ui/views/customer/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/ui/views/login_view.dart';
 import 'package:tas/ui/views/notification_view.dart';
-import 'package:tas/ui/views/place_details_view.dart';
+import 'package:tas/ui/views/customer/place_details_view.dart';
+import 'package:tas/ui/views/restaurant/new_restaurant_stepper_view.dart';
+import 'package:tas/ui/views/restaurant/restaurant_main_view.dart';
 import 'package:tas/ui/views/signup_view.dart';
+import 'package:tas/ui/views/startup_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -32,6 +35,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: PlaceDetailsView(),
+      );
+    case RestaurantMainViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: RestaurantMainView(),
+      );
+    case StartUpViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: StartUpView(),
+      );
+    case NewRestaurantStepperViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: NewRestaurantStepperView(),
       );
     default:
       return MaterialPageRoute(

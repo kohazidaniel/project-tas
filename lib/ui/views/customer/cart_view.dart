@@ -5,7 +5,7 @@ import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/ui/widgets/cart_item.dart';
-import 'package:tas/viewmodels/cart_view_model.dart';
+import 'package:tas/viewmodels/customer/cart_view_model.dart';
 
 List cartItems = [
   {

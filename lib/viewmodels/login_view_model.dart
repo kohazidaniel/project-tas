@@ -53,7 +53,7 @@ class LoginViewModel extends BaseModel {
 
     if (result is bool && result) {
       if (result) {
-        _navigationService.navigateTo(MainViewRoute);
+        _navigationService.navigateTo(StartUpViewRoute);
       } else {
         loginPasswordErrorMessage =
             FlutterI18n.translate(context, "validation_messages.default");

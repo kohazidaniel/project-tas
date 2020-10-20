@@ -3,13 +3,13 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
-import 'package:tas/ui/views/cart_view.dart';
-import 'package:tas/ui/views/favourite_view.dart';
-import 'package:tas/ui/views/home_view.dart';
+import 'package:tas/ui/views/customer/cart_view.dart';
+import 'package:tas/ui/views/customer/favourite_view.dart';
+import 'package:tas/ui/views/customer/home_view.dart';
 import 'package:tas/ui/views/notification_view.dart';
-import 'package:tas/ui/views/profile_view.dart';
+import 'package:tas/ui/views/customer/profile_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
-import 'package:tas/viewmodels/main_view_model.dart';
+import 'package:tas/viewmodels/customer/main_view_model.dart';
 
 class MainView extends StatelessWidget {
   @override

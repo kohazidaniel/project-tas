@@ -2,6 +2,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
+import 'package:tas/ui/widgets/expansion_list.dart';
 import 'package:tas/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -52,6 +53,11 @@ class SignUpView extends StatelessWidget {
                 controller: passwordController,
                 validationMessage: model.signUpPasswordErrorMessage,
               ),
+              ExpansionList<String>(
+                  items: model.selectableRoles,
+                  title: model.selectedRole,
+                  onItemSelected: model.setSelectedRole),
+              verticalSpaceMedium,
               BusyButton(
                 title: FlutterI18n.translate(context, "signup"),
                 busy: model.busy,

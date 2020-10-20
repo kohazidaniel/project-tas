@@ -16,6 +16,18 @@ class SignUpViewModel extends BaseModel {
 
   SignUpViewModel(BuildContext context) {
     this.context = context;
+    this._selectableRoles = ['Vendég', 'Vendéglátóhely'];
+    this._selectedRole = _selectableRoles[0];
+  }
+
+  List<String> _selectableRoles;
+  List<String> get selectableRoles => _selectableRoles;
+  String _selectedRole;
+  String get selectedRole => _selectedRole;
+
+  void setSelectedRole(dynamic role) {
+    _selectedRole = role;
+    notifyListeners();
   }
 
   String signUpEmailErrorMessage;
@@ -51,17 +63,20 @@ class SignUpViewModel extends BaseModel {
       return;
     }
 
+    var userRoleValue = _selectedRole == 'Vendég' ? 'CUSTOMER' : 'RESTAURANT';
+
     var result = await _authenticationService.signUpWithEmail(
       email: email.trim(),
       password: password,
       fullName: fullName,
+      userRole: userRoleValue,
     );
 
     setBusy(false);
 
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(MainViewRoute);
+        _navigationService.navigateTo(StartUpViewRoute);
       } else {
         signUpPasswordErrorMessage =
             FlutterI18n.translate(context, "validation_messages.default");

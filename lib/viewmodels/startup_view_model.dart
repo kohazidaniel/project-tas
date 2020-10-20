@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/services/auth_service.dart';
@@ -12,7 +14,14 @@ class StartUpViewModel extends BaseModel {
     var hasLoggedInUser = await _authService.isUserLoggedIn();
 
     if (hasLoggedInUser) {
-      _navigationService.navigateTo(MainViewRoute);
+      switch (_authService.currentUser.userRole) {
+        case "CUSTOMER":
+          _navigationService.navigateTo(MainViewRoute);
+          break;
+        case 'RESTAURANT':
+          _navigationService.navigateTo(NewRestaurantStepperViewRoute);
+          break;
+      }
     } else {
       _navigationService.navigateTo(LoginViewRoute);
     }

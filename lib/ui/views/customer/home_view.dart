@@ -8,7 +8,7 @@ import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/category_card.dart';
 import 'package:tas/ui/widgets/grid_card.dart';
 import 'package:tas/ui/widgets/slider_item.dart';
-import 'package:tas/viewmodels/home_view_model.dart';
+import 'package:tas/viewmodels/customer/home_view_model.dart';
 
 final List<String> imgList = [
   "https://etterem.hu/img/max960/p1343n/1362941577-3763.jpg",

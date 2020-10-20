@@ -3,7 +3,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/grid_card.dart';
-import 'package:tas/viewmodels/favourite_view_model.dart';
+import 'package:tas/viewmodels/customer/favourite_view_model.dart';
 
 final List<String> imgList = [
   "https://etterem.hu/img/max960/p1343n/1362941577-3763.jpg",
