@@ -7,14 +7,16 @@ class CategoryCard extends StatefulWidget {
   final String items;
   final Function tap;
   final bool isHome;
+  final bool isSelected;
 
   CategoryCard(
       {Key key,
       @required this.icon,
       @required this.title,
-      @required this.items,
+      this.items,
       this.tap,
-      this.isHome})
+      this.isHome = false,
+      this.isSelected = false})
       : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class _HomeCategoryState extends State<CategoryCard> {
     return InkWell(
       onTap: widget.isHome ? () {} : widget.tap,
       child: Card(
+        color: widget.isSelected ? Colors.greenAccent : Colors.white,
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         elevation: 4.0,
@@ -54,13 +57,17 @@ class _HomeCategoryState extends State<CategoryCard> {
                       fontSize: 17,
                     ),
                   ),
-                  Text(
-                    widget.items + " " + FlutterI18n.translate(context, "item"),
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 10,
-                    ),
-                  ),
+                  widget.items != null
+                      ? Text(
+                          widget.items +
+                              " " +
+                              FlutterI18n.translate(context, "item"),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10,
+                          ),
+                        )
+                      : Container(),
                   SizedBox(height: 5),
                 ],
               ),

@@ -49,36 +49,44 @@ class LoginViewModel extends BaseModel {
       password: password,
     );
 
+    print(result);
+
     setBusy(false);
 
     if (result is bool && result) {
       if (result) {
         _navigationService.navigateTo(StartUpViewRoute);
       } else {
-        loginPasswordErrorMessage =
-            FlutterI18n.translate(context, "validation_messages.default");
+        loginPasswordErrorMessage = FlutterI18n.translate(
+          context,
+          "validation_messages.default",
+        );
       }
-    } else if (result is PlatformException) {
+    } else {
       switch (result.code) {
-        case "ERROR_INVALID_EMAIL":
+        case "invalid-email":
           loginEmailErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.invalid_email");
+            context,
+            "validation_messages.invalid_email",
+          );
           break;
-        case "ERROR_WRONG_PASSWORD":
+        case "wrong-password":
           loginPasswordErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.wrong_password");
+            context,
+            "validation_messages.wrong_password",
+          );
           break;
-        case "ERROR_USER_NOT_FOUND":
+        case "user-not-found":
           loginEmailErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.user_not_found");
-          break;
-        case "ERROR_USER_DISABLED":
-          loginEmailErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.user_disabled");
+            context,
+            "validation_messages.user_not_found",
+          );
           break;
         default:
-          loginPasswordErrorMessage =
-              FlutterI18n.translate(context, "validation_messages.default");
+          loginPasswordErrorMessage = FlutterI18n.translate(
+            context,
+            "validation_messages.default",
+          );
       }
     }
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_i18n/flutter_i18n_delegate.dart';
@@ -12,6 +13,8 @@ import 'ui/router.dart';
 import 'locator.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   setupLocator();
   final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
     translationLoader: FileTranslationLoader(
@@ -20,9 +23,7 @@ void main() async {
         basePath: 'assets/lang',
         forcedLocale: Locale('hu')),
   );
-  WidgetsFlutterBinding.ensureInitialized();
   await flutterI18nDelegate.load(null);
-
   runApp(MyApp(flutterI18nDelegate));
 }
 

@@ -14,71 +14,76 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-    sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
-    flutter:
-        sdk: flutter
-    flutter_localizations:
-        sdk: flutter
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
-    cupertino_icons: ^0.1.2
-    http: ^0.12.0+2
-    async: ^2.0.8
-    get_it: ^3.0.0+1
-    provider: ^3.2.0
-    provider_architecture: ^1.0.3
-    firebase_auth: ^0.15.3
-    flare_flutter: ^2.0.2
-    flutter_i18n: ^0.13.0
-    cloud_firestore: ^0.13.4+2
-    animations: ^1.0.0+5
-    carousel_slider: ^2.1.0
-    font_awesome_flutter: ^8.8.1
+  cupertino_icons: ^0.1.2
+  http: ^0.12.0+2
+  async: ^2.0.8
+  get_it: ^3.0.0+1
+  provider: ^3.2.0
+  provider_architecture: ^1.0.3
+  flare_flutter: ^2.0.2
+  flutter_i18n: ^0.13.0
+  animations: ^1.0.0+5
+  carousel_slider: ^2.1.0
+  font_awesome_flutter: ^8.8.1
+  image_picker: ^0.6.7+12
+  uuid: ^2.2.2
+  cloud_firestore: ^0.14.1+3
+  firebase_auth: ^0.18.1+2
+  firebase_storage: ^4.0.1
+  firebase_core: ^0.5.0+1
+  firebase_analytics: ^6.0.2
 
 dev_dependencies:
-    flutter_test:
-        sdk: flutter
+  flutter_test:
+    sdk: flutter
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-    # The following line ensures that the Material Icons font is
-    # included with your application, so that you can use the icons in
-    # the material Icons class.
-    uses-material-design: true
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
 
-    # To add assets to your application, add an assets section, like this:
-    assets:
-        - assets/flare/beer_drink.flr
-        - assets/lang/hu.json
-        - assets/lang/en.json
-        - assets/images/cm4.jpg
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/flare/beer_drink.flr
+    - assets/lang/hu.json
+    - assets/lang/en.json
+    - assets/images/cm4.jpg
 
-    # An image asset can refer to one or more resolution-specific "variants", see
-    # https://flutter.io/assets-and-images/#resolution-aware.
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.io/assets-and-images/#resolution-aware.
 
-    # For details regarding adding assets from package dependencies, see
-    # https://flutter.io/assets-and-images/#from-packages
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.io/assets-and-images/#from-packages
 
-    # To add custom fonts to your application, add a fonts section here,
-    # in this "flutter" section. Each entry in this list should have a
-    # "family" key with the font family name, and a "fonts" key with a
-    # list giving the asset and other descriptors for the font. For
-    # example:
-    fonts:
-        - family: Open Sans
-          fonts:
-              - asset: assets/fonts/OpenSans-Bold.ttf
-                weight: 700
-              - asset: assets/fonts/OpenSans-ExtraBold.ttf
-                weight: 800
-              - asset: assets/fonts/OpenSans-Light.ttf
-                weight: 300
-              - asset: assets/fonts/OpenSans-Regular.ttf
-                weight: 400
-    #
-    # For details regarding fonts from package dependencies,
-    # see https://flutter.io/custom-fonts/#from-packages
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Open Sans
+      fonts:
+        - asset: assets/fonts/OpenSans-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/OpenSans-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/OpenSans-Light.ttf
+          weight: 300
+        - asset: assets/fonts/OpenSans-Regular.ttf
+          weight: 400
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.io/custom-fonts/#from-packages

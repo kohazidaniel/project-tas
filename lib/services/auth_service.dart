@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tas/locator.dart';
-import 'package:tas/models/user.dart';
+import 'package:tas/models/tas_user.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 
@@ -10,8 +10,8 @@ class AuthService {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  User _currentUser;
-  User get currentUser => _currentUser;
+  TasUser _currentUser;
+  TasUser get currentUser => _currentUser;
 
   Future loginWithEmail({
     @required String email,
@@ -41,7 +41,7 @@ class AuthService {
         password: password,
       );
 
-      _currentUser = User(
+      _currentUser = TasUser(
         id: result.user.uid,
         email: email,
         fullName: fullName,
@@ -65,12 +65,12 @@ class AuthService {
 
   // Lekéri hogy be van e jelenetkezve a felhasználó, ha igen akkor az adatait is lekéri
   Future<bool> isUserLoggedIn() async {
-    var user = await _firebaseAuth.currentUser();
+    var user = _firebaseAuth.currentUser;
     await _populateCurrentUser(user);
     return user != null;
   }
 
-  Future _populateCurrentUser(FirebaseUser user) async {
+  Future _populateCurrentUser(User user) async {
     if (user != null) {
       _currentUser = await _firestoreService.getUser(user.uid);
     }

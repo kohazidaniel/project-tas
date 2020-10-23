@@ -30,9 +30,9 @@ class SignUpViewModel extends BaseModel {
     notifyListeners();
   }
 
-  String signUpEmailErrorMessage;
-  String signUpPasswordErrorMessage;
-  String fullNameEmailErrorMessage;
+  String signUpEmailErrorMessage = "";
+  String signUpPasswordErrorMessage = "";
+  String fullNameEmailErrorMessage = "";
 
   Future signUp({
     @required String email,
@@ -76,30 +76,38 @@ class SignUpViewModel extends BaseModel {
 
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(StartUpViewRoute);
+        _navigationService.navigateTo(
+          StartUpViewRoute,
+          arguments: {
+            'isNewRestaurant': true,
+          },
+        );
       } else {
-        signUpPasswordErrorMessage =
-            FlutterI18n.translate(context, "validation_messages.default");
+        signUpPasswordErrorMessage = FlutterI18n.translate(
+          context,
+          "validation_messages.default",
+        );
       }
-    } else if (result is PlatformException) {
+    } else {
       switch (result.code) {
-        case "ERROR_WEAK_PASSWORD":
+        case "weak-password":
           signUpPasswordErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.weak_password");
+            context,
+            "validation_messages.weak_password",
+          );
           break;
-        case "ERROR_INVALID_EMAIL":
+        case "invalid-email":
           signUpEmailErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.invalid_email");
+            context,
+            "validation_messages.invalid_email",
+          );
           break;
-        case "ERROR_EMAIL_ALREADY_IN_USE":
+        case "email-already-in-use":
           signUpEmailErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.email_already_in_use");
+            context,
+            "validation_messages.email_already_in_use",
+          );
           break;
-        case "ERROR_INVALID_CREDENTIAL":
-          signUpEmailErrorMessage = FlutterI18n.translate(
-              context, "validation_messages.invalid_email");
-          break;
-
         default:
           signUpPasswordErrorMessage = "An undefined Error happened.";
       }
@@ -107,7 +115,8 @@ class SignUpViewModel extends BaseModel {
   }
 
   void resetMessages() {
-    signUpEmailErrorMessage = null;
-    signUpPasswordErrorMessage = null;
+    signUpEmailErrorMessage = "";
+    signUpPasswordErrorMessage = "";
+    fullNameEmailErrorMessage = "";
   }
 }

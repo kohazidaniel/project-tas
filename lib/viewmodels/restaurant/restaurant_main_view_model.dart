@@ -9,11 +9,12 @@ class RestaurantMainViewModel extends BaseModel {
   final PageController _pageController = PageController();
   final ContainerTransitionType _transitionType =
       ContainerTransitionType.fadeThrough;
-  int _page = 0;
 
   ContainerTransitionType get transitionType => _transitionType;
   NavigationService get navigationService => _navigationService;
   PageController get pageController => _pageController;
+
+  int _page = 0;
   int get page => _page;
 
   void onPageChanged(int page) {

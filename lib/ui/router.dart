@@ -42,9 +42,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         viewToShow: RestaurantMainView(),
       );
     case StartUpViewRoute:
+      Map navArguments = settings.arguments as Map;
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: StartUpView(),
+        viewToShow: StartUpView(
+          isNewRestaurant: navArguments['isNewRestaurant'] ?? false,
+        ),
       );
     case NewRestaurantStepperViewRoute:
       return _getPageRoute(
@@ -53,10 +56,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     default:
       return MaterialPageRoute(
-          builder: (_) => Scaffold(
-                body: Center(
-                    child: Text('No route defined for ${settings.name}')),
-              ));
+        builder: (_) => Scaffold(
+          body: Center(
+            child: Text('No route defined for ${settings.name}'),
+          ),
+        ),
+      );
   }
 }
 
@@ -67,28 +72,31 @@ PageRoute _getPageRoute({String routeName, Widget viewToShow}) {
 class SlideRightRoute extends PageRouteBuilder {
   final Widget widget;
   SlideRightRoute({this.widget})
-      : super(pageBuilder: (BuildContext context, Animation<double> animation,
-            Animation<double> secondaryAnimation) {
-          return widget;
-        }, transitionsBuilder: (BuildContext context,
-            Animation<double> animation,
-            Animation<double> secondaryAnimation,
-            Widget child) {
-          return new SlideTransition(
-            position: new Tween<Offset>(
-              begin: const Offset(1.0, 0.0),
-              end: Offset.zero,
-            ).animate(
-              CurvedAnimation(
-                parent: animation,
-                curve: Interval(
-                  0.00,
-                  0.50,
-                  curve: Curves.easeInOutQuad,
+      : super(
+          pageBuilder: (BuildContext context, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            return widget;
+          },
+          transitionsBuilder: (BuildContext context,
+              Animation<double> animation,
+              Animation<double> secondaryAnimation,
+              Widget child) {
+            return new SlideTransition(
+              position: new Tween<Offset>(
+                begin: const Offset(1.0, 0.0),
+                end: Offset.zero,
+              ).animate(
+                CurvedAnimation(
+                  parent: animation,
+                  curve: Interval(
+                    0.00,
+                    0.50,
+                    curve: Curves.easeInOutQuad,
+                  ),
                 ),
               ),
-            ),
-            child: child,
-          );
-        });
+              child: child,
+            );
+          },
+        );
 }

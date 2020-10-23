@@ -1,12 +1,12 @@
-class User {
+class TasUser {
   final String id;
   final String fullName;
   final String email;
   final String userRole;
 
-  User({this.id, this.fullName, this.email, this.userRole});
+  TasUser({this.id, this.fullName, this.email, this.userRole});
 
-  User.fromData(Map<String, dynamic> data)
+  TasUser.fromData(Map<String, dynamic> data)
       : id = data['id'],
         fullName = data['fullName'],
         email = data['email'],

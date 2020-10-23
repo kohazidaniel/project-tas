@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:tas/locator.dart';
-import 'package:tas/models/user.dart';
+import 'package:tas/models/tas_user.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
 
 class ProfileViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
 
-  User getUser() {
+  TasUser getUser() {
     return _authService.currentUser;
   }
 
