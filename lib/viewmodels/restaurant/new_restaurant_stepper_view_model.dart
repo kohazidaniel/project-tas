@@ -1,11 +1,18 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
+import 'package:tas/services/navigation_service.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:uuid/uuid.dart';
@@ -13,11 +20,14 @@ import 'package:uuid/uuid.dart';
 class NewRestaurantStepperViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authenticationService = locator<AuthService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+
+  final addressController = TextEditingController();
 
   int _currStep = 0;
   int get currStep => _currStep;
 
-  int _totalSteps = 3;
+  int _totalSteps = 4;
   int get totalSteps => _totalSteps;
 
   List<String> _selectedTypes = [];
@@ -26,10 +36,13 @@ class NewRestaurantStepperViewModel extends BaseModel {
   File _imageFile;
   File get imageFile => _imageFile;
 
+  Position currentPosition;
+
   String restaurantNameErrorMessage = "";
   String restaurantDescriptionErrorMessage = "";
   String restaurantTypeErrorMessage = "";
   String restaurantImageErrorMessage = "";
+  String restaurantAddressErrorMessage = "";
 
   ImagePicker picker = ImagePicker();
 
@@ -72,24 +85,68 @@ class NewRestaurantStepperViewModel extends BaseModel {
       return;
     }
 
-    String uploadedFileName = await uploadImageToFirebase();
+    if (addressController.text.isEmpty) {
+      restaurantAddressErrorMessage = "Kérlek add meg a hely címét";
+      notifyListeners();
+      setBusy(false);
+      return;
+    }
+
+    if (currentPosition == null) {
+      try {
+        List<Location> locations = await locationFromAddress(
+          addressController.text,
+        );
+        currentPosition = Position(
+          latitude: locations[0].latitude,
+          longitude: locations[0].longitude,
+        );
+      } catch (e) {
+        restaurantAddressErrorMessage = "Helytelen cím";
+        notifyListeners();
+        setBusy(false);
+        return;
+      }
+    }
+
+    String thumbnailUrl = await uploadImageToFirebase();
     String restaurantId = Uuid().v4();
 
     await _firestoreService.createRestaurant(
       new Restaurant(
-        ownerId: _authenticationService.currentUser.id,
-        id: restaurantId,
-        name: restaurantName,
-        description: restaurantDescription,
-        restaurantTypes: _selectedTypes,
-        thumbnail: uploadedFileName,
-      ),
+          ownerId: _authenticationService.currentUser.id,
+          id: restaurantId,
+          name: restaurantName,
+          description: restaurantDescription,
+          restaurantTypes: _selectedTypes,
+          thumbnailUrl: thumbnailUrl,
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+          address: addressController.text),
     );
 
     setBusy(false);
+
+    _navigationService.navigateTo(RestaurantMainViewRoute);
   }
 
-  Future<String> uploadImageToFirebase() async {
+  Future getCurrentPosition() async {
+    currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      currentPosition.latitude,
+      currentPosition.longitude,
+    );
+
+    addressController.text =
+        '${placemarks[0].postalCode} ${placemarks[0].locality}, ${placemarks[0].thoroughfare} ${placemarks[0].subThoroughfare}';
+
+    notifyListeners();
+  }
+
+  FutureOr<dynamic> uploadImageToFirebase() async {
     String fileName = basename(_imageFile.path);
     StorageReference firebaseStorageRef = FirebaseStorage.instance
         .ref()
@@ -97,7 +154,7 @@ class NewRestaurantStepperViewModel extends BaseModel {
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
 
-    return taskSnapshot.ref.getName();
+    return taskSnapshot.ref.getDownloadURL();
   }
 
   Future pickImage() async {
@@ -141,5 +198,6 @@ class NewRestaurantStepperViewModel extends BaseModel {
     restaurantDescriptionErrorMessage = "";
     restaurantTypeErrorMessage = "";
     restaurantImageErrorMessage = "";
+    restaurantAddressErrorMessage = "";
   }
 }

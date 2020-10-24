@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
@@ -33,9 +35,28 @@ class FirestoreService {
     }
   }
 
-  Future isNewRestaurant(TasUser user) async {
+  Future doesUserHaveRestaurant(String userId) async {
+    if (userId == null) return false;
     try {
-      await _restaurants.where('ownerId', isEqualTo: user.id).get();
+      var restaurantData = await _restaurants
+          .where(
+            'ownerId',
+            isEqualTo: userId,
+          )
+          .get();
+
+      return restaurantData.docs.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<Restaurant> getUserRestaurant(String userId) async {
+    try {
+      var restaurantData =
+          await _restaurants.where('ownerId', isEqualTo: userId).get();
+
+      return Restaurant.fromData(restaurantData.docs.first.data());
     } catch (e) {
       return e.message;
     }

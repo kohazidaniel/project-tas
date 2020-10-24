@@ -5,15 +5,13 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/viewmodels/startup_view_model.dart';
 
 class StartUpView extends StatelessWidget {
-  final bool isNewRestaurant;
-  const StartUpView({Key key, this.isNewRestaurant = false}) : super(key: key);
+  const StartUpView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<StartUpViewModel>.withConsumer(
       viewModel: StartUpViewModel(),
       onModelReady: (model) {
-        model.setIsNewRestaurant(isNewRestaurant);
         model.handleStartUpLogic();
       },
       builder: (context, model, child) => Scaffold(

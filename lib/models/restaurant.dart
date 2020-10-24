@@ -3,8 +3,11 @@ class Restaurant {
   final String ownerId;
   final String name;
   final String description;
-  final List<String> restaurantTypes;
-  final String thumbnail;
+  final List<dynamic> restaurantTypes;
+  final String thumbnailUrl;
+  final double latitude;
+  final double longitude;
+  final String address;
 
   Restaurant({
     this.id,
@@ -12,7 +15,10 @@ class Restaurant {
     this.name,
     this.description,
     this.restaurantTypes,
-    this.thumbnail,
+    this.thumbnailUrl,
+    this.latitude,
+    this.longitude,
+    this.address,
   });
 
   Restaurant.fromData(Map<String, dynamic> data)
@@ -21,7 +27,10 @@ class Restaurant {
         name = data['name'],
         description = data['description'],
         restaurantTypes = data['restaurantTypes'],
-        thumbnail = data['thumbnail'];
+        thumbnailUrl = data['thumbnailUrl'],
+        latitude = data['latitude'],
+        longitude = data['longitude'],
+        address = data['address'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,7 +39,10 @@ class Restaurant {
       'name': name,
       'description': description,
       'restaurantTypes': restaurantTypes,
-      'thumbnail': thumbnail,
+      'thumbnailUrl': thumbnailUrl,
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': address,
     };
   }
 }

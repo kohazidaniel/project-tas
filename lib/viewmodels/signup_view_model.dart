@@ -76,12 +76,7 @@ class SignUpViewModel extends BaseModel {
 
     if (result is bool) {
       if (result) {
-        _navigationService.navigateTo(
-          StartUpViewRoute,
-          arguments: {
-            'isNewRestaurant': true,
-          },
-        );
+        _navigationService.navigateTo(StartUpViewRoute);
       } else {
         signUpPasswordErrorMessage = FlutterI18n.translate(
           context,

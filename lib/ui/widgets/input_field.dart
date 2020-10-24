@@ -10,6 +10,8 @@ class InputField extends StatefulWidget {
   final TextEditingController controller;
   final TextInputType textInputType;
   final bool password;
+  final bool isLocation;
+  final Function getLocation;
   final bool isReadOnly;
   final String placeholder;
   final String validationMessage;
@@ -22,21 +24,24 @@ class InputField extends StatefulWidget {
   final Function(String) onChanged;
   final TextInputFormatter formatter;
 
-  InputField(
-      {@required this.controller,
-      @required this.placeholder,
-      this.enterPressed,
-      this.fieldFocusNode,
-      this.nextFocusNode,
-      this.additionalNote,
-      this.onChanged,
-      this.formatter,
-      this.validationMessage,
-      this.textInputAction = TextInputAction.next,
-      this.textInputType = TextInputType.text,
-      this.password = false,
-      this.isReadOnly = false,
-      this.smallVersion = false});
+  InputField({
+    @required this.controller,
+    @required this.placeholder,
+    this.enterPressed,
+    this.fieldFocusNode,
+    this.nextFocusNode,
+    this.additionalNote,
+    this.onChanged,
+    this.formatter,
+    this.validationMessage,
+    this.textInputAction = TextInputAction.next,
+    this.textInputType = TextInputType.text,
+    this.password = false,
+    this.isReadOnly = false,
+    this.smallVersion = false,
+    this.getLocation,
+    this.isLocation = false,
+  });
 
   @override
   _InputFieldState createState() => _InputFieldState();
@@ -105,6 +110,17 @@ class _InputFieldState extends State<InputField> {
                         child: Icon(isPassword
                             ? Icons.visibility
                             : Icons.visibility_off))
+                    : Container(),
+              ),
+              GestureDetector(
+                onTap: widget.getLocation,
+                child: widget.isLocation
+                    ? Container(
+                        width: fieldHeight,
+                        height: fieldHeight,
+                        alignment: Alignment.centerRight,
+                        child: Icon(Icons.my_location_outlined),
+                      )
                     : Container(),
               ),
             ],
