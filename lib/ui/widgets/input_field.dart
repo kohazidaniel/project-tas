@@ -23,6 +23,7 @@ class InputField extends StatefulWidget {
   final String additionalNote;
   final Function(String) onChanged;
   final TextInputFormatter formatter;
+  final String inputPostfix;
 
   InputField({
     @required this.controller,
@@ -34,6 +35,7 @@ class InputField extends StatefulWidget {
     this.onChanged,
     this.formatter,
     this.validationMessage,
+    this.inputPostfix,
     this.textInputAction = TextInputAction.next,
     this.textInputType = TextInputType.text,
     this.password = false,
@@ -98,6 +100,9 @@ class _InputFieldState extends State<InputField> {
                           TextStyle(fontSize: widget.smallVersion ? 12 : 15)),
                 ),
               ),
+              widget.inputPostfix != null
+                  ? Text(widget.inputPostfix)
+                  : Container(),
               GestureDetector(
                 onTap: () => setState(() {
                   isPassword = !isPassword;

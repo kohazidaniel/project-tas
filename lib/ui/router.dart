@@ -7,6 +7,7 @@ import 'package:tas/ui/views/customer/place_details_view.dart';
 import 'package:tas/ui/views/restaurant/new_restaurant_stepper_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_main_view.dart';
 import 'package:tas/ui/views/signup_view.dart';
+import 'package:tas/ui/views/startup_view.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -43,6 +44,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case StartUpViewRoute:
       return _getPageRoute(
         routeName: settings.name,
+        viewToShow: StartUpView(),
       );
     case NewRestaurantStepperViewRoute:
       return _getPageRoute(

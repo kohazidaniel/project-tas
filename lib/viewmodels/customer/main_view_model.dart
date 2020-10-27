@@ -1,17 +1,9 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tas/locator.dart';
-import 'package:tas/services/navigation_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
 
 class MainViewModel extends BaseModel {
-  final NavigationService _navigationService = locator<NavigationService>();
   final PageController _pageController = PageController();
-  final ContainerTransitionType _transitionType =
-      ContainerTransitionType.fadeThrough;
 
-  ContainerTransitionType get transitionType => _transitionType;
-  NavigationService get navigationService => _navigationService;
   PageController get pageController => _pageController;
 
   int _page = 0;

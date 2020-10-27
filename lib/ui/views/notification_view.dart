@@ -16,7 +16,7 @@ class NotificationView extends StatelessWidget {
                 backgroundColor: backgroundColor,
                 leading: IconButton(
                   icon: Icon(
-                    Icons.keyboard_backspace,
+                    Icons.keyboard_arrow_left,
                     color: primaryColor,
                   ),
                   onPressed: () => model.navigationService.pop(),

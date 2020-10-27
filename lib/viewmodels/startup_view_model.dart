@@ -27,6 +27,9 @@ class StartUpViewModel extends BaseModel {
             _navigationService.navigateTo(NewRestaurantStepperViewRoute);
           }
           break;
+        default:
+          _navigationService.navigateTo(LoginViewRoute);
+          break;
       }
     } else {
       _navigationService.navigateTo(LoginViewRoute);

@@ -27,102 +27,105 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<HomeViewModel>.withConsumer(
-        viewModel: HomeViewModel(),
-        builder: (context, model, child) => Scaffold(
-            backgroundColor: backgroundColor,
-            body: Padding(
-                padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-                child: ListView(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          FlutterI18n.translate(context, "recommended_places"),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
+      viewModel: HomeViewModel(),
+      builder: (context, model, child) => Scaffold(
+        backgroundColor: backgroundColor,
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+          child: ListView(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    FlutterI18n.translate(context, "recommended_places"),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
                     ),
-                    verticalSpaceTiny,
-                    CarouselSlider(
-                      options: CarouselOptions(
-                        height: MediaQuery.of(context).size.height / 2.4,
-                        viewportFraction: 1.0,
-                        autoPlay: false,
-                      ),
-                      items: imgList
-                          .map((item) => SliderItem(
-                              name: "Y söröző",
-                              img: item,
-                              isFav: true,
-                              rating: 5,
-                              raters: 125))
-                          .toList(),
+                  ),
+                ],
+              ),
+              verticalSpaceTiny,
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height / 2.4,
+                  viewportFraction: 1.0,
+                  autoPlay: false,
+                ),
+                items: imgList
+                    .map((item) => SliderItem(
+                        name: "Y söröző",
+                        img: item,
+                        isFav: true,
+                        rating: 5,
+                        raters: 125))
+                    .toList(),
+              ),
+              verticalSpaceSmall,
+              Text(
+                FlutterI18n.translate(context, "categories"),
+                style: TextStyle(
+                  fontSize: 23,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Container(
+                height: 65.0,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: categories == null ? 0 : categories.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Map cat = categories[index];
+                    return CategoryCard(
+                      icon: cat['icon'],
+                      title: cat['name'],
+                      items: cat['items'].toString(),
+                      isHome: true,
+                    );
+                  },
+                ),
+              ),
+              verticalSpaceSmall,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    FlutterI18n.translate(context, "places_nearby"),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
                     ),
-                    verticalSpaceSmall,
-                    Text(
-                      FlutterI18n.translate(context, "categories"),
-                      style: TextStyle(
-                        fontSize: 23,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    Container(
-                      height: 65.0,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemCount: categories == null ? 0 : categories.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Map cat = categories[index];
-                          return CategoryCard(
-                            icon: cat['icon'],
-                            title: cat['name'],
-                            items: cat['items'].toString(),
-                            isHome: true,
-                          );
-                        },
-                      ),
-                    ),
-                    verticalSpaceSmall,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          FlutterI18n.translate(context, "places_nearby"),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
-                    ),
-                    verticalSpaceTiny,
-                    GridView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: MediaQuery.of(context).size.width /
-                            (MediaQuery.of(context).size.height / 1.25),
-                      ),
-                      itemCount: imgList == null ? 0 : imgList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GridCard(
-                          img: imgList[index],
-                          isFav: false,
-                          name: "Kocsma",
-                          rating: 5.0,
-                          raters: 23,
-                        );
-                      },
-                    ),
-                    SizedBox(height: 30),
-                  ],
-                ))));
+                  ),
+                ],
+              ),
+              verticalSpaceTiny,
+              GridView.builder(
+                shrinkWrap: true,
+                primary: false,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: MediaQuery.of(context).size.width /
+                      (MediaQuery.of(context).size.height / 1.25),
+                ),
+                itemCount: imgList == null ? 0 : imgList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return GridCard(
+                    img: imgList[index],
+                    isFav: false,
+                    name: "Kocsma",
+                    rating: 5.0,
+                    raters: 23,
+                  );
+                },
+              ),
+              SizedBox(height: 30),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

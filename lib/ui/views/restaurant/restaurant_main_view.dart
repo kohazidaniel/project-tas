@@ -5,6 +5,8 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/notification_view.dart';
+import 'package:tas/ui/views/profile_view.dart';
+import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_main_view_model.dart';
 
@@ -58,7 +60,7 @@ class RestaurantMainView extends StatelessWidget {
             elevation: 0.0,
             actions: <Widget>[
               OpenContainer(
-                transitionType: model.transitionType,
+                transitionType: ContainerTransitionType.fadeThrough,
                 openBuilder: (BuildContext context, VoidCallback _) {
                   return NotificationView();
                 },
@@ -92,33 +94,61 @@ class RestaurantMainView extends StatelessWidget {
                   height: 100,
                   child: DrawerHeader(
                     child: model.userRestaurant != null
-                        ? Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  model.userRestaurant.thumbnailUrl,
+                        ? InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) {
+                                  return ProfileView();
+                                }),
+                              );
+                            },
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    model.userRestaurant.thumbnailUrl,
+                                  ),
+                                  radius: 20.0,
+                                  backgroundColor: Colors.grey[200],
                                 ),
-                                radius: 25.0,
-                              ),
-                              horizontalSpaceSmall,
-                              Flexible(
-                                child: Text(
-                                  model.userRestaurant.name,
-                                  style: TextStyle(fontSize: 18.0),
-                                ),
-                              )
-                            ],
+                                horizontalSpaceSmall,
+                                Flexible(
+                                  child: Text(
+                                    model.userRestaurant.name,
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           )
                         : Container(),
                   ),
                 ),
                 ListTile(
-                  title: Text('Item 1'),
-                  onTap: () {},
-                ),
-                ListTile(
-                  title: Text('Item 2'),
-                  onTap: () {},
+                  leading: Icon(
+                    Icons.menu_book,
+                    color: Colors.grey[800],
+                  ),
+                  title: Text(
+                    'Itallap',
+                    style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return RestaurantMenuView();
+                      }),
+                    );
+                  },
                 ),
               ],
             ),

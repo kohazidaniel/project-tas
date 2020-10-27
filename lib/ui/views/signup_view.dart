@@ -54,9 +54,10 @@ class SignUpView extends StatelessWidget {
                 validationMessage: model.signUpPasswordErrorMessage,
               ),
               ExpansionList<String>(
-                  items: model.selectableRoles,
-                  title: model.selectedRole,
-                  onItemSelected: model.setSelectedRole),
+                items: model.selectableRoles,
+                title: model.selectedRole,
+                onItemSelected: model.setSelectedRole,
+              ),
               verticalSpaceMedium,
               BusyButton(
                 title: FlutterI18n.translate(context, "signup"),

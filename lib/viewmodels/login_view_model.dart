@@ -92,7 +92,7 @@ class LoginViewModel extends BaseModel {
   }
 
   void resetMessages() {
-    loginEmailErrorMessage = null;
-    loginPasswordErrorMessage = null;
+    loginEmailErrorMessage = "";
+    loginPasswordErrorMessage = "";
   }
 }
