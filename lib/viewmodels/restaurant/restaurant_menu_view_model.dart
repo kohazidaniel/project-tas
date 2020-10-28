@@ -1,18 +1,15 @@
-import 'dart:io';
+import 'package:tas/locator.dart';
+import 'package:tas/services/auth_service.dart';
+import 'package:tas/services/firestore_service.dart';
+import 'package:tas/viewmodels/base_model.dart';
 
-import 'package:image_picker/image_picker.dart';
-import 'package:tas/viewmodels/restaurant/restaurant_main_view_model.dart';
+class RestaurantMenuViewModel extends BaseModel {
+  final FirestoreService _firestoreService = locator<FirestoreService>();
+  final AuthService _authenticationService = locator<AuthService>();
 
-class RestaurantMenuViewModel extends RestaurantMainViewModel {
-  File _imageFile;
-  File get imageFile => _imageFile;
-
-  ImagePicker picker = ImagePicker();
-
-  Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    _imageFile = File(pickedFile.path);
-    notifyListeners();
+  Future getMenuItems() async {
+    await _firestoreService.getMenuItems(
+      _authenticationService.userRestaurant.id,
+    );
   }
 }

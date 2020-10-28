@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tas/locator.dart';
+import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
@@ -12,6 +13,9 @@ class AuthService {
 
   TasUser _currentUser;
   TasUser get currentUser => _currentUser;
+
+  Restaurant _userRestaurant;
+  Restaurant get userRestaurant => _userRestaurant;
 
   Future loginWithEmail({
     @required String email,
@@ -73,6 +77,10 @@ class AuthService {
   Future _populateCurrentUser(User user) async {
     if (user != null) {
       _currentUser = await _firestoreService.getUser(user.uid);
+      if (_currentUser.userRole == 'RESTAURANT') {
+        _userRestaurant =
+            await _firestoreService.getUserRestaurant(_currentUser.id);
+      }
     }
   }
 }

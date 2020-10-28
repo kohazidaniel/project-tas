@@ -11,6 +11,7 @@ import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/services/auth_service.dart';
+import 'package:tas/services/cloud_storage_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
@@ -20,6 +21,8 @@ class NewRestaurantStepperViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authenticationService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final CloudStorageService _cloudStorageService =
+      locator<CloudStorageService>();
 
   final addressController = TextEditingController();
 
@@ -52,43 +55,11 @@ class NewRestaurantStepperViewModel extends BaseModel {
     resetMessages();
     setBusy(true);
 
-    if (restaurantName.isEmpty) {
-      _currStep = 0;
-      restaurantNameErrorMessage = "Add meg a hely nevét";
-      notifyListeners();
-      setBusy(false);
-      return;
-    }
-
-    if (restaurantDescription.isEmpty) {
-      _currStep = 1;
-      restaurantDescriptionErrorMessage = "Adj meg egy menő leírást";
-      notifyListeners();
-      setBusy(false);
-      return;
-    }
-
-    if (_selectedTypes.isEmpty) {
-      _currStep = 2;
-      restaurantTypeErrorMessage = "Legalább 1 típust válassz ki";
-      notifyListeners();
-      setBusy(false);
-      return;
-    }
-
-    if (_imageFile == null) {
-      _currStep = 3;
-      restaurantImageErrorMessage = "Kérlek válassz ki egy képet";
-      notifyListeners();
-      setBusy(false);
-      return;
-    }
+    int validationErrorOnStep;
 
     if (addressController.text.isEmpty) {
+      validationErrorOnStep = 4;
       restaurantAddressErrorMessage = "Kérlek add meg a hely címét";
-      notifyListeners();
-      setBusy(false);
-      return;
     }
 
     if (currentPosition == null) {
@@ -101,32 +72,62 @@ class NewRestaurantStepperViewModel extends BaseModel {
           longitude: locations[0].longitude,
         );
       } catch (e) {
+        validationErrorOnStep = 4;
         restaurantAddressErrorMessage = "Helytelen cím";
-        notifyListeners();
-        setBusy(false);
-        return;
       }
     }
 
-    String thumbnailUrl = await uploadImageToFirebase();
-    String restaurantId = Uuid().v4();
+    if (_imageFile == null) {
+      validationErrorOnStep = 3;
+      restaurantImageErrorMessage = "Kérlek válassz ki egy képet";
+    }
 
-    await _firestoreService.createRestaurant(
-      new Restaurant(
-          ownerId: _authenticationService.currentUser.id,
-          id: restaurantId,
-          name: restaurantName,
-          description: restaurantDescription,
-          restaurantTypes: _selectedTypes,
-          thumbnailUrl: thumbnailUrl,
-          latitude: currentPosition.latitude,
-          longitude: currentPosition.longitude,
-          address: addressController.text),
-    );
+    if (_selectedTypes.isEmpty) {
+      validationErrorOnStep = 2;
+      restaurantTypeErrorMessage = "Legalább 1 típust válassz ki";
+    }
 
-    setBusy(false);
+    if (restaurantDescription.isEmpty) {
+      validationErrorOnStep = 1;
+      restaurantDescriptionErrorMessage = "Adj meg egy menő leírást";
+    }
 
-    _navigationService.navigateTo(RestaurantMainViewRoute);
+    if (restaurantName.isEmpty) {
+      validationErrorOnStep = 0;
+      restaurantNameErrorMessage = "Add meg a hely nevét";
+    }
+
+    if (validationErrorOnStep != null) {
+      _currStep = validationErrorOnStep;
+      notifyListeners();
+      setBusy(false);
+    } else {
+      String restaurantId = Uuid().v4();
+      CloudStorageResult result = await _cloudStorageService.uploadImage(
+        imageToUpload: _imageFile,
+        title: '$restaurantName-thumbnail',
+        path: 'restaurants/thumbnails/',
+      );
+
+      await _firestoreService.createRestaurant(
+        new Restaurant(
+            ownerId: _authenticationService.currentUser.id,
+            id: restaurantId,
+            name: restaurantName,
+            description: restaurantDescription,
+            restaurantTypes: _selectedTypes,
+            thumbnailUrl: result.imageUrl,
+            latitude: currentPosition.latitude,
+            longitude: currentPosition.longitude,
+            address: addressController.text),
+      );
+
+      _authenticationService.isUserLoggedIn();
+
+      setBusy(false);
+
+      _navigationService.navigateTo(RestaurantMainViewRoute);
+    }
   }
 
   Future getCurrentPosition() async {
@@ -143,17 +144,6 @@ class NewRestaurantStepperViewModel extends BaseModel {
         '${placemarks[0].postalCode} ${placemarks[0].locality}, ${placemarks[0].thoroughfare} ${placemarks[0].subThoroughfare}';
 
     notifyListeners();
-  }
-
-  FutureOr<dynamic> uploadImageToFirebase() async {
-    String fileName = basename(_imageFile.path);
-    StorageReference firebaseStorageRef = FirebaseStorage.instance
-        .ref()
-        .child('restaurants/thumbnails/$fileName');
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(_imageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-
-    return taskSnapshot.ref.getDownloadURL();
   }
 
   Future pickImage() async {

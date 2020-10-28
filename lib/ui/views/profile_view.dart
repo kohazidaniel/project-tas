@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/viewmodels/profile_view_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfileView extends StatelessWidget {
   @override
@@ -135,9 +138,8 @@ class ProfileView extends StatelessWidget {
                 },
               ),
             ),
-            model.userRestaurant != null
+            model.getUser().userRole == 'RESTAURANT'
                 ? Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(height: 15.0),
@@ -151,41 +153,97 @@ class ProfileView extends StatelessWidget {
                           ),
                         ),
                       ),
-                      ListTile(
-                        title: Text(
-                          'Név',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        subtitle: Text(
-                          model.userRestaurant.name,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Leírás',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        subtitle: Text(
-                          model.userRestaurant.description,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Cím',
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        subtitle: Text(
-                          model.userRestaurant.address,
-                        ),
+                      FutureBuilder<Restaurant>(
+                        future: model.getRestaurant(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Restaurant> snapshot) {
+                          List<Widget> children;
+                          if (snapshot.hasData) {
+                            children = <Widget>[
+                              ListTile(
+                                title: Text(
+                                  'Név',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data.name,
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Leírás',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data.description,
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Cím',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data.address,
+                                ),
+                              ),
+                            ];
+                          } else {
+                            children = <Widget>[
+                              Shimmer.fromColors(
+                                baseColor: Colors.grey[300],
+                                highlightColor: Colors.grey[100],
+                                enabled: true,
+                                child: Padding(
+                                  padding: EdgeInsets.all(15.0),
+                                  child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: 3,
+                                    itemBuilder: (_, __) => Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 60.0,
+                                          height: 17.0,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Container(
+                                          width: 150.0,
+                                          height: 16.0,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          height: 15,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ];
+                          }
+                          return Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: children,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   )

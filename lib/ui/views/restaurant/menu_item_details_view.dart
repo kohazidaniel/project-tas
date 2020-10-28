@@ -6,13 +6,19 @@ import 'package:tas/ui/shared/shared_styles.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/input_field.dart';
-import 'package:tas/viewmodels/restaurant/restaurant_menu_view_model.dart';
+import 'package:tas/ui/widgets/note_text.dart';
+import 'package:tas/ui/widgets/show_up.dart';
+import 'package:tas/viewmodels/restaurant/menu_item_details_view_model.dart';
 
 class MenuItemDetailsView extends StatelessWidget {
+  final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final priceController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<RestaurantMenuViewModel>.withConsumer(
-      viewModel: RestaurantMenuViewModel(),
+    return ViewModelProvider<MenuItemDetailsViewModel>.withConsumer(
+      viewModel: MenuItemDetailsViewModel(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -69,17 +75,20 @@ class MenuItemDetailsView extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 InputField(
-                  controller: null,
+                  validationMessage: model.nameErrorMessage,
+                  controller: nameController,
                   placeholder: 'Név',
                 ),
                 horizontalSpaceSmall,
                 InputField(
-                  controller: null,
+                  validationMessage: model.descriptionErrorMessage,
+                  controller: descriptionController,
                   placeholder: 'Leírás',
                 ),
                 horizontalSpaceSmall,
                 InputField(
-                  controller: null,
+                  validationMessage: model.priceErrorMessage,
+                  controller: priceController,
                   placeholder: 'Ár',
                   inputPostfix: 'Ft',
                 ),
@@ -90,22 +99,39 @@ class MenuItemDetailsView extends StatelessWidget {
                     title: 'Kategória',
                     placeholder: 'Válassz ki egy kategóriát',
                     modalTitle: 'Kategóriák',
-                    value: null,
+                    value: model.selectedType,
                     choiceItems: [
                       S2Choice<String>(value: 'beer', title: 'Sör'),
                       S2Choice<String>(value: 'wine', title: 'Bor'),
+                      S2Choice<String>(value: 'soda', title: 'Üdítő'),
                     ],
                     modalType: S2ModalType.bottomSheet,
                     choiceType: S2ChoiceType.chips,
-                    onChange: (state) => {},
+                    onChange: (state) => model.setSelectedType(state.value),
                     tileBuilder: (context, state) => S2Tile.fromState(
                       state,
                       isTwoLine: true,
                     ),
                   ),
                 ),
-                SizedBox(height: 30),
-                BusyButton(title: 'Hozzáadás', onPressed: null),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ShowUp(
+                    child: NoteText(
+                      model.typeErrorMessage,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                BusyButton(
+                  title: 'Létrehozás',
+                  busy: model.busy,
+                  onPressed: () => model.addMenuItem(
+                    nameController.text,
+                    descriptionController.text,
+                    priceController.text,
+                  ),
+                ),
               ],
             ),
           ),
@@ -113,21 +139,4 @@ class MenuItemDetailsView extends StatelessWidget {
       ),
     );
   }
-}
-
-class MyShapeBorder extends ContinuousRectangleBorder {
-  const MyShapeBorder(this.curveHeight);
-  final double curveHeight;
-
-  @override
-  Path getOuterPath(Rect rect, {TextDirection textDirection}) => Path()
-    ..lineTo(0, rect.size.height)
-    ..quadraticBezierTo(
-      rect.size.width / 2,
-      rect.size.height + curveHeight * 2,
-      rect.size.width,
-      rect.size.height,
-    )
-    ..lineTo(rect.size.width, 0)
-    ..close();
 }

@@ -11,19 +11,13 @@ class ProfileViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
-  Restaurant _userRestaurant;
-  Restaurant get userRestaurant => _userRestaurant;
-
   TasUser getUser() {
     return _authService.currentUser;
   }
 
-  Future getRestaurant() async {
-    if (getUser().userRole == 'RESTAURANT') {
-      _userRestaurant = await _firestoreService
-          .getUserRestaurant(_authService.currentUser.id);
-      notifyListeners();
-    }
+  Future<Restaurant> getRestaurant() async {
+    return await _firestoreService
+        .getUserRestaurant(_authService.currentUser.id);
   }
 
   void signOut() {

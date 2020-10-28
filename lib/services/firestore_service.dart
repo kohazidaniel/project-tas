@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tas/models/menu_item.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 
@@ -9,6 +10,8 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('users');
   final CollectionReference _restaurants =
       FirebaseFirestore.instance.collection('restaurants');
+  final CollectionReference _menuItems =
+      FirebaseFirestore.instance.collection('menuitems');
 
   Future createUser(TasUser user) async {
     try {
@@ -23,7 +26,7 @@ class FirestoreService {
       var userData = await _users.doc(uid).get();
       return TasUser.fromData(userData.data());
     } catch (e) {
-      return e.message;
+      return null;
     }
   }
 
@@ -32,6 +35,29 @@ class FirestoreService {
       await _restaurants.doc(restaurant.id).set(restaurant.toJson());
     } catch (e) {
       return e.message;
+    }
+  }
+
+  Future createMenuItem(MenuItem menuItem) async {
+    try {
+      await _menuItems.doc(menuItem.id).set(menuItem.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future<List<MenuItem>> getMenuItems(String restaurantId) async {
+    try {
+      var menuItems = await _menuItems
+          .where(
+            'restaurantId',
+            isEqualTo: restaurantId,
+          )
+          .get();
+
+      print(menuItems.docs.asMap());
+    } catch (e) {
+      return null;
     }
   }
 
@@ -58,7 +84,7 @@ class FirestoreService {
 
       return Restaurant.fromData(restaurantData.docs.first.data());
     } catch (e) {
-      return e.message;
+      return null;
     }
   }
 }

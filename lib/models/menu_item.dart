@@ -5,6 +5,7 @@ class MenuItem {
   final String photoUrl;
   final String menuItemType;
   final int price;
+  final String restaurantId;
 
   MenuItem({
     this.id,
@@ -13,6 +14,7 @@ class MenuItem {
     this.photoUrl,
     this.menuItemType,
     this.price,
+    this.restaurantId,
   });
 
   MenuItem.fromData(Map<String, dynamic> data)
@@ -21,7 +23,8 @@ class MenuItem {
         description = data['description'],
         photoUrl = data['photoUrl'],
         menuItemType = data['menuItemType'],
-        price = data['price'];
+        price = data['price'],
+        restaurantId = data['restaurantId'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,7 +33,8 @@ class MenuItem {
       'description': description,
       'photoUrl': photoUrl,
       'menuItemType': menuItemType,
-      'price': price
+      'price': price,
+      'restaurantId': restaurantId,
     };
   }
 }
