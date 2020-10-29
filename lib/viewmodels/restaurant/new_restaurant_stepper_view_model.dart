@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/restaurant.dart';

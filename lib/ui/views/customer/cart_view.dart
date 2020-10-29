@@ -26,50 +26,51 @@ class CartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<CartViewModel>.withConsumer(
-        viewModel: CartViewModel(),
-        builder: (context, model, child) => Scaffold(
-            backgroundColor: backgroundColor,
-            body: Padding(
-              padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-              child: ListView.builder(
-                itemCount: cartItems == null ? 0 : cartItems.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Map item = cartItems[index];
-                  return CartItem(
-                    img: item['img'],
-                    isFav: false,
-                    name: item['name'],
-                    price: item['price'],
-                    rating: 5.0,
-                    raters: 23,
-                  );
-                },
-              ),
+      viewModel: CartViewModel(),
+      builder: (context, model, child) => Scaffold(
+        backgroundColor: backgroundColor,
+        body: Padding(
+          padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
+          child: ListView.builder(
+            itemCount: cartItems == null ? 0 : cartItems.length,
+            itemBuilder: (BuildContext context, int index) {
+              Map item = cartItems[index];
+              return CartItem(
+                img: item['img'],
+                isFav: false,
+                name: item['name'],
+                price: item['price'],
+                rating: 5.0,
+                raters: 23,
+              );
+            },
+          ),
+        ),
+        floatingActionButton: OpenContainer(
+          transitionType: model.transitionType,
+          openBuilder: (BuildContext context, VoidCallback _) {
+            return NotificationView();
+          },
+          closedElevation: 6.0,
+          closedColor: primaryColor,
+          closedShape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(50 / 2),
             ),
-            floatingActionButton: OpenContainer(
-              transitionType: model.transitionType,
-              openBuilder: (BuildContext context, VoidCallback _) {
-                return NotificationView();
-              },
-              closedElevation: 6.0,
-              closedColor: primaryColor,
-              closedShape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(50 / 2),
-                ),
-              ),
-              openColor: primaryColor,
-              closedBuilder:
-                  (BuildContext context, VoidCallback openContainer) {
-                return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: IconBadge(
-                      icon: Icons.arrow_forward,
-                      size: 22.0,
-                      badgeValue: 0,
-                      color: backgroundColor,
-                    ));
-              },
-            )));
+          ),
+          openColor: primaryColor,
+          closedBuilder: (BuildContext context, VoidCallback openContainer) {
+            return Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: IconBadge(
+                  icon: Icons.arrow_forward,
+                  size: 22.0,
+                  badgeValue: 0,
+                  color: backgroundColor,
+                ));
+          },
+        ),
+      ),
+    );
   }
 }

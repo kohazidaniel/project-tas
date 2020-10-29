@@ -35,5 +35,9 @@
         "user_not_found": "Nem szerepel fiók ezzel az e-mail-címmel",
         "user_disabled": "A fiók fel lett függesztve",
         "default": "Valami hiba történt"
+    },
+    "menuItemTypes": {
+        "beer": "Sör",
+        "wine": "Bor"
     }
 }

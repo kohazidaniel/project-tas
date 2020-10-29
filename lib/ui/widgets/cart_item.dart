@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
 
-
 class CartItem extends StatelessWidget {
   final String name;
   final String img;
@@ -10,31 +9,31 @@ class CartItem extends StatelessWidget {
   final double rating;
   final int raters;
   final int price;
-
+  final String description;
 
   CartItem({
     Key key,
     @required this.name,
     @required this.img,
     @required this.isFav,
-    @required this.rating,
-    @required this.raters,
-    @required this.price})
-      :super(key: key);
+    this.rating,
+    this.raters,
+    @required this.price,
+    this.description,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
       child: InkWell(
-        onTap: (){
-        },
+        onTap: () {},
         child: Row(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(left: 0.0, right: 10.0),
+              padding: EdgeInsets.all(10.0),
               child: Container(
-                height: MediaQuery.of(context).size.width/3.5,
-                width: MediaQuery.of(context).size.width/3,
+                height: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 3,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
@@ -48,25 +47,40 @@ class CartItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
-                  "$name",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(
+                    "$name",
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                    ),
                   ),
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Text(
+                    description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(height: 5.0),
                 Row(
                   children: <Widget>[
                     SmoothStarRating(
                       starCount: 1,
-                      color: Colors.yellow,
+                      color: rating == null ? Colors.grey : Colors.yellow,
                       allowHalfRating: true,
                       rating: 5.0,
                       size: 12.0,
                     ),
                     SizedBox(width: 6.0),
                     Text(
-                      "5.0 (23 ${FlutterI18n.translate(context, "review")})",
+                      rating == null
+                          ? 'Nincs értékelés'
+                          : '5.0 (23 ${FlutterI18n.translate(context, "review")})',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w300,
@@ -74,7 +88,7 @@ class CartItem extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 5.0),
                 Row(
                   children: <Widget>[
                     Text(
@@ -85,23 +99,9 @@ class CartItem extends StatelessWidget {
                         color: Theme.of(context).accentColor,
                       ),
                     ),
-
                   ],
                 ),
-
-                SizedBox(height: 10.0),
-
-                Text(
-                  "${FlutterI18n.translate(context, "quantity")}: 1",
-                  style: TextStyle(
-                    fontSize: 11.0,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-
-
               ],
-
             ),
           ],
         ),

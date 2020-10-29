@@ -35,5 +35,9 @@
         "user_not_found": "User with this email doesn't exist",
         "user_disabled": "User with this email has been disabled",
         "default": "An undefined Error happened"
+    },
+    "menuItemTypes": {
+        "beer": "Beer",
+        "wine": "Wine"
     }
 }

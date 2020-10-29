@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
-import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/viewmodels/profile_view_model.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProfileView extends StatelessWidget {
   @override

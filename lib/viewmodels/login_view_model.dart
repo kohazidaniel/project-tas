@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:tas/constants/route_names.dart';
@@ -48,8 +47,6 @@ class LoginViewModel extends BaseModel {
       email: email.trim(),
       password: password,
     );
-
-    print(result);
 
     setBusy(false);
 
