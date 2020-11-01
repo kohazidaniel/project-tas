@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/services/auth_service.dart';
@@ -14,29 +17,20 @@ class RestaurantMenuViewModel extends BaseModel {
   List<MenuItem> _menuItems;
   List<MenuItem> get menuItems => _menuItems;
 
-  List<String> _menuItemTypes = ['Sör', 'Bor'];
-  List<String> get menuItemTypes => _menuItemTypes;
-
-  String _selectedMenuItemType = 'Sör';
-  String get selectedMenuItemType => _selectedMenuItemType;
-
   Stream<List<MenuItem>> listenToPosts() {
-    Stream<List<MenuItem>> stream = _firestoreService.listenToPostsRealTime(
+    Stream<List<MenuItem>> stream =
+        _firestoreService.listenToMenuItemssRealTime(
       _authenticationService.userRestaurant.id,
     );
 
     return stream;
   }
 
-  void setMenuItemType(String menuItemType) {
-    _selectedMenuItemType = menuItemType;
-
+  void setMenuItemType(int index, int scrollPoint) {
     scrollController.animateTo(
-      350,
+      (scrollPoint * 167 + index * 44).toDouble(),
       curve: Curves.ease,
       duration: Duration(milliseconds: 300),
     );
-
-    notifyListeners();
   }
 }

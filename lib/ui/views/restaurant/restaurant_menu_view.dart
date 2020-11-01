@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:animations/animations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:tas/models/menu_item.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/restaurant/menu_item_details_view.dart';
 import 'package:tas/ui/widgets/cart_item.dart';
-import 'package:tas/ui/widgets/chip_list.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_menu_view_model.dart';
 import 'package:grouped_list/grouped_list.dart';
 
@@ -16,7 +17,9 @@ class RestaurantMenuView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelProvider<RestaurantMenuViewModel>.withConsumer(
       viewModel: RestaurantMenuViewModel(),
-      onModelReady: (model) => model.listenToPosts(),
+      onModelReady: (model) {
+        model.listenToPosts();
+      },
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: backgroundColor,
@@ -35,10 +38,88 @@ class RestaurantMenuView extends StatelessWidget {
           ),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50.0),
-            child: ChipList(
-              menuTypes: model.menuItemTypes,
-              selectedMenuType: model.selectedMenuItemType,
-              onPress: model.setMenuItemType,
+            child: StreamBuilder<List<MenuItem>>(
+              stream: model.listenToPosts(),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<List<MenuItem>> snapshot,
+              ) {
+                if (snapshot.hasData && snapshot.data.isNotEmpty) {
+                  Map<String, int> scrollOffSetByMenuTypes = Map();
+                  String lastMenuType;
+
+                  for (int i = 0; i < snapshot.data.length; i++) {
+                    if (i == 0) {
+                      lastMenuType = snapshot.data[i].menuItemType;
+                      scrollOffSetByMenuTypes[lastMenuType] = 0;
+                    }
+                    if (lastMenuType != snapshot.data[i].menuItemType) {
+                      lastMenuType = snapshot.data[i].menuItemType;
+                      scrollOffSetByMenuTypes[lastMenuType] = i;
+                    }
+                  }
+
+                  List<Widget> tabs = scrollOffSetByMenuTypes.entries
+                      .map(
+                        (entry) => Tab(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              FlutterI18n.translate(
+                                context,
+                                'menuItemTypes.' + entry.key,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                      .toList();
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      DefaultTabController(
+                        length: scrollOffSetByMenuTypes.keys.length,
+                        child: Builder(builder: (BuildContext context) {
+                          model.scrollController.addListener(
+                            () {
+                              int index;
+                              for (int i = 0;
+                                  i < scrollOffSetByMenuTypes.length;
+                                  i++) {
+                                if (model.scrollController.position.pixels >=
+                                    scrollOffSetByMenuTypes.values
+                                                .elementAt(i) *
+                                            167 +
+                                        i * 44) {
+                                  index = i;
+                                }
+                              }
+                              DefaultTabController.of(context).animateTo(index);
+                            },
+                          );
+
+                          return TabBar(
+                            onTap: (value) {
+                              List<int> scrollPoints =
+                                  scrollOffSetByMenuTypes.values.toList();
+                              model.setMenuItemType(value, scrollPoints[value]);
+                            },
+                            isScrollable: true,
+                            indicatorColor: Colors.black,
+                            labelColor: Colors.black,
+                            tabs: tabs,
+                          );
+                        }),
+                      )
+                    ],
+                  );
+                }
+                return Container(
+                  height: 50.0,
+                  color: Colors.grey[50],
+                );
+              },
             ),
           ),
           elevation: 0.0,
@@ -94,7 +175,7 @@ class RestaurantMenuView extends StatelessWidget {
                 ),
               );
             } else {
-              if (snapshot.data == null) {
+              if (snapshot.data.isEmpty) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +201,11 @@ class RestaurantMenuView extends StatelessWidget {
                   elements: snapshot.data,
                   groupBy: (element) => element.menuItemType,
                   groupSeparatorBuilder: (String groupByValue) => Padding(
-                    padding: EdgeInsets.only(left: 15.0),
+                    padding: EdgeInsets.only(
+                      left: 15.0,
+                      top: 10.0,
+                      bottom: 10.0,
+                    ),
                     child: Text(
                       FlutterI18n.translate(
                         context,
@@ -132,12 +217,26 @@ class RestaurantMenuView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  itemBuilder: (context, MenuItem item) => CartItem(
-                    img: item.photoUrl,
-                    isFav: false,
-                    name: item.name,
-                    price: item.price,
-                    description: item.description,
+                  itemBuilder: (context, MenuItem item) => OpenContainer(
+                    transitionType: ContainerTransitionType.fadeThrough,
+                    openBuilder: (BuildContext context, VoidCallback _) {
+                      return MenuItemDetailsView(
+                        selectedCartItem: item,
+                        isUpdating: true,
+                      );
+                    },
+                    closedElevation: 0.0,
+                    openColor: primaryColor,
+                    closedBuilder:
+                        (BuildContext context, VoidCallback openContainer) {
+                      return CartItem(
+                        img: item.photoUrl,
+                        isFav: false,
+                        name: item.name,
+                        price: item.price,
+                        description: item.description,
+                      );
+                    },
                   ),
                   itemComparator: (item1, item2) =>
                       item1.menuItemType.compareTo(item2.menuItemType),

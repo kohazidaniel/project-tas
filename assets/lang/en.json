@@ -38,6 +38,8 @@
     },
     "menuItemTypes": {
         "beer": "Beer",
-        "wine": "Wine"
+        "wine": "Wine",
+        "soda": "Soda",
+        "snack": "Snack"
     }
 }

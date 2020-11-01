@@ -41,17 +41,22 @@ class SignUpView extends StatelessWidget {
                 placeholder: FlutterI18n.translate(context, "full_name"),
                 controller: fullNameController,
                 validationMessage: model.fullNameEmailErrorMessage,
+                nextFocusNode: model.emailNode,
               ),
               InputField(
                 placeholder: FlutterI18n.translate(context, "email"),
                 controller: emailController,
                 validationMessage: model.signUpEmailErrorMessage,
+                fieldFocusNode: model.emailNode,
+                nextFocusNode: model.passwordNode,
               ),
               InputField(
                 placeholder: FlutterI18n.translate(context, "password"),
                 password: true,
                 controller: passwordController,
                 validationMessage: model.signUpPasswordErrorMessage,
+                fieldFocusNode: model.passwordNode,
+                enterPressed: () => model.passwordNode.unfocus(),
               ),
               ExpansionList<String>(
                 items: model.selectableRoles,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:smart_select/smart_select.dart';
+import 'package:tas/models/menu_item.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/shared_styles.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
@@ -11,21 +12,46 @@ import 'package:tas/ui/widgets/show_up.dart';
 import 'package:tas/viewmodels/restaurant/menu_item_details_view_model.dart';
 
 class MenuItemDetailsView extends StatelessWidget {
+  final MenuItem selectedCartItem;
+  final bool isUpdating;
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
 
+  MenuItemDetailsView({this.selectedCartItem, this.isUpdating = false}) {
+    if (isUpdating) {
+      this.nameController.text = selectedCartItem.name;
+      this.descriptionController.text = selectedCartItem.description;
+      this.priceController.text = selectedCartItem.price.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<MenuItemDetailsViewModel>.withConsumer(
-      viewModel: MenuItemDetailsViewModel(),
+      viewModel: MenuItemDetailsViewModel(selectedMenuItem: selectedCartItem),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-            'Létrehozás',
+            isUpdating ? 'Frissítés' : 'Létrehozás',
             style: TextStyle(color: primaryColor),
           ),
+          actions: [
+            isUpdating
+                ? IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: primaryColor,
+                    ),
+                    onPressed: () async {
+                      if (await model.deleteMenuItem()) {
+                        Navigator.pop(context);
+                      }
+                    },
+                  )
+                : Container()
+          ],
           leading: IconButton(
             icon: Icon(
               Icons.keyboard_arrow_left,
@@ -53,7 +79,9 @@ class MenuItemDetailsView extends StatelessWidget {
                       backgroundColor: Colors.grey[200],
                       backgroundImage: model.imageFile != null
                           ? FileImage(model.imageFile)
-                          : null,
+                          : isUpdating
+                              ? NetworkImage(selectedCartItem.photoUrl)
+                              : null,
                       child: Icon(Icons.photo, color: primaryColor),
                     ),
                     Positioned(
@@ -73,17 +101,29 @@ class MenuItemDetailsView extends StatelessWidget {
                     ),
                   ],
                 ),
+                Align(
+                  alignment: Alignment.center,
+                  child: ShowUp(
+                    child: NoteText(
+                      model.imageErrorMessage,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20),
                 InputField(
                   validationMessage: model.nameErrorMessage,
                   controller: nameController,
                   placeholder: 'Név',
+                  nextFocusNode: model.descriptionNode,
                 ),
                 horizontalSpaceSmall,
                 InputField(
                   validationMessage: model.descriptionErrorMessage,
                   controller: descriptionController,
                   placeholder: 'Leírás',
+                  fieldFocusNode: model.descriptionNode,
+                  nextFocusNode: model.priceNode,
                 ),
                 horizontalSpaceSmall,
                 InputField(
@@ -91,6 +131,8 @@ class MenuItemDetailsView extends StatelessWidget {
                   controller: priceController,
                   placeholder: 'Ár',
                   inputPostfix: 'Ft',
+                  fieldFocusNode: model.priceNode,
+                  enterPressed: () => model.priceNode.unfocus(),
                 ),
                 horizontalSpaceSmall,
                 Container(
@@ -104,6 +146,7 @@ class MenuItemDetailsView extends StatelessWidget {
                       S2Choice<String>(value: 'beer', title: 'Sör'),
                       S2Choice<String>(value: 'wine', title: 'Bor'),
                       S2Choice<String>(value: 'soda', title: 'Üdítő'),
+                      S2Choice<String>(value: 'snack', title: 'Sörkorcsolya'),
                     ],
                     modalType: S2ModalType.bottomSheet,
                     choiceType: S2ChoiceType.chips,
@@ -123,13 +166,15 @@ class MenuItemDetailsView extends StatelessWidget {
                     ),
                   ),
                 ),
+                SizedBox(height: 10.0),
                 BusyButton(
-                  title: 'Létrehozás',
+                  title: isUpdating ? 'Frissítés' : 'Létrehozás',
                   busy: model.busy,
                   onPressed: () => model.addMenuItem(
-                    nameController.text,
-                    descriptionController.text,
-                    priceController.text,
+                    name: nameController.text,
+                    description: descriptionController.text,
+                    price: priceController.text,
+                    isUpdating: isUpdating,
                   ),
                 ),
               ],

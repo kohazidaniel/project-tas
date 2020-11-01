@@ -38,6 +38,8 @@
     },
     "menuItemTypes": {
         "beer": "Sör",
-        "wine": "Bor"
+        "wine": "Bor",
+        "soda": "Üdítő",
+        "snack": "Sörkorcsolya"
     }
 }

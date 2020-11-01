@@ -44,6 +44,10 @@ class NewRestaurantStepperViewModel extends BaseModel {
   String restaurantImageErrorMessage = "";
   String restaurantAddressErrorMessage = "";
 
+  FocusNode nameNode = FocusNode();
+  FocusNode descriptionNode = FocusNode();
+  FocusNode addressNode = FocusNode();
+
   ImagePicker picker = ImagePicker();
 
   void createRestaurant(
@@ -145,7 +149,7 @@ class NewRestaurantStepperViewModel extends BaseModel {
   }
 
   Future pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     _imageFile = File(pickedFile.path);
     notifyListeners();
@@ -163,8 +167,6 @@ class NewRestaurantStepperViewModel extends BaseModel {
   void onStepContinue() {
     if (_currStep < _totalSteps) {
       _currStep += 1;
-    } else {
-      _currStep = 0;
     }
     notifyListeners();
   }

@@ -19,6 +19,9 @@ class SignUpViewModel extends BaseModel {
     this._selectedRole = _selectableRoles[0];
   }
 
+  FocusNode passwordNode = FocusNode();
+  FocusNode emailNode = FocusNode();
+
   List<String> _selectableRoles;
   List<String> get selectableRoles => _selectableRoles;
   String _selectedRole;

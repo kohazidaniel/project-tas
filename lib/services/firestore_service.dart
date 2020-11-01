@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
@@ -50,21 +49,28 @@ class FirestoreService {
     }
   }
 
-  Stream<List<MenuItem>> listenToPostsRealTime(String restaurantId) {
+  Future updateMenuItem(MenuItem menuItem) async {
+    try {
+      await _menuItems.doc(menuItem.id).update(menuItem.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future deleteMenuItem(String menuItemId) async {
+    await _menuItems.doc(menuItemId).delete();
+  }
+
+  Stream<List<MenuItem>> listenToMenuItemssRealTime(String restaurantId) {
     _menuItems
         .orderBy('menuItemType', descending: true)
         .snapshots()
         .listen((menuItemsSnapshot) {
-      if (menuItemsSnapshot.docs.isNotEmpty) {
-        var menuItems = menuItemsSnapshot.docs
-            .map((snapshot) => MenuItem.fromData(snapshot.data()))
-            .where((mappedItem) => mappedItem.restaurantId == restaurantId)
-            .toList();
-
-        _menuItemsController.add(menuItems);
-      } else {
-        _menuItemsController.addError(FlutterError('List is empty'));
-      }
+      var menuItems = menuItemsSnapshot.docs
+          .map((snapshot) => MenuItem.fromData(snapshot.data()))
+          .where((mappedItem) => mappedItem.restaurantId == restaurantId)
+          .toList();
+      _menuItemsController.add(menuItems);
     });
 
     return _menuItemsController.stream;

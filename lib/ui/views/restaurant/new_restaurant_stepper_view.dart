@@ -33,6 +33,29 @@ class NewRestaurantStepperView extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             child: new ListView(
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 25, left: 25),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hurrá 🎉,',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'új hely a láthatáron',
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 new Stepper(
                   physics: ClampingScrollPhysics(),
                   steps: [
@@ -45,6 +68,7 @@ class NewRestaurantStepperView extends StatelessWidget {
                         placeholder: 'Név',
                         validationMessage: model.restaurantNameErrorMessage,
                         enterPressed: () => model.onStepContinue(),
+                        nextFocusNode: model.descriptionNode,
                       ),
                     ),
                     new Step(
@@ -57,6 +81,7 @@ class NewRestaurantStepperView extends StatelessWidget {
                         validationMessage:
                             model.restaurantDescriptionErrorMessage,
                         enterPressed: () => model.onStepContinue(),
+                        fieldFocusNode: model.descriptionNode,
                       ),
                     ),
                     new Step(
@@ -158,6 +183,7 @@ class NewRestaurantStepperView extends StatelessWidget {
                         isLocation: true,
                         getLocation: () => model.getCurrentPosition(),
                         enterPressed: () => model.onStepContinue(),
+                        fieldFocusNode: model.addressNode,
                       ),
                     ),
                   ],
@@ -178,6 +204,10 @@ class NewRestaurantStepperView extends StatelessWidget {
                         descriptionController.text,
                       );
                     } else {
+                      if (model.currStep == 0)
+                        model.descriptionNode.requestFocus();
+                      if (model.currStep == 1) model.descriptionNode.unfocus();
+                      if (model.currStep == 3) model.addressNode.requestFocus();
                       model.onStepContinue();
                     }
                   },

@@ -26,7 +26,6 @@ class CartItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
       child: InkWell(
-        onTap: () {},
         child: Row(
           children: <Widget>[
             Padding(
