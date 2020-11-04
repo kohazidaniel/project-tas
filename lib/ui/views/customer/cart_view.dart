@@ -4,7 +4,6 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
-import 'package:tas/ui/widgets/cart_item.dart';
 import 'package:tas/viewmodels/customer/cart_view_model.dart';
 
 List cartItems = [
@@ -31,20 +30,7 @@ class CartView extends StatelessWidget {
         backgroundColor: backgroundColor,
         body: Padding(
           padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-          child: ListView.builder(
-            itemCount: cartItems == null ? 0 : cartItems.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map item = cartItems[index];
-              return CartItem(
-                img: item['img'],
-                isFav: false,
-                name: item['name'],
-                price: item['price'],
-                rating: 5.0,
-                raters: 23,
-              );
-            },
-          ),
+          child: Container(),
         ),
         floatingActionButton: OpenContainer(
           transitionType: model.transitionType,
@@ -61,13 +47,14 @@ class CartView extends StatelessWidget {
           openColor: primaryColor,
           closedBuilder: (BuildContext context, VoidCallback openContainer) {
             return Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: IconBadge(
-                  icon: Icons.arrow_forward,
-                  size: 22.0,
-                  badgeValue: 0,
-                  color: backgroundColor,
-                ));
+              padding: const EdgeInsets.all(15.0),
+              child: IconBadge(
+                icon: Icons.arrow_forward,
+                size: 22.0,
+                badgeValue: 0,
+                color: backgroundColor,
+              ),
+            );
           },
         ),
       ),

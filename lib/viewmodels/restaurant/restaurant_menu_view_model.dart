@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/locator.dart';
@@ -18,8 +16,7 @@ class RestaurantMenuViewModel extends BaseModel {
   List<MenuItem> get menuItems => _menuItems;
 
   Stream<List<MenuItem>> listenToPosts() {
-    Stream<List<MenuItem>> stream =
-        _firestoreService.listenToMenuItemssRealTime(
+    Stream<List<MenuItem>> stream = _firestoreService.listenToMenuItemsRealTime(
       _authenticationService.userRestaurant.id,
     );
 

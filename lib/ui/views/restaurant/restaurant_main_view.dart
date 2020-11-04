@@ -150,6 +150,25 @@ class RestaurantMainView extends StatelessWidget {
                     );
                   },
                 ),
+                ListTile(
+                  leading: IconBadge(
+                    icon: Icons.event_seat,
+                    color: Colors.grey[800],
+                  ),
+                  title: Text(
+                    'Asztalfoglalás',
+                    style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return RestaurantMenuView();
+                      }),
+                    );
+                  },
+                ),
               ],
             ),
           ),

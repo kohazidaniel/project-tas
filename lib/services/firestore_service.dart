@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/menu_item.dart';
@@ -61,7 +63,7 @@ class FirestoreService {
     await _menuItems.doc(menuItemId).delete();
   }
 
-  Stream<List<MenuItem>> listenToMenuItemssRealTime(String restaurantId) {
+  Stream<List<MenuItem>> listenToMenuItemsRealTime(String restaurantId) {
     _menuItems
         .orderBy('menuItemType', descending: true)
         .snapshots()
@@ -100,6 +102,38 @@ class FirestoreService {
       return Restaurant.fromData(restaurantData.docs.first.data());
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<List<Restaurant>> getRestaurants() async {
+    try {
+      var restaurantsSnapshot = await _restaurants.get();
+
+      return restaurantsSnapshot.docs
+          .map((restaurant) => Restaurant.fromData(restaurant.data()))
+          .toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<dynamic>> getUserFavouriteRestaurants(String uid) async {
+    try {
+      var userData = await _users.doc(uid).get();
+      return (userData.data()['favouriteRestaurants'] as List<dynamic>)
+          .cast<String>();
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future addRestaurantToUserFavourites(
+      List<String> favouriteRestaurants, String userId) async {
+    try {
+      _users.doc(userId).update({'favouriteRestaurants': favouriteRestaurants});
+    } catch (e) {
+      return e;
     }
   }
 }

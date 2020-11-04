@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/services/auth_service.dart';
@@ -12,10 +14,11 @@ class StartUpViewModel extends BaseModel {
 
   Future handleStartUpLogic() async {
     var hasLoggedInUser = await _authService.isUserLoggedIn();
-    bool doesUserHaveRestaurant = await _firestoreService
-        .doesUserHaveRestaurant(_authService.currentUser.id);
 
     if (hasLoggedInUser) {
+      bool doesUserHaveRestaurant = await _firestoreService
+          .doesUserHaveRestaurant(_authService.currentUser.id);
+
       switch (_authService.currentUser.userRole) {
         case "CUSTOMER":
           _navigationService.navigateTo(MainViewRoute);

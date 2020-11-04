@@ -3,18 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/category_card.dart';
 import 'package:tas/ui/widgets/grid_card.dart';
 import 'package:tas/ui/widgets/slider_item.dart';
 import 'package:tas/viewmodels/customer/home_view_model.dart';
-
-final List<String> imgList = [
-  "https://etterem.hu/img/max960/p1343n/1362941577-3763.jpg",
-  "https://drinkunion.hu/attachment/0001/861_copy_3_telthaz.jpg",
-  "https://etterem.hu/img/x/p406n/1353704056-2962.jpg"
-];
 
 List categories = [
   {"name": "Sörözõ", "icon": FontAwesomeIcons.beer, "items": 5},
@@ -28,6 +24,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelProvider<HomeViewModel>.withConsumer(
       viewModel: HomeViewModel(),
+      onModelReady: (model) => model.getViewData(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         body: Padding(
@@ -47,21 +44,60 @@ class HomeView extends StatelessWidget {
                 ],
               ),
               verticalSpaceTiny,
-              CarouselSlider(
-                options: CarouselOptions(
-                  height: MediaQuery.of(context).size.height / 2.4,
-                  viewportFraction: 1.0,
-                  autoPlay: false,
-                ),
-                items: imgList
-                    .map((item) => SliderItem(
-                        name: "Y söröző",
-                        img: item,
-                        isFav: true,
-                        rating: 5,
-                        raters: 125))
-                    .toList(),
-              ),
+              model.restaurants == null
+                  ? Shimmer.fromColors(
+                      baseColor: Colors.grey[100],
+                      highlightColor: Colors.grey[300],
+                      enabled: true,
+                      child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  color: Colors.white,
+                                ),
+                                height:
+                                    MediaQuery.of(context).size.height / 3.2,
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: MediaQuery.of(context).size.width / 2,
+                                height: 18.0,
+                                color: Colors.white,
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: MediaQuery.of(context).size.width / 4,
+                                height: 16.0,
+                                color: Colors.white,
+                              )
+                            ],
+                          )),
+                    )
+                  : CarouselSlider(
+                      options: CarouselOptions(
+                        height: MediaQuery.of(context).size.height / 2.4,
+                        viewportFraction: 1.0,
+                        autoPlay: false,
+                      ),
+                      items: model.restaurants
+                          .map(
+                            (restaurant) => SliderItem(
+                              name: restaurant.name,
+                              img: restaurant.thumbnailUrl,
+                              favTap: () =>
+                                  model.addToFavourites(restaurant.id),
+                              isFav: model.favouriteRestaurants
+                                  .contains(restaurant.id),
+                            ),
+                          )
+                          .toList(),
+                    ),
               verticalSpaceSmall,
               Text(
                 FlutterI18n.translate(context, "categories"),
@@ -101,26 +137,34 @@ class HomeView extends StatelessWidget {
                 ],
               ),
               verticalSpaceTiny,
-              GridView.builder(
-                shrinkWrap: true,
-                primary: false,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: MediaQuery.of(context).size.width /
-                      (MediaQuery.of(context).size.height / 1.25),
-                ),
-                itemCount: imgList == null ? 0 : imgList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return GridCard(
-                    img: imgList[index],
-                    isFav: false,
-                    name: "Kocsma",
-                    rating: 5.0,
-                    raters: 23,
-                  );
-                },
-              ),
+              model.restaurants == null
+                  ? Container()
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 1.25),
+                      ),
+                      itemCount: model.getNearbyRestaurants().length,
+                      itemBuilder: (BuildContext context, int index) {
+                        List<Restaurant> nearByRestaurants =
+                            model.getNearbyRestaurants();
+
+                        return GridCard(
+                          img: nearByRestaurants[index].thumbnailUrl,
+                          name: nearByRestaurants[index].name,
+                          favTap: () => model.addToFavourites(
+                            nearByRestaurants[index].id,
+                          ),
+                          isFav: model.favouriteRestaurants.contains(
+                            nearByRestaurants[index].id,
+                          ),
+                        );
+                      },
+                    ),
               SizedBox(height: 30),
             ],
           ),
