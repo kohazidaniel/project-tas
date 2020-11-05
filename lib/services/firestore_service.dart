@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/menu_item.dart';
@@ -100,6 +98,16 @@ class FirestoreService {
           await _restaurants.where('ownerId', isEqualTo: userId).get();
 
       return Restaurant.fromData(restaurantData.docs.first.data());
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Restaurant> getRestaurantById(String restaurantId) async {
+    try {
+      var restaurantSnapshot = await _restaurants.doc(restaurantId).get();
+
+      return Restaurant.fromData(restaurantSnapshot.data());
     } catch (e) {
       return null;
     }

@@ -10,6 +10,7 @@ class GridCard extends StatelessWidget {
 
   final String name;
   final String img;
+  final String restaurantId;
   final bool isFav;
   final Function favTap;
   final double rating;
@@ -19,6 +20,7 @@ class GridCard extends StatelessWidget {
     Key key,
     @required this.name,
     @required this.img,
+    @required this.restaurantId,
     @required this.isFav,
     @required this.favTap,
     this.rating,
@@ -107,7 +109,10 @@ class GridCard extends StatelessWidget {
         ],
       ),
       onTap: () {
-        _navigationService.navigateTo(PlaceDetailsViewRoute);
+        _navigationService.navigateTo(
+          PlaceDetailsViewRoute,
+          arguments: restaurantId,
+        );
       },
     );
   }

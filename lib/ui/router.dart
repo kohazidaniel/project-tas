@@ -34,7 +34,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case PlaceDetailsViewRoute:
       return _getPageRoute(
         routeName: settings.name,
-        viewToShow: PlaceDetailsView(),
+        viewToShow: PlaceDetailsView(
+          restaurantId: settings.arguments,
+        ),
       );
     case RestaurantMainViewRoute:
       return _getPageRoute(

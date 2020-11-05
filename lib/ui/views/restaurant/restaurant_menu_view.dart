@@ -11,10 +11,13 @@ import 'package:tas/viewmodels/restaurant/restaurant_menu_view_model.dart';
 import 'package:grouped_list/grouped_list.dart';
 
 class RestaurantMenuView extends StatelessWidget {
+  final String restaurantId;
+  RestaurantMenuView({this.restaurantId});
+
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<RestaurantMenuViewModel>.withConsumer(
-      viewModel: RestaurantMenuViewModel(),
+      viewModel: RestaurantMenuViewModel(restaurantId: restaurantId),
       onModelReady: (model) {
         model.listenToPosts();
       },
@@ -122,29 +125,31 @@ class RestaurantMenuView extends StatelessWidget {
           ),
           elevation: 0.0,
           actions: <Widget>[
-            OpenContainer(
-              transitionType: ContainerTransitionType.fadeThrough,
-              openBuilder: (BuildContext context, VoidCallback _) {
-                return MenuItemDetailsView();
-              },
-              closedElevation: 0.0,
-              closedShape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(100 / 2),
-                ),
-              ),
-              openColor: primaryColor,
-              closedBuilder:
-                  (BuildContext context, VoidCallback openContainer) {
-                return Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Icon(
-                    Icons.add_box_outlined,
-                    color: primaryColor,
+            restaurantId != null
+                ? Container()
+                : OpenContainer(
+                    transitionType: ContainerTransitionType.fadeThrough,
+                    openBuilder: (BuildContext context, VoidCallback _) {
+                      return MenuItemDetailsView();
+                    },
+                    closedElevation: 0.0,
+                    closedShape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(100 / 2),
+                      ),
+                    ),
+                    openColor: primaryColor,
+                    closedBuilder:
+                        (BuildContext context, VoidCallback openContainer) {
+                      return Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Icon(
+                          Icons.add_box_outlined,
+                          color: primaryColor,
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
           ],
         ),
         body: StreamBuilder<List<MenuItem>>(
@@ -217,6 +222,7 @@ class RestaurantMenuView extends StatelessWidget {
                   ),
                   itemBuilder: (context, MenuItem item) => OpenContainer(
                     transitionType: ContainerTransitionType.fadeThrough,
+                    tappable: restaurantId == null,
                     openBuilder: (BuildContext context, VoidCallback _) {
                       return MenuItemDetailsView(
                         selectedCartItem: item,

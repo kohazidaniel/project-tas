@@ -10,6 +10,7 @@ class SliderItem extends StatelessWidget {
 
   final String name;
   final String img;
+  final String restaurantId;
   final bool isFav;
   final double rating;
   final Function favTap;
@@ -19,6 +20,7 @@ class SliderItem extends StatelessWidget {
     Key key,
     @required this.name,
     @required this.img,
+    @required this.restaurantId,
     @required this.isFav,
     @required this.favTap,
     this.rating,
@@ -106,7 +108,10 @@ class SliderItem extends StatelessWidget {
         ],
       ),
       onTap: () {
-        _navigationService.navigateTo(PlaceDetailsViewRoute);
+        _navigationService.navigateTo(
+          PlaceDetailsViewRoute,
+          arguments: restaurantId,
+        );
       },
     );
   }

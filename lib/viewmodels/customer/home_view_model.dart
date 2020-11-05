@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/restaurant.dart';

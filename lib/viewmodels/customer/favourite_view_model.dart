@@ -15,8 +15,28 @@ class FavouriteViewModel extends BaseModel {
   List<String> get favouriteRestaurants => _favouriteRestaurants;
 
   void getViewData() async {
-    _restaurants = await _firestoreService.getRestaurants();
+    _favouriteRestaurants = await _firestoreService
+        .getUserFavouriteRestaurants(_authenticationService.currentUser.id);
+    List<Restaurant> restaurants = await _firestoreService.getRestaurants();
 
+    _restaurants = restaurants
+        .where(
+          (restaurant) => _favouriteRestaurants.contains(restaurant.id),
+        )
+        .toList();
+
+    notifyListeners();
+  }
+
+  void removeFromFavourites(String restaurantId) {
+    _restaurants = _restaurants
+        .where((restaurant) => restaurant.id != restaurantId)
+        .toList();
+    _favouriteRestaurants.remove(restaurantId);
+    _firestoreService.addRestaurantToUserFavourites(
+      _favouriteRestaurants,
+      _authenticationService.currentUser.id,
+    );
     notifyListeners();
   }
 }

@@ -44,7 +44,7 @@ class HomeView extends StatelessWidget {
                 ],
               ),
               verticalSpaceTiny,
-              model.restaurants == null
+              model.restaurants == null && model.favouriteRestaurants == null
                   ? Shimmer.fromColors(
                       baseColor: Colors.grey[100],
                       highlightColor: Colors.grey[300],
@@ -90,6 +90,7 @@ class HomeView extends StatelessWidget {
                             (restaurant) => SliderItem(
                               name: restaurant.name,
                               img: restaurant.thumbnailUrl,
+                              restaurantId: restaurant.id,
                               favTap: () =>
                                   model.addToFavourites(restaurant.id),
                               isFav: model.favouriteRestaurants
@@ -137,7 +138,7 @@ class HomeView extends StatelessWidget {
                 ],
               ),
               verticalSpaceTiny,
-              model.restaurants == null
+              model.restaurants == null && model.favouriteRestaurants == null
                   ? Container()
                   : GridView.builder(
                       shrinkWrap: true,
@@ -156,6 +157,7 @@ class HomeView extends StatelessWidget {
                         return GridCard(
                           img: nearByRestaurants[index].thumbnailUrl,
                           name: nearByRestaurants[index].name,
+                          restaurantId: nearByRestaurants[index].id,
                           favTap: () => model.addToFavourites(
                             nearByRestaurants[index].id,
                           ),
