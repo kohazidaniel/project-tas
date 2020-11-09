@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/menu_item.dart';
+import 'package:tas/models/reservation.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 
@@ -12,6 +13,8 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('restaurants');
   final CollectionReference _menuItems =
       FirebaseFirestore.instance.collection('menuitems');
+  final CollectionReference _reservations =
+      FirebaseFirestore.instance.collection('reservations');
 
   final StreamController<List<MenuItem>> _menuItemsController =
       StreamController<List<MenuItem>>.broadcast();
@@ -140,6 +143,14 @@ class FirestoreService {
       List<String> favouriteRestaurants, String userId) async {
     try {
       _users.doc(userId).update({'favouriteRestaurants': favouriteRestaurants});
+    } catch (e) {
+      return e;
+    }
+  }
+
+  Future createReservation(Reservation reservation) async {
+    try {
+      await _reservations.doc(reservation.id).set(reservation.toJson());
     } catch (e) {
       return e;
     }

@@ -6,6 +6,7 @@ import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/customer/cart_view.dart';
 import 'package:tas/ui/views/customer/favourite_view.dart';
 import 'package:tas/ui/views/customer/home_view.dart';
+import 'package:tas/ui/views/customer/tas_map_view.dart';
 import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/views/profile_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
@@ -162,7 +163,14 @@ class MainView extends StatelessWidget {
               Icons.search,
               color: backgroundColor,
             ),
-            onPressed: () => {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return TasMapView();
+                }),
+              );
+            },
           ),
         ),
       ),

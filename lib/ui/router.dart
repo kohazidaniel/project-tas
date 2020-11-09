@@ -1,3 +1,4 @@
+import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/customer/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
@@ -52,6 +53,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: NewRestaurantStepperView(),
+      );
+    case BookTableViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: BookTableView(),
       );
     default:
       return MaterialPageRoute(

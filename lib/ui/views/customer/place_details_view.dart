@@ -3,6 +3,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
 import 'package:tas/viewmodels/customer/place_details_view_model.dart';
@@ -120,6 +121,14 @@ class PlaceDetailsView extends StatelessWidget {
                       ),
                       maxLines: 2,
                     ),
+                    Text(
+                      model.restaurant.address,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                      maxLines: 2,
+                    ),
                     /* Padding(
                       padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
                       child: Row(
@@ -181,7 +190,7 @@ class PlaceDetailsView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20.0),
-                    Text(
+                    /* Text(
                       FlutterI18n.translate(context, "reviews"),
                       style: TextStyle(
                         fontSize: 18,
@@ -190,7 +199,7 @@ class PlaceDetailsView extends StatelessWidget {
                       maxLines: 2,
                     ),
                     SizedBox(height: 20.0),
-                    /* ListView.builder(
+                    ListView.builder(
                       shrinkWrap: true,
                       primary: false,
                       physics: NeverScrollableScrollPhysics(),
@@ -243,7 +252,14 @@ class PlaceDetailsView extends StatelessWidget {
           elevation: 4.0,
           icon: Icon(Icons.event_seat),
           label: Text('Foglalás'),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return BookTableView(restaurantId: model.restaurantId);
+              }),
+            );
+          },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
