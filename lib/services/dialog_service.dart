@@ -10,12 +10,10 @@ class DialogService {
 
   GlobalKey<NavigatorState> get dialogNavigationKey => _dialogNavigationKey;
 
-  /// Registers a callback function. Typically to show the dialog
   void registerDialogListener(Function(DialogRequest) showDialogListener) {
     _showDialogListener = showDialogListener;
   }
 
-  /// Calls the dialog listener and returns a Future that will wait for dialogComplete.
   Future<DialogResponse> showDialog({
     String title,
     String description,
@@ -30,7 +28,6 @@ class DialogService {
     return _dialogCompleter.future;
   }
 
-  /// Shows a confirmation dialog
   Future<DialogResponse> showConfirmationDialog(
       {String title,
       String description,
@@ -45,7 +42,6 @@ class DialogService {
     return _dialogCompleter.future;
   }
 
-  /// Completes the _dialogCompleter to resume the Future's execution call
   void dialogComplete(DialogResponse response) {
     _dialogNavigationKey.currentState.pop();
     _dialogCompleter.complete(response);

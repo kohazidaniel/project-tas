@@ -177,7 +177,8 @@ class BookTableView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                model.selectedTime.format(context),
+                                model.selectedTime?.format(context) ??
+                                    snapshot.data.openingTime,
                                 style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
@@ -197,7 +198,7 @@ class BookTableView extends StatelessWidget {
                           verticalSpaceSmall,
                           BusyButton(
                             title: 'Foglalás',
-                            onPressed: () => model.createReservation(),
+                            onPressed: () => model.createReservation(context),
                             busy: model.busy,
                           )
                         ],

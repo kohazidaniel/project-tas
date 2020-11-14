@@ -50,6 +50,7 @@ class AuthService {
         email: email,
         fullName: fullName,
         userRole: userRole,
+        favouriteRestaurants: [],
       );
 
       await _firestoreService.createUser(_currentUser);

@@ -16,7 +16,7 @@ class FavouriteView extends StatelessWidget {
         backgroundColor: backgroundColor,
         body: Padding(
           padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-          child: model.favouriteRestaurants == null && model.restaurants == null
+          child: model.favouriteRestaurants == null || model.restaurants == null
               ? Container()
               : model.restaurants.length == 0
                   ? Center(

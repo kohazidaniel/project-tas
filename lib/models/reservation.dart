@@ -10,15 +10,16 @@ class Reservation {
   final int total;
   final bool active;
 
-  Reservation(
-      {this.id,
-      this.userId,
-      this.restaurantId,
-      this.reservationDate,
-      this.numberOfPeople,
-      this.total,
-      this.orderMenuItemIds,
-      this.active});
+  Reservation({
+    this.id,
+    this.userId,
+    this.restaurantId,
+    this.reservationDate,
+    this.numberOfPeople,
+    this.total,
+    this.orderMenuItemIds,
+    this.active,
+  });
 
   Reservation.fromData(Map<String, dynamic> data)
       : id = data['id'],

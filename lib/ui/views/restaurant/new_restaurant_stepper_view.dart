@@ -6,6 +6,7 @@ import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/category_card.dart';
 import 'package:tas/ui/widgets/input_field.dart';
 import 'package:tas/ui/widgets/note_text.dart';
+import 'package:tas/ui/widgets/opening_hours_select.dart';
 import 'package:tas/ui/widgets/show_up.dart';
 import 'package:tas/viewmodels/restaurant/new_restaurant_stepper_view_model.dart';
 
@@ -186,6 +187,36 @@ class NewRestaurantStepperView extends StatelessWidget {
                         fieldFocusNode: model.addressNode,
                       ),
                     ),
+                    new Step(
+                      title: const Text('Nyitvatartás'),
+                      isActive: true,
+                      state: StepState.indexed,
+                      content: Column(
+                        children: [
+                          OpeningHoursSelect(
+                            closingTime: model.closingTime,
+                            openingTime: model.openingTime,
+                            closingTap: () => model.selectTime(
+                              context: context,
+                              isClosingTime: true,
+                            ),
+                            openingTap: () => model.selectTime(
+                              context: context,
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ShowUp(
+                              child: NoteText(
+                                model.openingHoursErrorMessage,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                          verticalSpaceTiny,
+                        ],
+                      ),
+                    ),
                   ],
                   type: StepperType.vertical,
                   currentStep: model.currStep,
@@ -202,12 +233,14 @@ class NewRestaurantStepperView extends StatelessWidget {
                       model.createRestaurant(
                         nameController.text,
                         descriptionController.text,
+                        context,
                       );
                     } else {
                       if (model.currStep == 0)
                         model.descriptionNode.requestFocus();
                       if (model.currStep == 1) model.descriptionNode.unfocus();
                       if (model.currStep == 3) model.addressNode.requestFocus();
+                      if (model.currStep == 4) model.addressNode.unfocus();
                       model.onStepContinue();
                     }
                   },

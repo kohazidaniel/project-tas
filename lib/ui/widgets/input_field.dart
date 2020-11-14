@@ -95,9 +95,11 @@ class _InputFieldState extends State<InputField> {
                   obscureText: isPassword,
                   readOnly: widget.isReadOnly,
                   decoration: InputDecoration.collapsed(
-                      hintText: widget.placeholder,
-                      hintStyle:
-                          TextStyle(fontSize: widget.smallVersion ? 12 : 15)),
+                    hintText: widget.placeholder,
+                    hintStyle: TextStyle(
+                      fontSize: widget.smallVersion ? 12 : 15,
+                    ),
+                  ),
                 ),
               ),
               widget.inputPostfix != null
@@ -112,9 +114,10 @@ class _InputFieldState extends State<InputField> {
                         width: fieldHeight,
                         height: fieldHeight,
                         alignment: Alignment.centerRight,
-                        child: Icon(isPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off))
+                        child: Icon(
+                          isPassword ? Icons.visibility : Icons.visibility_off,
+                        ),
+                      )
                     : Container(),
               ),
               GestureDetector(

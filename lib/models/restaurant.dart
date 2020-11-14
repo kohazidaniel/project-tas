@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Restaurant {
   final String id;
   final String ownerId;
@@ -8,6 +10,8 @@ class Restaurant {
   final double latitude;
   final double longitude;
   final String address;
+  final String openingTime;
+  final String closingTime;
 
   Restaurant({
     this.id,
@@ -19,6 +23,8 @@ class Restaurant {
     this.latitude,
     this.longitude,
     this.address,
+    this.openingTime,
+    this.closingTime,
   });
 
   Restaurant.fromData(Map<String, dynamic> data)
@@ -30,7 +36,9 @@ class Restaurant {
         thumbnailUrl = data['thumbnailUrl'],
         latitude = data['latitude'],
         longitude = data['longitude'],
-        address = data['address'];
+        address = data['address'],
+        openingTime = data['openingTime'],
+        closingTime = data['closingTime'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -43,6 +51,8 @@ class Restaurant {
       'latitude': latitude,
       'longitude': longitude,
       'address': address,
+      'openingTime': openingTime,
+      'closingTime': closingTime,
     };
   }
 }

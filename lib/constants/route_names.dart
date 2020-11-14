@@ -7,4 +7,4 @@ const String RestaurantMainViewRoute = "RestaurantMainView";
 const String StartUpViewRoute = "StartUpView";
 const String NewRestaurantStepperViewRoute = "NewRestaurantStepperView";
 const String BookTableViewRoute = "BookTableView";
-// Generate the views here
+const String ReservationViewRoute = "ReservationView";

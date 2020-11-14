@@ -1,25 +1,10 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:tas/models/reservation.dart';
+import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
-import 'package:tas/ui/views/notification_view.dart';
-import 'package:tas/ui/widgets/badge.dart';
+import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/cart_view_model.dart';
-
-List cartItems = [
-  {
-    "img":
-        "https://images.receptmuhely.hu/media/cache/vich_show/images/recipe/63219bc8-c7c0-418e-b100-ee1dd880fa76.jpg",
-    "name": "Limonádé",
-    "price": 480
-  },
-  {
-    "img":
-        "https://secure.ce-tescoassets.com/assets/HU/472/0000054491472/ShotType1_540x540.jpg",
-    "name": "Limonádé",
-    "price": 480
-  }
-];
 
 class CartView extends StatelessWidget {
   @override
@@ -30,32 +15,75 @@ class CartView extends StatelessWidget {
         backgroundColor: backgroundColor,
         body: Padding(
           padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
-          child: Container(),
-        ),
-        floatingActionButton: OpenContainer(
-          transitionType: model.transitionType,
-          openBuilder: (BuildContext context, VoidCallback _) {
-            return NotificationView();
-          },
-          closedElevation: 6.0,
-          closedColor: primaryColor,
-          closedShape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(50 / 2),
-            ),
-          ),
-          openColor: primaryColor,
-          closedBuilder: (BuildContext context, VoidCallback openContainer) {
-            return Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: IconBadge(
-                icon: Icons.arrow_forward,
-                size: 22.0,
-                badgeValue: 0,
-                color: backgroundColor,
-              ),
-            );
-          },
+          child: FutureBuilder<List<Reservation>>(
+              future: model.getUserReservations(),
+              builder: (
+                BuildContext context,
+                AsyncSnapshot<List<Reservation>> snapshot,
+              ) {
+                if (snapshot.hasData) {
+                  if (snapshot.data.length == 0) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.event_seat,
+                            size: 64.0,
+                            color: Colors.grey[400],
+                          ),
+                          Text(
+                            'Még nincsen foglalásod',
+                            style: TextStyle(
+                              color: Colors.grey[400],
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Reservation reservation = snapshot.data[index];
+                        return FutureBuilder<Restaurant>(
+                          future: model.getReservationRestaurant(
+                            reservation.restaurantId,
+                          ),
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<Restaurant> snapshot,
+                          ) {
+                            if (snapshot.hasData) {
+                              return ListTile(
+                                title: Text(snapshot.data.name),
+                                subtitle: Text(model.getFormattedDate(
+                                  reservation.reservationDate.toDate(),
+                                )),
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    snapshot.data.thumbnailUrl,
+                                  ),
+                                ),
+                                onTap: () => model.navToReservationDetails(
+                                  reservation.id,
+                                ),
+                              );
+                            } else {
+                              return Container();
+                            }
+                          },
+                        );
+                      },
+                    );
+                  }
+                } else {
+                  return BusyOverlay(
+                    show: true,
+                  );
+                }
+              }),
         ),
       ),
     );

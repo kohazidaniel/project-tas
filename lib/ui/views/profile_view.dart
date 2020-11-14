@@ -4,6 +4,7 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/widgets/opening_hours_select.dart';
 import 'package:tas/viewmodels/profile_view_model.dart';
 
 class ProfileView extends StatelessWidget {
@@ -193,6 +194,26 @@ class ProfileView extends StatelessWidget {
                                 ),
                                 subtitle: Text(
                                   snapshot.data.address,
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Nyitvatartás',
+                                  style: TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                trailing: OpeningHoursSelect(
+                                  closingTime: model.closingTime,
+                                  openingTime: model.openingTime,
+                                  closingTap: () => model.selectTime(
+                                    context: context,
+                                    isClosingTime: true,
+                                  ),
+                                  openingTap: () => model.selectTime(
+                                    context: context,
+                                  ),
                                 ),
                               ),
                             ];

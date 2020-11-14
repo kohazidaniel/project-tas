@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/tas_map_view_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -14,25 +15,8 @@ class TasMapView extends StatelessWidget {
       onModelReady: (model) => model.getViewData(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
-        body: model.cameraPosition == null
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 75,
-                      width: 75,
-                      child: FlareActor(
-                        "assets/flare/beer_drink.flr",
-                        alignment: Alignment.center,
-                        fit: BoxFit.contain,
-                        animation: "normal",
-                      ),
-                    ),
-                  ],
-                ),
-              )
+        body: model.cameraPosition == null || model.restaurants == null
+            ? BusyOverlay()
             : Stack(
                 children: <Widget>[
                   GoogleMap(

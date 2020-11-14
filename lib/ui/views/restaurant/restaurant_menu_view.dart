@@ -6,6 +6,7 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/restaurant/menu_item_details_view.dart';
+import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/ui/widgets/cart_item.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_menu_view_model.dart';
 import 'package:grouped_list/grouped_list.dart';
@@ -159,24 +160,7 @@ class RestaurantMenuView extends StatelessWidget {
             AsyncSnapshot<List<MenuItem>> snapshot,
           ) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 75,
-                      width: 75,
-                      child: FlareActor(
-                        "assets/flare/beer_drink.flr",
-                        alignment: Alignment.center,
-                        fit: BoxFit.contain,
-                        animation: "normal",
-                      ),
-                    ),
-                  ],
-                ),
-              );
+              return BusyOverlay();
             } else {
               if (snapshot.data.isEmpty) {
                 return Center(

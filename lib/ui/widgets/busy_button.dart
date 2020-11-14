@@ -23,27 +23,30 @@ class _BusyButtonState extends State<BusyButton> {
     return GestureDetector(
       onTap: widget.onPressed,
       child: InkWell(
-          child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              alignment: Alignment.center,
-              padding: EdgeInsets.symmetric(
-                  horizontal: widget.busy ? 10 : 15,
-                  vertical: widget.busy ? 10 : 10),
-              decoration: BoxDecoration(
-                color: widget.enabled ? Colors.grey[800] : Colors.grey[300],
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: !widget.busy
-                  ? Text(
-                      widget.title,
-                      style: buttonTitleTextStyle,
-                    )
-                  : SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(Colors.white),
-                          strokeWidth: 2)))),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(
+              horizontal: widget.busy ? 10 : 15,
+              vertical: widget.busy ? 10 : 10),
+          decoration: BoxDecoration(
+            color: widget.enabled ? Colors.grey[800] : Colors.grey[300],
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: !widget.busy
+              ? Text(
+                  widget.title,
+                  style: buttonTitleTextStyle,
+                )
+              : SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                      strokeWidth: 2),
+                ),
+        ),
+      ),
     );
   }
 }

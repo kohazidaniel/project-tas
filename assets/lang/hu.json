@@ -41,5 +41,11 @@
         "wine": "Bor",
         "soda": "Üdítő",
         "snack": "Sörkorcsolya"
+    },
+    "restaurantTypes": {
+        "BEER": "Söröző",
+        "WINE": "Borozó",
+        "BISTRO": "Bisztró",
+        "CAFE": "Kávézó"
     }
 }

@@ -55,6 +55,7 @@ class LoginView extends StatelessWidget {
                       placeholder: FlutterI18n.translate(context, "email"),
                       controller: emailController,
                       validationMessage: model.loginEmailErrorMessage,
+                      textInputType: TextInputType.emailAddress,
                     ),
                     InputField(
                       placeholder: FlutterI18n.translate(context, "password"),

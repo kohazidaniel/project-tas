@@ -7,6 +7,7 @@ import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
@@ -24,7 +25,11 @@ class BookTableViewModel extends BaseModel {
   int _numberOfPeople = 2;
   int get numberOfPeople => _numberOfPeople;
 
-  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDate = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
   DateTime get selectedDate => _selectedDate;
 
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -34,8 +39,54 @@ class BookTableViewModel extends BaseModel {
     return await _firestoreService.getRestaurantById(restaurantId);
   }
 
-  void createReservation() async {
+  void createReservation(BuildContext context) async {
     setBusy(true);
+
+    Restaurant restaurant =
+        await _firestoreService.getRestaurantById(restaurantId);
+
+    int closingTimeInMinutes = DateTimeUtils.getTimeOfDayInMinutes(
+      DateTimeUtils.parseToTimeOfDay(restaurant.closingTime),
+    );
+
+    int openingTimeInMinutes = DateTimeUtils.getTimeOfDayInMinutes(
+      DateTimeUtils.parseToTimeOfDay(restaurant.openingTime),
+    );
+
+    int selectedTimeInMinutes = DateTimeUtils.getTimeOfDayInMinutes(
+      _selectedTime,
+    );
+
+    if (_selectedDate.isBefore(DateTime.now())) {
+      int currentTimeInMinutes = DateTimeUtils.getTimeOfDayInMinutes(
+        TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 2),
+      );
+      if (currentTimeInMinutes > selectedTimeInMinutes) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Legalább 2 órával előbb foglalj asztalt'),
+          backgroundColor: Colors.red[400],
+        ));
+
+        setBusy(false);
+        return;
+      }
+    }
+
+    if (selectedTimeInMinutes > closingTimeInMinutes ||
+        selectedTimeInMinutes < openingTimeInMinutes) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Nyitvatartás: ${restaurant.openingTime} - ${restaurant.closingTime}',
+        ),
+        backgroundColor: Colors.red[400],
+      ));
+
+      setBusy(false);
+      return;
+    }
+
     Timestamp reservationTimeStamp = Timestamp.fromDate(
       _selectedDate.add(
         Duration(hours: _selectedTime.hour, minutes: _selectedTime.minute),
@@ -49,13 +100,15 @@ class BookTableViewModel extends BaseModel {
         id: reservationId,
         active: false,
         numberOfPeople: _numberOfPeople,
-        restaurantId: reservationId,
+        restaurantId: restaurantId,
         reservationDate: reservationTimeStamp,
         orderMenuItemIds: [],
         total: 0,
         userId: _authenticationService.currentUser.id,
       ),
     );
+
+    _navigationService.pop();
 
     setBusy(false);
   }

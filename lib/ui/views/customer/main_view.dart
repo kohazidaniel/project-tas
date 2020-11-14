@@ -62,13 +62,14 @@ class MainView extends StatelessWidget {
                 closedBuilder:
                     (BuildContext context, VoidCallback openContainer) {
                   return Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: IconBadge(
-                        icon: Icons.notifications,
-                        size: 22.0,
-                        badgeValue: 0,
-                        color: primaryColor,
-                      ));
+                    padding: const EdgeInsets.all(15.0),
+                    child: IconBadge(
+                      icon: Icons.notifications,
+                      size: 22.0,
+                      badgeValue: 0,
+                      color: primaryColor,
+                    ),
+                  );
                 },
               ),
             ],
@@ -124,9 +125,9 @@ class MainView extends StatelessWidget {
                 ),
                 IconButton(
                   icon: IconBadge(
-                    icon: Icons.shopping_cart,
+                    icon: Icons.event_seat,
                     size: 24.0,
-                    badgeValue: 5,
+                    badgeValue: 0,
                   ),
                   color: model.page == 2
                       ? primaryColor
@@ -156,19 +157,26 @@ class MainView extends StatelessWidget {
           floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: primaryColor,
-            elevation: 4.0,
-            child: Icon(
-              Icons.search,
-              color: backgroundColor,
+          floatingActionButton: OpenContainer(
+            transitionType: ContainerTransitionType.fadeThrough,
+            openBuilder: (BuildContext context, VoidCallback _) {
+              return TasMapView();
+            },
+            closedElevation: 0.0,
+            closedShape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(50 / 2),
+              ),
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) {
-                  return TasMapView();
-                }),
+            openColor: primaryColor,
+            closedBuilder: (BuildContext context, VoidCallback openContainer) {
+              return FloatingActionButton(
+                backgroundColor: primaryColor,
+                elevation: 4.0,
+                child: Icon(
+                  Icons.search,
+                  color: backgroundColor,
+                ),
               );
             },
           ),

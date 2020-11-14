@@ -5,19 +5,32 @@ import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
+import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/base_model.dart';
 
 class ProfileViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
+  TimeOfDay _openingTime = TimeOfDay.now();
+  TimeOfDay get openingTime => _openingTime;
+
+  TimeOfDay _closingTime = TimeOfDay.now();
+  TimeOfDay get closingTime => _closingTime;
+
   TasUser getUser() {
     return _authService.currentUser;
   }
 
   Future<Restaurant> getRestaurant() async {
-    return await _firestoreService
-        .getUserRestaurant(_authService.currentUser.id);
+    Restaurant restaurant =
+        await _firestoreService.getUserRestaurant(_authService.currentUser.id);
+
+    _openingTime = DateTimeUtils.parseToTimeOfDay(restaurant.openingTime);
+    _closingTime = DateTimeUtils.parseToTimeOfDay(restaurant.closingTime);
+
+    return restaurant;
   }
 
   void signOut() {
@@ -60,5 +73,38 @@ class ProfileViewModel extends BaseModel {
         ],
       ),
     );
+  }
+
+  Future<void> selectTime(
+      {BuildContext context, bool isClosingTime = false}) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: isClosingTime ? _closingTime : _openingTime,
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: primaryColor,
+            ),
+          ),
+          child: child,
+        );
+      },
+    );
+    if (picked != null) {
+      if (isClosingTime) {
+        _closingTime = picked;
+      } else {
+        _openingTime = picked;
+      }
+    }
+
+    _firestoreService.updateOpeningHours(
+      picked.format(context),
+      _authService.userRestaurant.id,
+      isClosingTime,
+    );
+
+    notifyListeners();
   }
 }

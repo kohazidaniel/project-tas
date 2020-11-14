@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +13,7 @@ import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/cloud_storage_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
+import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -27,7 +29,7 @@ class NewRestaurantStepperViewModel extends BaseModel {
   int _currStep = 0;
   int get currStep => _currStep;
 
-  int _totalSteps = 4;
+  int _totalSteps = 5;
   int get totalSteps => _totalSteps;
 
   List<String> _selectedTypes = [];
@@ -36,6 +38,12 @@ class NewRestaurantStepperViewModel extends BaseModel {
   File _imageFile;
   File get imageFile => _imageFile;
 
+  TimeOfDay _openingTime;
+  TimeOfDay get openingTime => _openingTime;
+
+  TimeOfDay _closingTime;
+  TimeOfDay get closingTime => _closingTime;
+
   Position currentPosition;
 
   String restaurantNameErrorMessage = "";
@@ -43,6 +51,7 @@ class NewRestaurantStepperViewModel extends BaseModel {
   String restaurantTypeErrorMessage = "";
   String restaurantImageErrorMessage = "";
   String restaurantAddressErrorMessage = "";
+  String openingHoursErrorMessage = "";
 
   FocusNode nameNode = FocusNode();
   FocusNode descriptionNode = FocusNode();
@@ -53,11 +62,17 @@ class NewRestaurantStepperViewModel extends BaseModel {
   void createRestaurant(
     String restaurantName,
     String restaurantDescription,
+    BuildContext context,
   ) async {
     resetMessages();
     setBusy(true);
 
     int validationErrorOnStep;
+
+    if (_closingTime == null || _openingTime == null) {
+      validationErrorOnStep = 5;
+      openingHoursErrorMessage = "Kérlek add meg a nyitvatartást";
+    }
 
     if (addressController.text.isEmpty) {
       validationErrorOnStep = 4;
@@ -113,15 +128,18 @@ class NewRestaurantStepperViewModel extends BaseModel {
 
       await _firestoreService.createRestaurant(
         new Restaurant(
-            ownerId: _authenticationService.currentUser.id,
-            id: restaurantId,
-            name: restaurantName,
-            description: restaurantDescription,
-            restaurantTypes: _selectedTypes,
-            thumbnailUrl: result.imageUrl,
-            latitude: currentPosition.latitude,
-            longitude: currentPosition.longitude,
-            address: addressController.text),
+          ownerId: _authenticationService.currentUser.id,
+          id: restaurantId,
+          name: restaurantName,
+          description: restaurantDescription,
+          restaurantTypes: _selectedTypes,
+          thumbnailUrl: result.imageUrl,
+          latitude: currentPosition.latitude,
+          longitude: currentPosition.longitude,
+          address: addressController.text,
+          openingTime: _openingTime.format(context),
+          closingTime: _closingTime.format(context),
+        ),
       );
 
       _authenticationService.isUserLoggedIn();
@@ -182,11 +200,40 @@ class NewRestaurantStepperViewModel extends BaseModel {
     notifyListeners();
   }
 
+  Future<void> selectTime(
+      {BuildContext context, bool isClosingTime = false}) async {
+    final TimeOfDay picked = await showTimePicker(
+      context: context,
+      initialTime: isClosingTime
+          ? _closingTime ?? TimeOfDay.now()
+          : _openingTime ?? TimeOfDay.now(),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: primaryColor,
+            ),
+          ),
+          child: child,
+        );
+      },
+    );
+    if (picked != null) {
+      if (isClosingTime) {
+        _closingTime = picked;
+      } else {
+        _openingTime = picked;
+      }
+    }
+    notifyListeners();
+  }
+
   void resetMessages() {
     restaurantNameErrorMessage = "";
     restaurantDescriptionErrorMessage = "";
     restaurantTypeErrorMessage = "";
     restaurantImageErrorMessage = "";
     restaurantAddressErrorMessage = "";
+    openingHoursErrorMessage = "";
   }
 }

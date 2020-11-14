@@ -148,11 +148,48 @@ class FirestoreService {
     }
   }
 
+  Future updateOpeningHours(
+    String openingHour,
+    String restaurantId,
+    bool isClosingTime,
+  ) async {
+    try {
+      _restaurants
+          .doc(restaurantId)
+          .update({isClosingTime ? 'closingTime' : 'openingTime': openingHour});
+    } catch (e) {
+      return e;
+    }
+  }
+
   Future createReservation(Reservation reservation) async {
     try {
       await _reservations.doc(reservation.id).set(reservation.toJson());
     } catch (e) {
       return e;
+    }
+  }
+
+  Future<List<Reservation>> getUserReservations(String userId) async {
+    try {
+      var userReservationsSnapshot =
+          await _reservations.where('userId', isEqualTo: userId).get();
+
+      return userReservationsSnapshot.docs
+          .map((reservation) => Reservation.fromData(reservation.data()))
+          .toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<Reservation> getReservationById(String reservationId) async {
+    try {
+      var reservationSnapshot = await _reservations.doc(reservationId).get();
+
+      return Reservation.fromData(reservationSnapshot.data());
+    } catch (e) {
+      return null;
     }
   }
 }

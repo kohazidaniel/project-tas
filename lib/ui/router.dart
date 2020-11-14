@@ -1,7 +1,9 @@
+import 'package:tas/models/reservation.dart';
 import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/customer/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
+import 'package:tas/ui/views/customer/reservation_view.dart';
 import 'package:tas/ui/views/login_view.dart';
 import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/views/customer/place_details_view.dart';
@@ -58,6 +60,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: BookTableView(),
+      );
+    case ReservationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ReservationView(
+          reservationId: settings.arguments,
+        ),
       );
     default:
       return MaterialPageRoute(

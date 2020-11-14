@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
+import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/ui/widgets/category_card.dart';
 import 'package:tas/ui/widgets/grid_card.dart';
 import 'package:tas/ui/widgets/slider_item.dart';
@@ -29,57 +29,24 @@ class HomeView extends StatelessWidget {
         backgroundColor: backgroundColor,
         body: Padding(
           padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-          child: ListView(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    FlutterI18n.translate(context, "recommended_places"),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
+          child: model.restaurants == null || model.currentPosition == null
+              ? BusyOverlay()
+              : ListView(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          FlutterI18n.translate(context, "recommended_places"),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              verticalSpaceTiny,
-              model.restaurants == null && model.favouriteRestaurants == null
-                  ? Shimmer.fromColors(
-                      baseColor: Colors.grey[100],
-                      highlightColor: Colors.grey[300],
-                      enabled: true,
-                      child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  color: Colors.white,
-                                ),
-                                height:
-                                    MediaQuery.of(context).size.height / 3.2,
-                              ),
-                              SizedBox(height: 5),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: MediaQuery.of(context).size.width / 2,
-                                height: 18.0,
-                                color: Colors.white,
-                              ),
-                              SizedBox(height: 5),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: MediaQuery.of(context).size.width / 4,
-                                height: 16.0,
-                                color: Colors.white,
-                              )
-                            ],
-                          )),
-                    )
-                  : CarouselSlider(
+                    verticalSpaceTiny,
+                    CarouselSlider(
                       options: CarouselOptions(
                         height: MediaQuery.of(context).size.height / 2.4,
                         viewportFraction: 1.0,
@@ -99,48 +66,49 @@ class HomeView extends StatelessWidget {
                           )
                           .toList(),
                     ),
-              verticalSpaceSmall,
-              Text(
-                FlutterI18n.translate(context, "categories"),
-                style: TextStyle(
-                  fontSize: 23,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              Container(
-                height: 65.0,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: categories == null ? 0 : categories.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Map cat = categories[index];
-                    return CategoryCard(
-                      icon: cat['icon'],
-                      title: cat['name'],
-                      items: cat['items'].toString(),
-                      isHome: true,
-                    );
-                  },
-                ),
-              ),
-              verticalSpaceSmall,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    FlutterI18n.translate(context, "places_nearby"),
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                    verticalSpaceSmall,
+                    Text(
+                      FlutterI18n.translate(context, "categories"),
+                      style: TextStyle(
+                        fontSize: 23,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              verticalSpaceTiny,
-              model.restaurants == null && model.favouriteRestaurants == null
-                  ? Container()
-                  : GridView.builder(
+                    Container(
+                      height: 65.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: model.getRestaurantTypes().length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Map cat = model.getRestaurantTypes()[index];
+                          return CategoryCard(
+                            icon: cat['icon'],
+                            title: FlutterI18n.translate(
+                              context,
+                              'restaurantTypes.${cat['name']}',
+                            ),
+                            items: cat['items'].toString(),
+                            isHome: true,
+                          );
+                        },
+                      ),
+                    ),
+                    verticalSpaceSmall,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          FlutterI18n.translate(context, "places_nearby"),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
+                    verticalSpaceTiny,
+                    GridView.builder(
                       shrinkWrap: true,
                       primary: false,
                       physics: NeverScrollableScrollPhysics(),
@@ -167,9 +135,9 @@ class HomeView extends StatelessWidget {
                         );
                       },
                     ),
-              SizedBox(height: 30),
-            ],
-          ),
+                    SizedBox(height: 30),
+                  ],
+                ),
         ),
       ),
     );

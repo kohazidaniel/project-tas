@@ -129,6 +129,13 @@ class PlaceDetailsView extends StatelessWidget {
                       ),
                       maxLines: 2,
                     ),
+                    Text(
+                      'Nyitvatartás: ${model.restaurant.openingTime} - ${model.restaurant.closingTime}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
                     /* Padding(
                       padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
                       child: Row(

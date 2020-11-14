@@ -49,6 +49,7 @@ class SignUpView extends StatelessWidget {
                 validationMessage: model.signUpEmailErrorMessage,
                 fieldFocusNode: model.emailNode,
                 nextFocusNode: model.passwordNode,
+                textInputType: TextInputType.emailAddress,
               ),
               InputField(
                 placeholder: FlutterI18n.translate(context, "password"),

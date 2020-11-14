@@ -41,5 +41,11 @@
         "wine": "Wine",
         "soda": "Soda",
         "snack": "Snack"
+    },
+    "restaurantTypes": {
+        "BEER": "Pub",
+        "WINE": "Winery",
+        "BISTRO": "Bistro",
+        "CAFE": "Cafe"
     }
 }
