@@ -99,6 +99,8 @@ class BookTableViewModel extends BaseModel {
       Reservation(
         id: reservationId,
         active: false,
+        closed: false,
+        seen: false,
         numberOfPeople: _numberOfPeople,
         restaurantId: restaurantId,
         reservationDate: reservationTimeStamp,

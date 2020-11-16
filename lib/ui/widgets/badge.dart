@@ -31,26 +31,23 @@ class _IconBadgeState extends State<IconBadge> {
         if (widget.badgeValue > 0)
           Positioned(
             right: 0.0,
-            child: Container(
+            child: new Container(
               padding: EdgeInsets.all(1),
-              decoration: BoxDecoration(
+              decoration: new BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(6),
               ),
               constraints: BoxConstraints(
-                minWidth: 13,
-                minHeight: 13,
+                minWidth: 12,
+                minHeight: 12,
               ),
-              child: Padding(
-                padding: EdgeInsets.only(top: 1),
-                child: Text(
-                  widget.badgeValue.toString(),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
-                  ),
-                  textAlign: TextAlign.center,
+              child: new Text(
+                '${widget.badgeValue}',
+                style: new TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),

@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
+import 'package:tas/services/navigation_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
 
 class HomeViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authenticationService = locator<AuthService>();
+  final NavigationService _navigationService = locator<NavigationService>();
 
   List<Restaurant> _restaurants;
   List<Restaurant> get restaurants => _restaurants;
@@ -100,5 +103,12 @@ class HomeViewModel extends BaseModel {
       _authenticationService.currentUser.id,
     );
     notifyListeners();
+  }
+
+  void navToListByCategoriesView(String restaurantType) {
+    _navigationService.navigateTo(
+      ListByCategoriesViewRoute,
+      arguments: restaurantType,
+    );
   }
 }

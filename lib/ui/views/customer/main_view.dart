@@ -99,9 +99,11 @@ class MainView extends StatelessWidget {
                   color: model.page == 0
                       ? primaryColor
                       : primaryColor.withOpacity(0.5),
-                  onPressed: () => model.pageController.animateToPage(0,
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeInOut),
+                  onPressed: () => model.pageController.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                  ),
                 ),
                 IconButton(
                   icon: Icon(
@@ -112,7 +114,9 @@ class MainView extends StatelessWidget {
                       ? primaryColor
                       : primaryColor.withOpacity(0.5),
                   onPressed: () => model.pageController.animateToPage(1,
-                      duration: const Duration(milliseconds: 200),
+                      duration: const Duration(
+                        milliseconds: 200,
+                      ),
                       curve: Curves.easeInOut),
                 ),
                 IconButton(
@@ -121,20 +125,30 @@ class MainView extends StatelessWidget {
                     size: 0,
                     color: backgroundColor,
                   ),
-                  onPressed: () => {},
+                  onPressed: () {},
                 ),
-                IconButton(
-                  icon: IconBadge(
-                    icon: Icons.event_seat,
-                    size: 24.0,
-                    badgeValue: 0,
-                  ),
-                  color: model.page == 2
-                      ? primaryColor
-                      : primaryColor.withOpacity(0.5),
-                  onPressed: () => model.pageController.animateToPage(2,
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeInOut),
+                StreamBuilder<int>(
+                  stream: model.listenToUnSeenReservationListLength(),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<int> snapshot,
+                  ) {
+                    return IconButton(
+                      icon: IconBadge(
+                        icon: Icons.event_seat,
+                        size: 24.0,
+                        badgeValue: snapshot.hasData ? snapshot.data : 0,
+                      ),
+                      color: model.page == 2
+                          ? primaryColor
+                          : primaryColor.withOpacity(0.5),
+                      onPressed: () => model.pageController.animateToPage(
+                        2,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeInOut,
+                      ),
+                    );
+                  },
                 ),
                 IconButton(
                   icon: Icon(
@@ -144,9 +158,11 @@ class MainView extends StatelessWidget {
                   color: model.page == 3
                       ? primaryColor
                       : primaryColor.withOpacity(0.5),
-                  onPressed: () => model.pageController.animateToPage(3,
-                      duration: const Duration(milliseconds: 200),
-                      curve: Curves.easeInOut),
+                  onPressed: () => model.pageController.animateToPage(
+                    3,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                  ),
                 ),
                 SizedBox(width: 7),
               ],

@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
@@ -11,13 +10,6 @@ import 'package:tas/ui/widgets/category_card.dart';
 import 'package:tas/ui/widgets/grid_card.dart';
 import 'package:tas/ui/widgets/slider_item.dart';
 import 'package:tas/viewmodels/customer/home_view_model.dart';
-
-List categories = [
-  {"name": "Sörözõ", "icon": FontAwesomeIcons.beer, "items": 5},
-  {"name": "Kávézó", "icon": FontAwesomeIcons.coffee, "items": 20},
-  {"name": "Bisztró", "icon": FontAwesomeIcons.utensils, "items": 9},
-  {"name": "Borozó", "icon": FontAwesomeIcons.wineGlass, "items": 9}
-];
 
 class HomeView extends StatelessWidget {
   @override
@@ -89,7 +81,9 @@ class HomeView extends StatelessWidget {
                               'restaurantTypes.${cat['name']}',
                             ),
                             items: cat['items'].toString(),
-                            isHome: true,
+                            tap: () => model.navToListByCategoriesView(
+                              cat['name'],
+                            ),
                           );
                         },
                       ),

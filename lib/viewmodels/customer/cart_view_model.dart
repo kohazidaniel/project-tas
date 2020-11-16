@@ -1,6 +1,7 @@
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
+import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
@@ -16,6 +17,11 @@ class CartViewModel extends BaseModel {
   Future<List<Reservation>> getUserReservations() {
     return _firestoreService
         .getUserReservations(_authenticationService.currentUser.id);
+  }
+
+  Stream<List<ReservationWithRestaurant>> listenToUserReservations() {
+    return _firestoreService
+        .listenToUserReservations(_authenticationService.currentUser.id);
   }
 
   Future<Restaurant> getReservationRestaurant(String restaurantId) {

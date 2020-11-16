@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/models/reservation.dart';
+import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 
@@ -18,6 +19,11 @@ class FirestoreService {
 
   final StreamController<List<MenuItem>> _menuItemsController =
       StreamController<List<MenuItem>>.broadcast();
+
+  final StreamController<int> _unSeenReservationListLengthController =
+      StreamController<int>.broadcast();
+
+  // User  actions
 
   Future createUser(TasUser user) async {
     try {
@@ -35,6 +41,30 @@ class FirestoreService {
       return null;
     }
   }
+
+  Future<List<dynamic>> getUserFavouriteRestaurants(String uid) async {
+    try {
+      var userData = await _users.doc(uid).get();
+      return (userData.data()['favouriteRestaurants'] as List<dynamic>)
+          .cast<String>();
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future addRestaurantToUserFavourites(
+    List<String> favouriteRestaurants,
+    String userId,
+  ) async {
+    try {
+      _users.doc(userId).update({'favouriteRestaurants': favouriteRestaurants});
+    } catch (e) {
+      return e;
+    }
+  }
+
+  // Restaurant actions
 
   Future createRestaurant(Restaurant restaurant) async {
     try {
@@ -128,23 +158,18 @@ class FirestoreService {
     }
   }
 
-  Future<List<dynamic>> getUserFavouriteRestaurants(String uid) async {
+  Future<List<Restaurant>> getRestaurantsByType(String restaurantType) async {
     try {
-      var userData = await _users.doc(uid).get();
-      return (userData.data()['favouriteRestaurants'] as List<dynamic>)
-          .cast<String>();
-    } catch (e) {
-      print(e);
-      return [];
-    }
-  }
+      var restaurantsSnapshot = await _restaurants
+          .where('restaurantTypes', arrayContains: restaurantType)
+          .orderBy('name', descending: true)
+          .get();
 
-  Future addRestaurantToUserFavourites(
-      List<String> favouriteRestaurants, String userId) async {
-    try {
-      _users.doc(userId).update({'favouriteRestaurants': favouriteRestaurants});
+      return restaurantsSnapshot.docs
+          .map((restaurant) => Restaurant.fromData(restaurant.data()))
+          .toList();
     } catch (e) {
-      return e;
+      return null;
     }
   }
 
@@ -161,6 +186,8 @@ class FirestoreService {
       return e;
     }
   }
+
+  // User reservation actions
 
   Future createReservation(Reservation reservation) async {
     try {
@@ -191,5 +218,66 @@ class FirestoreService {
     } catch (e) {
       return null;
     }
+  }
+
+  Stream<int> listenToUnSeenReservationListLength(String userId) {
+    _reservations.snapshots().listen((reservationSnapshot) {
+      var menuItems = reservationSnapshot.docs
+          .map((snapshot) => Reservation.fromData(snapshot.data()))
+          .where(
+              (mappedItem) => mappedItem.userId == userId && !mappedItem.seen)
+          .toList();
+      _unSeenReservationListLengthController.add(menuItems.length);
+    });
+
+    return _unSeenReservationListLengthController.stream;
+  }
+
+  Future<void> setReservationSeen(String reservationId) async {
+    try {
+      _reservations.doc(reservationId).update({'seen': true});
+    } catch (e) {
+      return e;
+    }
+  }
+
+  Stream<List<ReservationWithRestaurant>> listenToUserReservations(
+    String userId,
+  ) {
+    return _reservations
+        .where('userId', isEqualTo: userId)
+        .orderBy('reservationDate', descending: true)
+        .snapshots()
+        .asyncMap(
+          (QuerySnapshot reservationSnap) => reservationToPairs(
+            reservationSnap,
+          ),
+        );
+  }
+
+  Future<List<ReservationWithRestaurant>> reservationToPairs(
+    QuerySnapshot reservationSnap,
+  ) {
+    return Future.wait(
+        reservationSnap.docs.map((DocumentSnapshot reservationDoc) async {
+      return await reservationToPair(reservationDoc);
+    }).toList());
+  }
+
+  Future<ReservationWithRestaurant> reservationToPair(
+    DocumentSnapshot reservationDoc,
+  ) {
+    Reservation reservation = Reservation.fromData(reservationDoc.data());
+
+    return _restaurants
+        .doc(reservation.restaurantId)
+        .get()
+        .then((restaurantSnapshot) {
+      Restaurant restaurant = Restaurant.fromData(restaurantSnapshot.data());
+      return ReservationWithRestaurant(
+        reservation: reservation,
+        restaurant: restaurant,
+      );
+    });
   }
 }

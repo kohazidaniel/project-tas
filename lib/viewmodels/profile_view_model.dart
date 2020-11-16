@@ -13,10 +13,10 @@ class ProfileViewModel extends BaseModel {
   final AuthService _authService = locator<AuthService>();
   final FirestoreService _firestoreService = locator<FirestoreService>();
 
-  TimeOfDay _openingTime = TimeOfDay.now();
+  TimeOfDay _openingTime;
   TimeOfDay get openingTime => _openingTime;
 
-  TimeOfDay _closingTime = TimeOfDay.now();
+  TimeOfDay _closingTime;
   TimeOfDay get closingTime => _closingTime;
 
   TasUser getUser() {

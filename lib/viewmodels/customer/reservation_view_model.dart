@@ -25,5 +25,9 @@ class ReservationViewModel extends BaseModel {
     _restaurant =
         await _firestoreService.getRestaurantById(_reservation.restaurantId);
     notifyListeners();
+
+    if (!_reservation.seen) {
+      await _firestoreService.setReservationSeen(_reservationId);
+    }
   }
 }

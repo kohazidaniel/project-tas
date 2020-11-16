@@ -1,5 +1,6 @@
 import 'package:tas/models/reservation.dart';
 import 'package:tas/ui/views/customer/book_table_view.dart';
+import 'package:tas/ui/views/customer/list_by_categories_view.dart';
 import 'package:tas/ui/views/customer/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
@@ -66,6 +67,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: ReservationView(
           reservationId: settings.arguments,
+        ),
+      );
+    case ListByCategoriesViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ListByCategoriesView(
+          restaurantType: settings.arguments,
         ),
       );
     default:

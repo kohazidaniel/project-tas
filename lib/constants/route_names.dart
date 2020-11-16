@@ -8,3 +8,4 @@ const String StartUpViewRoute = "StartUpView";
 const String NewRestaurantStepperViewRoute = "NewRestaurantStepperView";
 const String BookTableViewRoute = "BookTableView";
 const String ReservationViewRoute = "ReservationView";
+const String ListByCategoriesViewRoute = "ListByCategoriesViewRoute";

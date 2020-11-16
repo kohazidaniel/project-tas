@@ -9,6 +9,7 @@ class ReservationView extends StatelessWidget {
   final String reservationId;
 
   ReservationView({this.reservationId});
+
   @override
   Widget build(BuildContext context) {
     return ViewModelProvider<ReservationViewModel>.withConsumer(

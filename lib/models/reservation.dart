@@ -9,6 +9,8 @@ class Reservation {
   final List<dynamic> orderMenuItemIds;
   final int total;
   final bool active;
+  final bool closed;
+  final bool seen;
 
   Reservation({
     this.id,
@@ -19,6 +21,8 @@ class Reservation {
     this.total,
     this.orderMenuItemIds,
     this.active,
+    this.closed,
+    this.seen,
   });
 
   Reservation.fromData(Map<String, dynamic> data)
@@ -29,7 +33,9 @@ class Reservation {
         numberOfPeople = data['numberOfPeople'],
         orderMenuItemIds = data['orderMenuItemIds'],
         total = data['total'],
-        active = data['active'];
+        active = data['active'],
+        closed = data['closed'],
+        seen = data['seen'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -40,7 +46,9 @@ class Reservation {
       'numberOfPeople': numberOfPeople,
       'orderMenuItemIds': orderMenuItemIds,
       'total': total,
-      'active': active
+      'active': active,
+      'closed': closed,
+      'seen': seen,
     };
   }
 }
