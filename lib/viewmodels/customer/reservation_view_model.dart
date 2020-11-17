@@ -1,13 +1,19 @@
+import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/restaurant.dart';
+import 'package:tas/services/auth_service.dart';
+import 'package:tas/services/dialog_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
+import 'package:intl/intl.dart';
 
 class ReservationViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final NavigationService navigationService = locator<NavigationService>();
+  final NavigationService _navigationService = locator<NavigationService>();
+  final AuthService _authService = locator<AuthService>();
+  final DialogService _dialogService = locator<DialogService>();
 
   String _reservationId;
   ReservationViewModel(String reservationId) {
@@ -29,5 +35,75 @@ class ReservationViewModel extends BaseModel {
     if (!_reservation.seen) {
       await _firestoreService.setReservationSeen(_reservationId);
     }
+  }
+
+  void navToPlaceDetailsView(String restaurantId) {
+    _navigationService.navigateTo(
+      PlaceDetailsViewRoute,
+      arguments: restaurantId,
+    );
+  }
+
+  void navToBack() {
+    _navigationService.pop();
+  }
+
+  String getFormattedDate(DateTime dateTime) {
+    DateFormat formatter = new DateFormat.yMMMMd('hu');
+
+    return formatter.format(dateTime) +
+        ' ${dateTime.hour}:' +
+        '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
+        '${dateTime.minute}';
+  }
+
+  Future<void> startReservation() async {
+    setBusy(true);
+
+    await _firestoreService.startReservation(
+      reservation.id,
+      _authService.currentUser.id,
+    );
+
+    _authService.refreshUser();
+
+    setBusy(false);
+  }
+
+  Future<void> deleteReservation() async {
+    var dialogResponse = await _dialogService.showConfirmationDialog(
+      title: 'Asztalfoglalás',
+      description: 'Biztos törölni szeretnéd a foglalást?',
+      confirmationTitle: 'Igen',
+      cancelTitle: 'Nem',
+    );
+
+    if (dialogResponse.confirmed) {
+      setBusy(true);
+      await _firestoreService.deleteReservation(reservation.id);
+      setBusy(false);
+      _navigationService.pop();
+    }
+  }
+
+  bool canStartReservation() {
+    return _authService.currentUser.inProgressReservationId.isNotEmpty &&
+        _reservation.reservationDate
+            .toDate()
+            .subtract(Duration(minutes: 15))
+            .isAfter(
+              DateTime.now(),
+            );
+  }
+
+  bool canDeleteReservation() {
+    return _reservation.reservationDate
+        .toDate()
+        .subtract(
+          Duration(hours: 2),
+        )
+        .isBefore(
+          DateTime.now(),
+        );
   }
 }

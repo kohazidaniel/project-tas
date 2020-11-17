@@ -29,7 +29,10 @@ class FavouriteView extends StatelessWidget {
                             color: Colors.grey[400],
                           ),
                           Text(
-                            'Keresd meg a kedvenc helyeidet',
+                            FlutterI18n.translate(
+                              context,
+                              "find_your_favourites",
+                            ),
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontWeight: FontWeight.bold,

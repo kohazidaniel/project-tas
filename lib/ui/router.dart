@@ -1,4 +1,5 @@
 import 'package:tas/models/reservation.dart';
+import 'package:tas/ui/views/customer/active_reservation_view.dart';
 import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/customer/list_by_categories_view.dart';
 import 'package:tas/ui/views/customer/main_view.dart';
@@ -74,6 +75,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         routeName: settings.name,
         viewToShow: ListByCategoriesView(
           restaurantType: settings.arguments,
+        ),
+      );
+    case ActiveReservationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ActiveReservationView(
+          reservationId: settings.arguments,
         ),
       );
     default:

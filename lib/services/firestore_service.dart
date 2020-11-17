@@ -23,6 +23,9 @@ class FirestoreService {
   final StreamController<int> _unSeenReservationListLengthController =
       StreamController<int>.broadcast();
 
+  final StreamController<bool> _userReservationInProgressController =
+      StreamController<bool>.broadcast();
+
   // User  actions
 
   Future createUser(TasUser user) async {
@@ -62,6 +65,17 @@ class FirestoreService {
     } catch (e) {
       return e;
     }
+  }
+
+  Stream<bool> listenToUserReservationInProgress(String userId) {
+    _users.doc(userId).snapshots().listen((userSnapshot) {
+      TasUser user = TasUser.fromData(userSnapshot.data());
+      _userReservationInProgressController.add(
+        user.inProgressReservationId.isNotEmpty,
+      );
+    });
+
+    return _userReservationInProgressController.stream;
   }
 
   // Restaurant actions
@@ -220,6 +234,35 @@ class FirestoreService {
     }
   }
 
+  Future<ReservationWithRestaurant> getReservationWithRestaurantById(
+      String reservationId) async {
+    try {
+      var reservationSnapshot = await _reservations.doc(reservationId).get();
+      Reservation reservation = Reservation.fromData(
+        reservationSnapshot.data(),
+      );
+
+      var restaurantSnapshot =
+          await _restaurants.doc(reservation.restaurantId).get();
+
+      return ReservationWithRestaurant(
+        reservation: reservation,
+        restaurant: Restaurant.fromData(restaurantSnapshot.data()),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> startReservation(String reservationId, String userId) async {
+    try {
+      _users.doc(userId).update({'inProgressReservationId': reservationId});
+      _reservations.doc(reservationId).update({'active': true});
+    } catch (e) {
+      return e;
+    }
+  }
+
   Stream<int> listenToUnSeenReservationListLength(String userId) {
     _reservations.snapshots().listen((reservationSnapshot) {
       var menuItems = reservationSnapshot.docs
@@ -236,6 +279,14 @@ class FirestoreService {
   Future<void> setReservationSeen(String reservationId) async {
     try {
       _reservations.doc(reservationId).update({'seen': true});
+    } catch (e) {
+      return e;
+    }
+  }
+
+  Future<void> deleteReservation(String reservationId) async {
+    try {
+      _reservations.doc(reservationId).delete();
     } catch (e) {
       return e;
     }

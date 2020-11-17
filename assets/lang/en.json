@@ -23,6 +23,11 @@
     "description": "Description",
     "drink_menu": "Drink menu",
     "book_a_table": "Book a table",
+    "active_reservation": "Active reservation",
+    "find_your_favourites": "Find your favourite places",
+    "no_reservations": "There are no reservations",
+    "search_places": "Search...",
+    "opening_hours": "Opening hours",
     "details": "Details",
     "validation_messages": {
         "missing_email": "Missing email",
@@ -47,5 +52,14 @@
         "WINE": "Winery",
         "BISTRO": "Bistro",
         "CAFE": "Cafe"
+    },
+    "book_table_view": {
+        "book": "Book",
+        "select_time": "SELECT TIME",
+        "select_day": "SELECT DAY",
+        "which_day_title": "On which day are you coming?",
+        "when_title": "When are you coming?",
+        "number_of_people_title": "Number of people",
+        "people": "People"
     }
 }

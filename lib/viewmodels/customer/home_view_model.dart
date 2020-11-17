@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
+import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
@@ -23,14 +24,31 @@ class HomeViewModel extends BaseModel {
   List<String> _favouriteRestaurants;
   List<String> get favouriteRestaurants => _favouriteRestaurants;
 
+  ReservationWithRestaurant _reservationWithRestaurant;
+  ReservationWithRestaurant get reservationWithRestaurant =>
+      _reservationWithRestaurant;
+
   void getViewData() async {
     _currentPosition = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
     _restaurants = await _firestoreService.getRestaurants();
-    _favouriteRestaurants = await _firestoreService
-        .getUserFavouriteRestaurants(_authenticationService.currentUser.id);
+    _favouriteRestaurants = await _firestoreService.getUserFavouriteRestaurants(
+      _authenticationService.currentUser.id,
+    );
+    if (_authenticationService.currentUser.inProgressReservationId.isNotEmpty) {
+      _reservationWithRestaurant =
+          await _firestoreService.getReservationWithRestaurantById(
+        _authenticationService.currentUser.inProgressReservationId,
+      );
+    }
     notifyListeners();
+  }
+
+  Stream<bool> listenToUserReservationInProgress() {
+    return _firestoreService.listenToUserReservationInProgress(
+      _authenticationService.currentUser.id,
+    );
   }
 
   List getRestaurantTypes() {
@@ -109,6 +127,13 @@ class HomeViewModel extends BaseModel {
     _navigationService.navigateTo(
       ListByCategoriesViewRoute,
       arguments: restaurantType,
+    );
+  }
+
+  void navToActiveReservationView(String reservationId) {
+    _navigationService.navigateTo(
+      ActiveReservationViewRoute,
+      arguments: reservationId,
     );
   }
 }

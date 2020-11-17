@@ -4,21 +4,23 @@ class TasUser {
   final String email;
   final String userRole;
   final List<dynamic> favouriteRestaurants;
+  final String inProgressReservationId;
 
-  TasUser({
-    this.id,
-    this.fullName,
-    this.email,
-    this.userRole,
-    this.favouriteRestaurants,
-  });
+  TasUser(
+      {this.id,
+      this.fullName,
+      this.email,
+      this.userRole,
+      this.favouriteRestaurants,
+      this.inProgressReservationId});
 
   TasUser.fromData(Map<String, dynamic> data)
       : id = data['id'],
         fullName = data['fullName'],
         email = data['email'],
         userRole = data['userRole'],
-        favouriteRestaurants = data['favouriteRestaurants'];
+        favouriteRestaurants = data['favouriteRestaurants'],
+        inProgressReservationId = data['inProgressReservationId'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -27,6 +29,7 @@ class TasUser {
       'email': email,
       'userRole': userRole,
       'favouriteRestaurants': favouriteRestaurants,
+      'inProgressReservationId': inProgressReservationId,
     };
   }
 }

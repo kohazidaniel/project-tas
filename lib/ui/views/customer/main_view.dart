@@ -187,6 +187,7 @@ class MainView extends StatelessWidget {
             openColor: primaryColor,
             closedBuilder: (BuildContext context, VoidCallback openContainer) {
               return FloatingActionButton(
+                onPressed: openContainer,
                 backgroundColor: primaryColor,
                 elevation: 4.0,
                 child: Icon(

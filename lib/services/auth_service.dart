@@ -75,6 +75,11 @@ class AuthService {
     return user != null;
   }
 
+  Future<void> refreshUser() async {
+    var user = _firebaseAuth.currentUser;
+    await _populateCurrentUser(user);
+  }
+
   Future _populateCurrentUser(User user) async {
     if (user != null) {
       _currentUser = await _firestoreService.getUser(user.uid);

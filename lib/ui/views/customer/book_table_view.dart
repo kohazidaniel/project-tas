@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/restaurant.dart';
@@ -47,7 +48,10 @@ class BookTableView extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Asztalfoglalás',
+                                        FlutterI18n.translate(
+                                          context,
+                                          'book_a_table',
+                                        ),
                                         style: TextStyle(
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.bold,
@@ -85,7 +89,10 @@ class BookTableView extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Hányan lesztek?',
+                                FlutterI18n.translate(
+                                  context,
+                                  'book_table_view.number_of_people_title',
+                                ),
                                 style: TextStyle(
                                   fontSize: 14.0,
                                 ),
@@ -96,7 +103,7 @@ class BookTableView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${model.numberOfPeople.toString()} fő',
+                                '${model.numberOfPeople.toString()} ${FlutterI18n.translate(context, 'book_table_view.people')}',
                                 style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.bold,
@@ -134,7 +141,10 @@ class BookTableView extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Melyik nap jöttök?',
+                                FlutterI18n.translate(
+                                  context,
+                                  'book_table_view.which_day_title',
+                                ),
                                 style: TextStyle(
                                   fontSize: 14.0,
                                 ),
@@ -154,7 +164,10 @@ class BookTableView extends StatelessWidget {
                               ),
                               FlatButton(
                                 child: Text(
-                                  'NAP KIVÁLASZTÁSA',
+                                  FlutterI18n.translate(
+                                    context,
+                                    'book_table_view.select_day',
+                                  ),
                                   style: TextStyle(fontSize: 12.0),
                                 ),
                                 textColor: primaryColor,
@@ -166,7 +179,10 @@ class BookTableView extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Hányra jöttök?',
+                                FlutterI18n.translate(
+                                  context,
+                                  'book_table_view.when_title',
+                                ),
                                 style: TextStyle(
                                   fontSize: 14.0,
                                 ),
@@ -187,7 +203,10 @@ class BookTableView extends StatelessWidget {
                               ),
                               FlatButton(
                                 child: Text(
-                                  'IDŐ KIVÁLASZTÁSA',
+                                  FlutterI18n.translate(
+                                    context,
+                                    'book_table_view.select_time',
+                                  ),
                                   style: TextStyle(fontSize: 12.0),
                                 ),
                                 textColor: primaryColor,
@@ -197,7 +216,10 @@ class BookTableView extends StatelessWidget {
                           ),
                           verticalSpaceSmall,
                           BusyButton(
-                            title: 'Foglalás',
+                            title: FlutterI18n.translate(
+                              context,
+                              'book_table_view.book',
+                            ),
                             onPressed: () => model.createReservation(context),
                             busy: model.busy,
                           )

@@ -37,10 +37,17 @@ class CartViewModel extends BaseModel {
         '${dateTime.minute}';
   }
 
-  void navToReservationDetails(String reservationId) {
-    _navigationService.navigateTo(
-      ReservationViewRoute,
-      arguments: reservationId,
-    );
+  void navToReservation(Reservation reservation) {
+    if (reservation.active) {
+      _navigationService.navigateTo(
+        ActiveReservationViewRoute,
+        arguments: reservation.id,
+      );
+    } else {
+      _navigationService.navigateTo(
+        ReservationViewRoute,
+        arguments: reservation.id,
+      );
+    }
   }
 }

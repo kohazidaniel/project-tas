@@ -1,5 +1,4 @@
 import 'package:animations/animations.dart';
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
@@ -35,7 +34,7 @@ class RestaurantMenuView extends StatelessWidget {
           ),
           centerTitle: true,
           title: Text(
-            'Itallap',
+            FlutterI18n.translate(context, 'drink_menu'),
             style: TextStyle(color: primaryColor),
           ),
           bottom: PreferredSize(

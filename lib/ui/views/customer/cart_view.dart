@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/cart_view_model.dart';
 
@@ -34,7 +36,7 @@ class CartView extends StatelessWidget {
                           color: Colors.grey[400],
                         ),
                         Text(
-                          'Még nincsen foglalásod',
+                          FlutterI18n.translate(context, 'no_reservations'),
                           style: TextStyle(
                             color: Colors.grey[400],
                             fontWeight: FontWeight.bold,
@@ -61,22 +63,27 @@ class CartView extends StatelessWidget {
                             restaurant.thumbnailUrl,
                           ),
                         ),
-                        onTap: () => model.navToReservationDetails(
-                          reservation.id,
-                        ),
-                        trailing: reservation.seen
-                            ? SizedBox.shrink()
-                            : Container(
-                                padding: EdgeInsets.all(1),
-                                decoration: new BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                constraints: BoxConstraints(
-                                  maxWidth: 12,
-                                  maxHeight: 12,
-                                ),
-                              ),
+                        onTap: () => model.navToReservation(reservation),
+                        trailing: reservation.active
+                            ? BlinkingPoint(
+                                xCoor: -6.0,
+                                yCoor: 0.0,
+                                pointColor: Colors.red,
+                                pointSize: 10.0,
+                              )
+                            : reservation.seen
+                                ? SizedBox.shrink()
+                                : Container(
+                                    padding: EdgeInsets.all(1),
+                                    decoration: new BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
+                                    constraints: BoxConstraints(
+                                      maxWidth: 10,
+                                      maxHeight: 10,
+                                    ),
+                                  ),
                       );
                     },
                   );

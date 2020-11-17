@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/dialog_models.dart';
 import 'package:tas/services/dialog_service.dart';
+import 'package:tas/ui/shared/app_colors.dart';
 
 class DialogManager extends StatefulWidget {
   final Widget child;
@@ -34,14 +35,26 @@ class _DialogManagerState extends State<DialogManager> {
               actions: <Widget>[
                 if (isConfirmationDialog)
                   FlatButton(
-                    child: Text(request.cancelTitle),
+                    splashColor: Colors.yellow[400].withOpacity(0.5),
+                    child: Text(
+                      request.cancelTitle,
+                      style: TextStyle(
+                        color: primaryColor,
+                      ),
+                    ),
                     onPressed: () {
                       _dialogService
                           .dialogComplete(DialogResponse(confirmed: false));
                     },
                   ),
                 FlatButton(
-                  child: Text(request.buttonTitle),
+                  splashColor: Colors.yellow[400].withOpacity(0.5),
+                  child: Text(
+                    request.buttonTitle,
+                    style: TextStyle(
+                      color: primaryColor,
+                    ),
+                  ),
                   onPressed: () {
                     _dialogService
                         .dialogComplete(DialogResponse(confirmed: true));

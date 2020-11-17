@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
+import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/reservation_view_model.dart';
 
@@ -18,16 +20,24 @@ class ReservationView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         body: model.reservation == null || model.restaurant == null
             ? BusyOverlay()
-            : ListView(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(25.0),
-                    child: Column(
+            : Padding(
+                padding: EdgeInsets.all(25.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
+                        InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          onTap: () => model.navToPlaceDetailsView(
+                            model.restaurant.id,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Row(
                               children: [
                                 CircleAvatar(
                                   backgroundImage: NetworkImage(
@@ -59,19 +69,77 @@ class ReservationView extends StatelessWidget {
                                 )
                               ],
                             ),
-                            IconButton(
-                              icon: Icon(
-                                Icons.cancel,
-                                color: primaryColor,
-                              ),
-                              onPressed: () => model.navigationService.pop(),
-                            ),
-                          ],
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.cancel,
+                            color: primaryColor,
+                          ),
+                          onPressed: () => model.navToBack(),
                         ),
                       ],
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: MediaQuery.of(context).size.width / 2,
+                      child: SvgPicture.asset(
+                        'assets/images/book_a_table.svg',
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Dátum',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  model.getFormattedDate(
+                                    model.reservation.reservationDate.toDate(),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${model.reservation.numberOfPeople}',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Icon(Icons.person),
+                              ],
+                            ),
+                          ],
+                        ),
+                        verticalSpaceSmall,
+                        model.canStartReservation()
+                            ? SizedBox.shrink()
+                            : BusyButton(
+                                title: 'Itt vagyunk',
+                                onPressed: () => model.startReservation(),
+                              ),
+                        verticalSpaceSmall,
+                        model.canDeleteReservation()
+                            ? SizedBox.shrink()
+                            : BusyButton(
+                                title: 'Törlés',
+                                onPressed: () => model.deleteReservation(),
+                              ),
+                      ],
+                    )
+                  ],
+                ),
               ),
       ),
     );

@@ -1,5 +1,5 @@
-import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
@@ -89,7 +89,10 @@ class TasMapView extends StatelessWidget {
                                       border: InputBorder.none,
                                       contentPadding:
                                           EdgeInsets.symmetric(horizontal: 15),
-                                      hintText: "Hely keresése...",
+                                      hintText: FlutterI18n.translate(
+                                        context,
+                                        'search_places',
+                                      ),
                                     ),
                                   ),
                                 ),

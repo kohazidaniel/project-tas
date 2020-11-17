@@ -130,7 +130,7 @@ class PlaceDetailsView extends StatelessWidget {
                       maxLines: 2,
                     ),
                     Text(
-                      'Nyitvatartás: ${model.restaurant.openingTime} - ${model.restaurant.closingTime}',
+                      '${FlutterI18n.translate(context, 'opening_hours')}: ${model.restaurant.openingTime} - ${model.restaurant.closingTime}',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w300,
@@ -258,7 +258,7 @@ class PlaceDetailsView extends StatelessWidget {
         floatingActionButton: FloatingActionButton.extended(
           elevation: 4.0,
           icon: Icon(Icons.event_seat),
-          label: Text('Foglalás'),
+          label: Text(FlutterI18n.translate(context, 'book_a_table')),
           onPressed: () {
             Navigator.push(
               context,

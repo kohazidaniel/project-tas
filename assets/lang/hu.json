@@ -23,6 +23,11 @@
     "description": "Leírás",
     "drink_menu": "Itallap",
     "book_a_table": "Asztalfoglalás",
+    "active_reservation": "Aktív asztalfoglalás",
+    "find_your_favourites": "Keresd meg a kedvenc helyeidet",
+    "no_reservations": "Még nincsen foglalásod",
+    "search_places": "Hely keresése...",
+    "opening_hours": "Nyitvatartás",
     "details": "Részletek",
     "validation_messages": {
         "missing_email": "Hiányzó email",
@@ -47,5 +52,14 @@
         "WINE": "Borozó",
         "BISTRO": "Bisztró",
         "CAFE": "Kávézó"
+    },
+    "book_table_view": {
+        "book": "Foglalás",
+        "select_time": "IDŐ KIVÁLASZTÁSA",
+        "select_day": "NAP KIVÁLASZTÁSA",
+        "which_day_title": "Melyik nap jöttök?",
+        "when_title": "Hányra jöttök?",
+        "number_of_people_title": "Hányan jöttök?",
+        "people": "fő"
     }
 }
