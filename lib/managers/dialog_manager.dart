@@ -35,7 +35,7 @@ class _DialogManagerState extends State<DialogManager> {
               actions: <Widget>[
                 if (isConfirmationDialog)
                   FlatButton(
-                    splashColor: Colors.yellow[400].withOpacity(0.5),
+                    splashColor: primaryColor.withOpacity(0.2),
                     child: Text(
                       request.cancelTitle,
                       style: TextStyle(
@@ -43,12 +43,13 @@ class _DialogManagerState extends State<DialogManager> {
                       ),
                     ),
                     onPressed: () {
-                      _dialogService
-                          .dialogComplete(DialogResponse(confirmed: false));
+                      _dialogService.dialogComplete(
+                        DialogResponse(confirmed: false),
+                      );
                     },
                   ),
                 FlatButton(
-                  splashColor: Colors.yellow[400].withOpacity(0.5),
+                  splashColor: primaryColor.withOpacity(0.2),
                   child: Text(
                     request.buttonTitle,
                     style: TextStyle(
@@ -56,8 +57,9 @@ class _DialogManagerState extends State<DialogManager> {
                     ),
                   ),
                   onPressed: () {
-                    _dialogService
-                        .dialogComplete(DialogResponse(confirmed: true));
+                    _dialogService.dialogComplete(
+                      DialogResponse(confirmed: true),
+                    );
                   },
                 ),
               ],

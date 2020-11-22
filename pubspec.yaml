@@ -47,6 +47,7 @@ dependencies:
   firebase_storage: ^4.0.1
   firebase_core: ^0.5.0+1
   firebase_analytics: ^6.0.2
+  sliver_fab: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +70,7 @@ flutter:
     - assets/lang/en.json
     - assets/images/cm4.jpg
     - assets/images/book_a_table.svg
+    - assets/images/empty_reservation.svg
     - assets/map_style.txt
     - assets/images/marker.png
 

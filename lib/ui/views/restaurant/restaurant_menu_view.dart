@@ -5,6 +5,7 @@ import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/restaurant/menu_item_details_view.dart';
+import 'package:tas/ui/widgets/animated_button.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/ui/widgets/cart_item.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_menu_view_model.dart';
@@ -12,7 +13,8 @@ import 'package:grouped_list/grouped_list.dart';
 
 class RestaurantMenuView extends StatelessWidget {
   final String restaurantId;
-  RestaurantMenuView({this.restaurantId});
+  final String reservationId;
+  RestaurantMenuView({this.restaurantId, this.reservationId});
 
   @override
   Widget build(BuildContext context) {
@@ -222,6 +224,10 @@ class RestaurantMenuView extends StatelessWidget {
                         name: item.name,
                         price: item.price,
                         description: item.description,
+                        isCart: reservationId != null,
+                        quantity: model.getQuantity(item.id),
+                        removeFromCartTap: () => model.removeFromCart(item),
+                        addToCartTap: () => model.addToCart(item),
                       );
                     },
                   ),
@@ -232,6 +238,57 @@ class RestaurantMenuView extends StatelessWidget {
               }
             }
           },
+        ),
+        bottomNavigationBar: AnimatedContainer(
+          duration: Duration(milliseconds: 250),
+          height: model.cartMenuItemIds.length > 0 ? 55.0 : 0.0,
+          child: BottomAppBar(
+            child: new Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: 'Összesen: ',
+                      ),
+                      TextSpan(
+                        text: '${model.total} Ft',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                AnimatedButton(
+                  onTap: () => model.orderMenuItems(reservationId),
+                  animationDuration: const Duration(milliseconds: 1000),
+                  initialText: "RENDELÉS",
+                  finalText: "MEGRENDELVE",
+                  iconData: Icons.check,
+                  iconSize: 20.0,
+                  buttonStyle: AnimatedButtonStyle(
+                    primaryColor: primaryColor,
+                    secondaryColor: Colors.white,
+                    elevation: 10.0,
+                    initialTextStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    finalTextStyle: TextStyle(
+                      color: primaryColor,
+                    ),
+                    borderRadius: 18.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

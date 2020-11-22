@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
+import 'package:tas/models/reservation_with_restaurant_and_menuitems.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 
@@ -25,6 +26,10 @@ class FirestoreService {
 
   final StreamController<bool> _userReservationInProgressController =
       StreamController<bool>.broadcast();
+
+  final StreamController<ReservationWithRestaurantAndMenuItems>
+      _reservationWithRestaurantAndMenuItemsController =
+      StreamController<ReservationWithRestaurantAndMenuItems>.broadcast();
 
   // User  actions
 
@@ -254,10 +259,62 @@ class FirestoreService {
     }
   }
 
+  Stream<ReservationWithRestaurantAndMenuItems>
+      listenToReservationWithRestaurantAndMenuItems(
+    String reservationId,
+  ) {
+    _reservations
+        .doc(reservationId)
+        .snapshots()
+        .listen((reservationSnapshot) async {
+      Reservation reservation = Reservation.fromData(
+        reservationSnapshot.data(),
+      );
+
+      List<MenuItem> menuItems = [];
+
+      reservation.orderedMenuItemIds.forEach((menuItemId) async {
+        var menuItemData = await _menuItems.doc(menuItemId).get();
+
+        menuItems.add(MenuItem.fromData(
+          menuItemData.data(),
+        ));
+      });
+
+      var restaurantData =
+          await _restaurants.doc(reservation.restaurantId).get();
+
+      _reservationWithRestaurantAndMenuItemsController
+          .add(ReservationWithRestaurantAndMenuItems(
+        reservation: reservation,
+        menuItems: menuItems,
+        restaurant: Restaurant.fromData(restaurantData.data()),
+      ));
+    });
+
+    return _reservationWithRestaurantAndMenuItemsController.stream;
+  }
+
   Future<void> startReservation(String reservationId, String userId) async {
     try {
       _users.doc(userId).update({'inProgressReservationId': reservationId});
-      _reservations.doc(reservationId).update({'active': true});
+      _reservations.doc(reservationId).update({
+        'status': ReservationStatus.ACTIVE,
+      });
+    } catch (e) {
+      return e;
+    }
+  }
+
+  Future<void> setReservationStatusToPay(
+    String reservationId,
+    String userId,
+  ) async {
+    try {
+      _users.doc(userId).update({'inProgressReservationId': ''});
+      _reservations.doc(reservationId).update({
+        'status': ReservationStatus.ACTIVE_PAYING,
+      });
     } catch (e) {
       return e;
     }
@@ -267,8 +324,9 @@ class FirestoreService {
     _reservations.snapshots().listen((reservationSnapshot) {
       var menuItems = reservationSnapshot.docs
           .map((snapshot) => Reservation.fromData(snapshot.data()))
-          .where(
-              (mappedItem) => mappedItem.userId == userId && !mappedItem.seen)
+          .where((mappedItem) =>
+              mappedItem.userId == userId &&
+              mappedItem.status == ReservationStatus.UNSEEN_INACTIVE)
           .toList();
       _unSeenReservationListLengthController.add(menuItems.length);
     });
@@ -278,7 +336,9 @@ class FirestoreService {
 
   Future<void> setReservationSeen(String reservationId) async {
     try {
-      _reservations.doc(reservationId).update({'seen': true});
+      _reservations.doc(reservationId).update({
+        'status': ReservationStatus.SEEN_INACTIVE,
+      });
     } catch (e) {
       return e;
     }
@@ -287,6 +347,28 @@ class FirestoreService {
   Future<void> deleteReservation(String reservationId) async {
     try {
       _reservations.doc(reservationId).delete();
+    } catch (e) {
+      return e;
+    }
+  }
+
+  Future<void> orderMenuItems(
+    List<String> menuItemIds,
+    int total,
+    String reservationId,
+  ) async {
+    try {
+      var reservationSnap = await _reservations.doc(reservationId).get();
+
+      Reservation reservation = Reservation.fromData(reservationSnap.data());
+
+      _reservations.doc(reservationId).update({
+        'orderedMenuItemIds': [
+          ...reservation.orderedMenuItemIds,
+          ...menuItemIds,
+        ],
+        'total': total + reservation.total,
+      });
     } catch (e) {
       return e;
     }

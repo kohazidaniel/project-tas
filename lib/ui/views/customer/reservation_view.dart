@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider_architecture/provider_architecture.dart';
+import 'package:tas/models/reservation.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
@@ -95,6 +96,41 @@ class ReservationView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
+                                  'Fizetés státusz',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  model.reservation.status ==
+                                          ReservationStatus.ACTIVE_PAYING
+                                      ? 'Nincs kifizetve'
+                                      : 'Kifizetve',
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${model.reservation.total} Ft',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        verticalSpaceSmall,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
                                   'Dátum',
                                   style: TextStyle(
                                     fontSize: 16.0,
@@ -124,18 +160,18 @@ class ReservationView extends StatelessWidget {
                         ),
                         verticalSpaceSmall,
                         model.canStartReservation()
-                            ? SizedBox.shrink()
-                            : BusyButton(
+                            ? BusyButton(
                                 title: 'Itt vagyunk',
                                 onPressed: () => model.startReservation(),
-                              ),
+                              )
+                            : SizedBox.shrink(),
                         verticalSpaceSmall,
                         model.canDeleteReservation()
-                            ? SizedBox.shrink()
-                            : BusyButton(
+                            ? BusyButton(
                                 title: 'Törlés',
                                 onPressed: () => model.deleteReservation(),
-                              ),
+                              )
+                            : SizedBox.shrink(),
                       ],
                     )
                   ],

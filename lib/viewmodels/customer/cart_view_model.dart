@@ -38,7 +38,7 @@ class CartViewModel extends BaseModel {
   }
 
   void navToReservation(Reservation reservation) {
-    if (reservation.active) {
+    if (reservation.status == ReservationStatus.ACTIVE) {
       _navigationService.navigateTo(
         ActiveReservationViewRoute,
         arguments: reservation.id,

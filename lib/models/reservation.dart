@@ -6,11 +6,9 @@ class Reservation {
   final String restaurantId;
   final Timestamp reservationDate;
   final int numberOfPeople;
-  final List<dynamic> orderMenuItemIds;
+  final List<dynamic> orderedMenuItemIds;
   final int total;
-  final bool active;
-  final bool closed;
-  final bool seen;
+  final String status;
 
   Reservation({
     this.id,
@@ -19,10 +17,8 @@ class Reservation {
     this.reservationDate,
     this.numberOfPeople,
     this.total,
-    this.orderMenuItemIds,
-    this.active,
-    this.closed,
-    this.seen,
+    this.orderedMenuItemIds,
+    this.status,
   });
 
   Reservation.fromData(Map<String, dynamic> data)
@@ -31,11 +27,9 @@ class Reservation {
         restaurantId = data['restaurantId'],
         reservationDate = data['reservationDate'],
         numberOfPeople = data['numberOfPeople'],
-        orderMenuItemIds = data['orderMenuItemIds'],
+        orderedMenuItemIds = data['orderedMenuItemIds'],
         total = data['total'],
-        active = data['active'],
-        closed = data['closed'],
-        seen = data['seen'];
+        status = data['status'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -44,11 +38,17 @@ class Reservation {
       'restaurantId': restaurantId,
       'reservationDate': reservationDate,
       'numberOfPeople': numberOfPeople,
-      'orderMenuItemIds': orderMenuItemIds,
+      'orderedMenuItemIds': orderedMenuItemIds,
       'total': total,
-      'active': active,
-      'closed': closed,
-      'seen': seen,
+      'status': status,
     };
   }
+}
+
+class ReservationStatus {
+  static const UNSEEN_INACTIVE = "unseen_inactive";
+  static const SEEN_INACTIVE = "seen_inactive";
+  static const ACTIVE = "active";
+  static const ACTIVE_PAYING = "active_paying";
+  static const CLOSED = "closed";
 }

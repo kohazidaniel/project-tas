@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
 
 class CartItem extends StatelessWidget {
@@ -10,6 +11,10 @@ class CartItem extends StatelessWidget {
   final int raters;
   final int price;
   final String description;
+  final bool isCart;
+  final int quantity;
+  final Function removeFromCartTap;
+  final Function addToCartTap;
 
   CartItem({
     Key key,
@@ -20,6 +25,10 @@ class CartItem extends StatelessWidget {
     this.raters,
     @required this.price,
     this.description,
+    this.isCart = false,
+    this.quantity = 0,
+    this.removeFromCartTap,
+    this.addToCartTap,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -89,6 +98,7 @@ class CartItem extends StatelessWidget {
                 ),
                 SizedBox(height: 5.0),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
                       "$price Ft",
@@ -98,6 +108,48 @@ class CartItem extends StatelessWidget {
                         color: Theme.of(context).accentColor,
                       ),
                     ),
+                    horizontalSpaceMedium,
+                    isCart
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                IconButton(
+                                  splashRadius: 16.0,
+                                  onPressed: removeFromCartTap,
+                                  icon: Icon(
+                                    Icons.remove,
+                                    size: 24,
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
+                                Container(
+                                  color: Colors.grey.shade200,
+                                  padding: const EdgeInsets.only(
+                                    bottom: 2,
+                                    right: 12,
+                                    left: 12,
+                                  ),
+                                  child: Text(
+                                    "$quantity",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                IconButton(
+                                  splashRadius: 16.0,
+                                  onPressed: addToCartTap,
+                                  icon: Icon(
+                                    Icons.add,
+                                    size: 24,
+                                    color: Colors.grey.shade700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
               ],

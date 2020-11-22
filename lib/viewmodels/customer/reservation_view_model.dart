@@ -32,7 +32,7 @@ class ReservationViewModel extends BaseModel {
         await _firestoreService.getRestaurantById(_reservation.restaurantId);
     notifyListeners();
 
-    if (!_reservation.seen) {
+    if (_reservation.status == ReservationStatus.UNSEEN_INACTIVE) {
       await _firestoreService.setReservationSeen(_reservationId);
     }
   }
@@ -68,6 +68,12 @@ class ReservationViewModel extends BaseModel {
     _authService.refreshUser();
 
     setBusy(false);
+
+    _navigationService.pop();
+    _navigationService.navigateTo(
+      ActiveReservationViewRoute,
+      arguments: _reservation.id,
+    );
   }
 
   Future<void> deleteReservation() async {
@@ -87,23 +93,27 @@ class ReservationViewModel extends BaseModel {
   }
 
   bool canStartReservation() {
-    return _authService.currentUser.inProgressReservationId.isNotEmpty &&
+    return (_reservation.status == ReservationStatus.UNSEEN_INACTIVE ||
+            _reservation.status == ReservationStatus.SEEN_INACTIVE) &&
+        _authService.currentUser.inProgressReservationId.isEmpty &&
         _reservation.reservationDate
             .toDate()
             .subtract(Duration(minutes: 15))
-            .isAfter(
+            .isBefore(
               DateTime.now(),
             );
   }
 
   bool canDeleteReservation() {
-    return _reservation.reservationDate
-        .toDate()
-        .subtract(
-          Duration(hours: 2),
-        )
-        .isBefore(
-          DateTime.now(),
-        );
+    return (_reservation.status == ReservationStatus.UNSEEN_INACTIVE ||
+            _reservation.status == ReservationStatus.SEEN_INACTIVE) &&
+        _reservation.reservationDate
+            .toDate()
+            .subtract(
+              Duration(hours: 2),
+            )
+            .isAfter(
+              DateTime.now(),
+            );
   }
 }

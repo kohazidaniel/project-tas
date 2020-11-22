@@ -64,16 +64,16 @@ class CartView extends StatelessWidget {
                           ),
                         ),
                         onTap: () => model.navToReservation(reservation),
-                        trailing: reservation.active
+                        trailing: reservation.status == ReservationStatus.ACTIVE
                             ? BlinkingPoint(
                                 xCoor: -6.0,
                                 yCoor: 0.0,
                                 pointColor: Colors.red,
                                 pointSize: 10.0,
                               )
-                            : reservation.seen
-                                ? SizedBox.shrink()
-                                : Container(
+                            : reservation.status ==
+                                    ReservationStatus.UNSEEN_INACTIVE
+                                ? Container(
                                     padding: EdgeInsets.all(1),
                                     decoration: new BoxDecoration(
                                       color: Colors.red,
@@ -83,7 +83,8 @@ class CartView extends StatelessWidget {
                                       maxWidth: 10,
                                       maxHeight: 10,
                                     ),
-                                  ),
+                                  )
+                                : SizedBox.shrink(),
                       );
                     },
                   );

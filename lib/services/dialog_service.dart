@@ -28,17 +28,21 @@ class DialogService {
     return _dialogCompleter.future;
   }
 
-  Future<DialogResponse> showConfirmationDialog(
-      {String title,
-      String description,
-      String confirmationTitle = 'Ok',
-      String cancelTitle = 'Cancel'}) {
+  Future<DialogResponse> showConfirmationDialog({
+    String title,
+    String description,
+    String confirmationTitle = 'Ok',
+    String cancelTitle = 'Cancel',
+  }) {
     _dialogCompleter = Completer<DialogResponse>();
-    _showDialogListener(DialogRequest(
+    _showDialogListener(
+      DialogRequest(
         title: title,
         description: description,
         buttonTitle: confirmationTitle,
-        cancelTitle: cancelTitle));
+        cancelTitle: cancelTitle,
+      ),
+    );
     return _dialogCompleter.future;
   }
 

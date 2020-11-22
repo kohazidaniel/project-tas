@@ -98,13 +98,11 @@ class BookTableViewModel extends BaseModel {
     await _firestoreService.createReservation(
       Reservation(
         id: reservationId,
-        active: false,
-        closed: false,
-        seen: false,
+        status: ReservationStatus.UNSEEN_INACTIVE,
         numberOfPeople: _numberOfPeople,
         restaurantId: restaurantId,
         reservationDate: reservationTimeStamp,
-        orderMenuItemIds: [],
+        orderedMenuItemIds: [],
         total: 0,
         userId: _authenticationService.currentUser.id,
       ),
