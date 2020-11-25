@@ -121,6 +121,30 @@ class PlaceDetailsView extends StatelessWidget {
                       ),
                       maxLines: 2,
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
+                      child: Row(
+                        children: <Widget>[
+                          SmoothStarRating(
+                            starCount: 5,
+                            color: Colors.yellow,
+                            allowHalfRating: true,
+                            rating: model.restaurant.ratings
+                                    .reduce((a, b) => a + b) /
+                                model.restaurant.ratings.length,
+                            size: 11.0,
+                          ),
+                          SizedBox(width: 10.0),
+                          Text(
+                            "${model.restaurant.ratings.reduce((a, b) => a + b) / model.restaurant.ratings.length} " +
+                                "(${model.restaurant.ratings.length} ${FlutterI18n.translate(context, "review")})",
+                            style: TextStyle(
+                              fontSize: 11.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     Text(
                       model.restaurant.address,
                       style: TextStyle(
@@ -136,49 +160,6 @@ class PlaceDetailsView extends StatelessWidget {
                         fontWeight: FontWeight.w300,
                       ),
                     ),
-                    /* Padding(
-                      padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
-                      child: Row(
-                        children: <Widget>[
-                          SmoothStarRating(
-                            starCount: 5,
-                            color: Colors.yellow,
-                            allowHalfRating: true,
-                            rating: 5.0,
-                            size: 10.0,
-                          ),
-                          SizedBox(width: 10.0),
-                          Text(
-                            "5.0 (23 ${FlutterI18n.translate(context, "review")})",
-                            style: TextStyle(
-                              fontSize: 11.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            FontAwesomeIcons.dollarSign,
-                            color: primaryColor,
-                            size: 12.0,
-                          ),
-                          Icon(
-                            FontAwesomeIcons.dollarSign,
-                            color: primaryColor.withOpacity(0.50),
-                            size: 12.0,
-                          ),
-                          Icon(
-                            FontAwesomeIcons.dollarSign,
-                            color: primaryColor.withOpacity(0.50),
-                            size: 12.0,
-                          ),
-                        ],
-                      ),
-                    ), */
                     SizedBox(height: 20.0),
                     Text(
                       FlutterI18n.translate(context, "description"),
@@ -197,61 +178,6 @@ class PlaceDetailsView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 20.0),
-                    /* Text(
-                      FlutterI18n.translate(context, "reviews"),
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                      ),
-                      maxLines: 2,
-                    ),
-                    SizedBox(height: 20.0),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: comments == null ? 0 : comments.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Map comment = comments[index];
-                        return ListTile(
-                          leading: CircleAvatar(
-                            radius: 25.0,
-                            backgroundImage: AssetImage(
-                              "${comment['img']}",
-                            ),
-                          ),
-                          title: Text("${comment['name']}"),
-                          subtitle: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  SmoothStarRating(
-                                    starCount: 5,
-                                    color: Colors.yellow,
-                                    allowHalfRating: true,
-                                    rating: 5.0,
-                                    size: 12.0,
-                                  ),
-                                  SizedBox(width: 6.0),
-                                  Text(
-                                    "2020. Február 8.",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 7.0),
-                              Text(
-                                "${comment["comment"]}",
-                              ),
-                            ],
-                          ),
-                        ); 
-                      },
-                    ),*/
-                    SizedBox(height: 10.0),
                   ],
                 ),
               ),

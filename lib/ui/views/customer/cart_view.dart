@@ -5,7 +5,6 @@ import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
-import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/cart_view_model.dart';
 
@@ -64,27 +63,7 @@ class CartView extends StatelessWidget {
                           ),
                         ),
                         onTap: () => model.navToReservation(reservation),
-                        trailing: reservation.status == ReservationStatus.ACTIVE
-                            ? BlinkingPoint(
-                                xCoor: -6.0,
-                                yCoor: 0.0,
-                                pointColor: Colors.red,
-                                pointSize: 10.0,
-                              )
-                            : reservation.status ==
-                                    ReservationStatus.UNSEEN_INACTIVE
-                                ? Container(
-                                    padding: EdgeInsets.all(1),
-                                    decoration: new BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    constraints: BoxConstraints(
-                                      maxWidth: 10,
-                                      maxHeight: 10,
-                                    ),
-                                  )
-                                : SizedBox.shrink(),
+                        trailing: model.getTrailing(reservation.status),
                       );
                     },
                   );

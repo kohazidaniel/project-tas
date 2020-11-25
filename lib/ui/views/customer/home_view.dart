@@ -126,8 +126,10 @@ class HomeView extends StatelessWidget {
                               restaurantId: restaurant.id,
                               favTap: () =>
                                   model.addToFavourites(restaurant.id),
-                              isFav: model.favouriteRestaurants
-                                  .contains(restaurant.id),
+                              isFav: model.favouriteRestaurants.contains(
+                                restaurant.id,
+                              ),
+                              ratings: restaurant.ratings,
                             ),
                           )
                           .toList(),
@@ -200,6 +202,7 @@ class HomeView extends StatelessWidget {
                           isFav: model.favouriteRestaurants.contains(
                             nearByRestaurants[index].id,
                           ),
+                          ratings: nearByRestaurants[index].ratings,
                         );
                       },
                     ),

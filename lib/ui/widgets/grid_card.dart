@@ -13,8 +13,7 @@ class GridCard extends StatelessWidget {
   final String restaurantId;
   final bool isFav;
   final Function favTap;
-  final double rating;
-  final int raters;
+  final List<dynamic> ratings;
 
   GridCard({
     Key key,
@@ -23,8 +22,7 @@ class GridCard extends StatelessWidget {
     @required this.restaurantId,
     @required this.isFav,
     @required this.favTap,
-    this.rating,
-    this.raters,
+    @required this.ratings,
   }) : super(key: key);
 
   @override
@@ -79,7 +77,7 @@ class GridCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          raters == null
+          ratings.isEmpty
               ? Text(
                   'Nincs értékelés',
                   style: TextStyle(
@@ -94,11 +92,12 @@ class GridCard extends StatelessWidget {
                         starCount: 5,
                         color: Colors.yellow,
                         allowHalfRating: true,
-                        rating: rating,
+                        rating:
+                            ratings.reduce((a, b) => a + b) / ratings.length,
                         size: 10.0,
                       ),
                       Text(
-                        "$rating ($raters ${FlutterI18n.translate(context, "review")})",
+                        "${ratings.reduce((a, b) => a + b) / ratings.length} (${ratings.length} ${FlutterI18n.translate(context, "review")})",
                         style: TextStyle(
                           fontSize: 11.0,
                         ),

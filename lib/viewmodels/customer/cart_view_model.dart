@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
@@ -6,6 +8,7 @@ import 'package:tas/models/restaurant.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
+import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:intl/intl.dart';
 
@@ -48,6 +51,36 @@ class CartViewModel extends BaseModel {
         ReservationViewRoute,
         arguments: reservation.id,
       );
+    }
+  }
+
+  Widget getTrailing(String reservationStatus) {
+    switch (reservationStatus) {
+      case ReservationStatus.ACTIVE:
+        return BlinkingPoint(
+          xCoor: -6.0,
+          yCoor: 0.0,
+          pointColor: Colors.red,
+          pointSize: 10.0,
+        );
+      case ReservationStatus.UNSEEN_INACTIVE:
+        return Container(
+          padding: EdgeInsets.all(1),
+          decoration: new BoxDecoration(
+            color: Colors.red,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          constraints: BoxConstraints(
+            maxWidth: 10,
+            maxHeight: 10,
+          ),
+        );
+      case ReservationStatus.ACTIVE_PAYING:
+        return Icon(FontAwesomeIcons.handHoldingUsd);
+      case ReservationStatus.CLOSED:
+        return Icon(FontAwesomeIcons.checkCircle);
+      default:
+        return SizedBox.shrink();
     }
   }
 }

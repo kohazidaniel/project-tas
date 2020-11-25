@@ -16,13 +16,13 @@ class DialogService {
 
   Future<DialogResponse> showDialog({
     String title,
-    String description,
+    Widget content,
     String buttonTitle = 'Ok',
   }) {
     _dialogCompleter = Completer<DialogResponse>();
     _showDialogListener(DialogRequest(
       title: title,
-      description: description,
+      content: content,
       buttonTitle: buttonTitle,
     ));
     return _dialogCompleter.future;
@@ -30,7 +30,7 @@ class DialogService {
 
   Future<DialogResponse> showConfirmationDialog({
     String title,
-    String description,
+    Widget content,
     String confirmationTitle = 'Ok',
     String cancelTitle = 'Cancel',
   }) {
@@ -38,7 +38,7 @@ class DialogService {
     _showDialogListener(
       DialogRequest(
         title: title,
-        description: description,
+        content: content,
         buttonTitle: confirmationTitle,
         cancelTitle: cancelTitle,
       ),

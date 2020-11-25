@@ -12,9 +12,8 @@ class SliderItem extends StatelessWidget {
   final String img;
   final String restaurantId;
   final bool isFav;
-  final double rating;
   final Function favTap;
-  final int raters;
+  final List<dynamic> ratings;
 
   SliderItem({
     Key key,
@@ -23,8 +22,7 @@ class SliderItem extends StatelessWidget {
     @required this.restaurantId,
     @required this.isFav,
     @required this.favTap,
-    this.rating,
-    this.raters,
+    @required this.ratings,
   }) : super(key: key);
 
   @override
@@ -78,7 +76,7 @@ class SliderItem extends StatelessWidget {
               maxLines: 2,
             ),
           ),
-          raters == null
+          ratings.isEmpty
               ? Text(
                   'Nincs értékelés',
                   style: TextStyle(
@@ -93,11 +91,12 @@ class SliderItem extends StatelessWidget {
                         starCount: 5,
                         color: Colors.yellow,
                         allowHalfRating: true,
-                        rating: rating,
+                        rating:
+                            ratings.reduce((a, b) => a + b) / ratings.length,
                         size: 10.0,
                       ),
                       Text(
-                        "$rating ($raters ${FlutterI18n.translate(context, "review")})",
+                        "${ratings.reduce((a, b) => a + b) / ratings.length} (${ratings.length} ${FlutterI18n.translate(context, "review")})",
                         style: TextStyle(
                           fontSize: 11.0,
                         ),

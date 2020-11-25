@@ -10,6 +10,7 @@ import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
+import 'package:tas/ui/widgets/star_rating.dart';
 import 'package:tas/viewmodels/customer/active_reservation_model.dart';
 
 class ActiveReservationView extends StatelessWidget {
@@ -62,8 +63,9 @@ class ActiveReservationView extends StatelessWidget {
                       SliverAppBar(
                         leading: IconButton(
                           icon: Icon(
-                            Icons.keyboard_arrow_left,
+                            Icons.arrow_back,
                             color: backgroundColor,
+                            size: 28.0,
                           ),
                           onPressed: () => Navigator.pop(context),
                         ),
@@ -154,48 +156,50 @@ class ActiveReservationView extends StatelessWidget {
                                         menuItemsWithQuantity[index];
 
                                     return Padding(
-                                        padding: EdgeInsets.only(
-                                          top: index == 0 ? 15.0 : 0.0,
-                                        ),
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              index == 0
-                                                  ? Padding(
-                                                      padding: EdgeInsets.only(
-                                                        left: 20.0,
-                                                      ),
-                                                      child: Text(
-                                                        'Rendelések',
-                                                        style: TextStyle(
-                                                          fontSize: 23,
-                                                          fontWeight:
-                                                              FontWeight.w800,
-                                                        ),
-                                                      ),
-                                                    )
-                                                  : Container(),
-                                              ListTile(
-                                                title: Text(
-                                                  menuItemWithQuantity
-                                                      .menuItem.name,
-                                                ),
-                                                subtitle: Text(
-                                                    "${menuItemWithQuantity.menuItem.price} ft"),
-                                                leading: CircleAvatar(
-                                                  backgroundColor: primaryColor
-                                                      .withOpacity(0.5),
-                                                  backgroundImage: NetworkImage(
-                                                    menuItemWithQuantity
-                                                        .menuItem.photoUrl,
+                                      padding: EdgeInsets.only(
+                                        top: index == 0 ? 15.0 : 0.0,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          index == 0
+                                              ? Padding(
+                                                  padding: EdgeInsets.only(
+                                                    left: 20.0,
                                                   ),
-                                                ),
-                                                trailing: Text(
-                                                  '${menuItemWithQuantity.quantity} darab',
-                                                ),
-                                              )
-                                            ]));
+                                                  child: Text(
+                                                    'Rendelések',
+                                                    style: TextStyle(
+                                                      fontSize: 23,
+                                                      fontWeight:
+                                                          FontWeight.w800,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(),
+                                          ListTile(
+                                            title: Text(
+                                              menuItemWithQuantity
+                                                  .menuItem.name,
+                                            ),
+                                            subtitle: Text(
+                                                "${menuItemWithQuantity.menuItem.price} ft"),
+                                            leading: CircleAvatar(
+                                              backgroundColor:
+                                                  primaryColor.withOpacity(0.5),
+                                              backgroundImage: NetworkImage(
+                                                menuItemWithQuantity
+                                                    .menuItem.photoUrl,
+                                              ),
+                                            ),
+                                            trailing: Text(
+                                              '${menuItemWithQuantity.quantity} darab',
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    );
                                   },
                                 ),
                         ),
@@ -213,12 +217,14 @@ class ActiveReservationView extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           children: [
-                            BlinkingPoint(
-                              pointColor: Colors.red,
-                              pointSize: 8.0,
-                              xCoor: 0.0,
-                              yCoor: 0.0,
-                            ),
+                            menuItemsWithQuantity.length > 0
+                                ? BlinkingPoint(
+                                    pointColor: Colors.red,
+                                    pointSize: 8.0,
+                                    xCoor: 0.0,
+                                    yCoor: 0.0,
+                                  )
+                                : SizedBox.shrink(),
                             horizontalSpaceMedium,
                             RichText(
                               text: TextSpan(
@@ -246,7 +252,11 @@ class ActiveReservationView extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0),
                           ),
-                          onPressed: () => model.setReservationStatusToPay(),
+                          onPressed: () => model.setReservationStatusToPay(
+                            snapshot.data.reservation.total,
+                            context,
+                            snapshot.data.restaurant,
+                          ),
                           color: primaryColor,
                           textColor: Colors.white,
                           child: Text(

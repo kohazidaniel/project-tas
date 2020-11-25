@@ -28,41 +28,55 @@ class _DialogManagerState extends State<DialogManager> {
   void _showDialog(DialogRequest request) {
     var isConfirmationDialog = request.cancelTitle != null;
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(request.title),
-              content: Text(request.description),
-              actions: <Widget>[
-                if (isConfirmationDialog)
-                  FlatButton(
-                    splashColor: primaryColor.withOpacity(0.2),
-                    child: Text(
-                      request.cancelTitle,
-                      style: TextStyle(
-                        color: primaryColor,
-                      ),
-                    ),
-                    onPressed: () {
-                      _dialogService.dialogComplete(
-                        DialogResponse(confirmed: false),
-                      );
-                    },
-                  ),
-                FlatButton(
-                  splashColor: primaryColor.withOpacity(0.2),
-                  child: Text(
-                    request.buttonTitle,
-                    style: TextStyle(
-                      color: primaryColor,
-                    ),
-                  ),
-                  onPressed: () {
-                    _dialogService.dialogComplete(
-                      DialogResponse(confirmed: true),
-                    );
-                  },
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.all(25),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+        title: Text(
+          request.title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: request.content,
+        actions: <Widget>[
+          if (isConfirmationDialog)
+            FlatButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+              splashColor: primaryColor.withOpacity(0.2),
+              child: Text(
+                request.cancelTitle,
+                style: TextStyle(
+                  color: primaryColor,
                 ),
-              ],
-            ));
+              ),
+              onPressed: () {
+                _dialogService.dialogComplete(
+                  DialogResponse(confirmed: false),
+                );
+              },
+            ),
+          FlatButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            splashColor: primaryColor.withOpacity(0.2),
+            child: Text(
+              request.buttonTitle,
+              style: TextStyle(
+                color: primaryColor,
+              ),
+            ),
+            onPressed: () {
+              _dialogService.dialogComplete(
+                DialogResponse(confirmed: true),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

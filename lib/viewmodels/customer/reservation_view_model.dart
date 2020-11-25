@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
@@ -79,7 +80,7 @@ class ReservationViewModel extends BaseModel {
   Future<void> deleteReservation() async {
     var dialogResponse = await _dialogService.showConfirmationDialog(
       title: 'Asztalfoglalás',
-      description: 'Biztos törölni szeretnéd a foglalást?',
+      content: Text('Biztos törölni szeretnéd a foglalást?'),
       confirmationTitle: 'Igen',
       cancelTitle: 'Nem',
     );

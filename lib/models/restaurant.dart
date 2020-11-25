@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-
 class Restaurant {
   final String id;
   final String ownerId;
   final String name;
   final String description;
-  final List<dynamic> restaurantTypes;
   final String thumbnailUrl;
+  final List<dynamic> restaurantTypes;
+  final List<dynamic> ratings;
   final double latitude;
   final double longitude;
   final String address;
@@ -19,6 +18,7 @@ class Restaurant {
     this.name,
     this.description,
     this.restaurantTypes,
+    this.ratings,
     this.thumbnailUrl,
     this.latitude,
     this.longitude,
@@ -33,6 +33,7 @@ class Restaurant {
         name = data['name'],
         description = data['description'],
         restaurantTypes = data['restaurantTypes'],
+        ratings = data['ratings'],
         thumbnailUrl = data['thumbnailUrl'],
         latitude = data['latitude'],
         longitude = data['longitude'],
@@ -47,6 +48,7 @@ class Restaurant {
       'name': name,
       'description': description,
       'restaurantTypes': restaurantTypes,
+      'ratings': ratings,
       'thumbnailUrl': thumbnailUrl,
       'latitude': latitude,
       'longitude': longitude,

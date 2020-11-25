@@ -75,6 +75,7 @@ class FavouriteView extends StatelessWidget {
                               favTap: () => model.removeFromFavourites(
                                 currentRestaurant.id,
                               ),
+                              ratings: currentRestaurant.ratings,
                             );
                           },
                         ),

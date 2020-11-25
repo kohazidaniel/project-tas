@@ -89,40 +89,47 @@ class ReservationView extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Fizetés státusz',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
+                        model.reservation.status ==
+                                    ReservationStatus.ACTIVE_PAYING ||
+                                model.reservation.status ==
+                                    ReservationStatus.CLOSED
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Fizetés státusz',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        model.reservation.status ==
+                                                ReservationStatus.ACTIVE_PAYING
+                                            ? 'Nincs kifizetve'
+                                            : 'Kifizetve',
+                                      )
+                                    ],
                                   ),
-                                ),
-                                Text(
-                                  model.reservation.status ==
-                                          ReservationStatus.ACTIVE_PAYING
-                                      ? 'Nincs kifizetve'
-                                      : 'Kifizetve',
-                                )
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  '${model.reservation.total} Ft',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${model.reservation.total} Ft',
+                                        style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                ],
+                              )
+                            : SizedBox.shrink(),
                         verticalSpaceSmall,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

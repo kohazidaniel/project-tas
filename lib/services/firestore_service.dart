@@ -31,8 +31,6 @@ class FirestoreService {
       _reservationWithRestaurantAndMenuItemsController =
       StreamController<ReservationWithRestaurantAndMenuItems>.broadcast();
 
-  // User  actions
-
   Future createUser(TasUser user) async {
     try {
       await _users.doc(user.id).set(user.toJson());
@@ -82,8 +80,6 @@ class FirestoreService {
 
     return _userReservationInProgressController.stream;
   }
-
-  // Restaurant actions
 
   Future createRestaurant(Restaurant restaurant) async {
     try {
@@ -205,8 +201,6 @@ class FirestoreService {
       return e;
     }
   }
-
-  // User reservation actions
 
   Future createReservation(Reservation reservation) async {
     try {
@@ -412,5 +406,20 @@ class FirestoreService {
         restaurant: restaurant,
       );
     });
+  }
+
+  Future<void> rateRestaurant(int rating, String restaurantId) async {
+    try {
+      print(restaurantId);
+      var restaurantSnap = await _restaurants.doc(restaurantId).get();
+
+      Restaurant restaurant = Restaurant.fromData(restaurantSnap.data());
+
+      _restaurants.doc(restaurantId).update({
+        'ratings': [...restaurant.ratings, rating],
+      });
+    } catch (e) {
+      return e;
+    }
   }
 }

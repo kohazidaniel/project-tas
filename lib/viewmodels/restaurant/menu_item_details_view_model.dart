@@ -54,8 +54,8 @@ class MenuItemDetailsViewModel extends BaseModel {
   Future<bool> deleteMenuItem() async {
     var dialogResponse = await _dialogService.showConfirmationDialog(
       title: 'Törlés',
-      description:
-          'Biztos szeretnéd törölni a(z) ${selectedMenuItem.name} nevű tételt?',
+      content: Text(
+          'Biztos szeretnéd törölni a(z) ${selectedMenuItem.name} nevű tételt?'),
       confirmationTitle: 'Igen',
       cancelTitle: 'Nem',
     );
