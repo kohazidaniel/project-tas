@@ -7,6 +7,7 @@ import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/views/profile_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
+import 'package:tas/ui/views/restaurant/restaurant_reservations_list_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_main_view_model.dart';
 
@@ -156,7 +157,7 @@ class RestaurantMainView extends StatelessWidget {
                     color: Colors.grey[800],
                   ),
                   title: Text(
-                    'Asztalfoglalás',
+                    'Asztalfoglalások',
                     style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
                   ),
                   onTap: () {
@@ -164,7 +165,7 @@ class RestaurantMainView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) {
-                        return RestaurantMenuView();
+                        return RestaurantReservationsListView();
                       }),
                     );
                   },

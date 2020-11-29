@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
+import 'package:tas/models/menu_item.dart';
 import 'package:tas/models/reservation.dart';
-import 'package:tas/models/reservation_with_restaurant.dart';
-import 'package:tas/models/restaurant.dart';
+import 'package:tas/models/reservation_with_user_and_menuitems.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:intl/intl.dart';
+import 'package:tas/viewmodels/customer/active_reservation_model.dart';
 
-class CartViewModel extends BaseModel {
+class RestaurantReservationViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final AuthService _authenticationService = locator<AuthService>();
   final NavigationService _navigationService = locator<NavigationService>();
 
-  Future<List<Reservation>> getUserReservations() {
-    return _firestoreService
-        .getUserReservations(_authenticationService.currentUser.id);
+  final String reservationId;
+  RestaurantReservationViewModel({this.reservationId});
+
+  Stream<ReservationWithUserAndMenuItems>
+      listenToReservationWithUserAndMenuItems() {
+    return _firestoreService.listenToReservationWithUserAndMenuItems(
+      reservationId,
+    );
   }
 
-  Stream<List<ReservationWithRestaurant>> listenToUserReservations() {
-    return _firestoreService
-        .listenToUserReservations(_authenticationService.currentUser.id);
-  }
-
-  Future<Restaurant> getReservationRestaurant(String restaurantId) {
-    return _firestoreService.getRestaurantById(restaurantId);
+  void closeReservation(String reservationId) async {
+    await _firestoreService.closeReservation(reservationId);
   }
 
   String getFormattedDate(DateTime dateTime) {
@@ -38,20 +38,6 @@ class CartViewModel extends BaseModel {
         ' ${dateTime.hour}:' +
         '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
         '${dateTime.minute}';
-  }
-
-  void navToReservation(Reservation reservation) {
-    if (reservation.status == ReservationStatus.ACTIVE) {
-      _navigationService.navigateTo(
-        ActiveReservationViewRoute,
-        arguments: reservation.id,
-      );
-    } else {
-      _navigationService.navigateTo(
-        ReservationViewRoute,
-        arguments: reservation.id,
-      );
-    }
   }
 
   Widget getTrailing(String reservationStatus) {
@@ -93,5 +79,34 @@ class CartViewModel extends BaseModel {
       default:
         return SizedBox.shrink();
     }
+  }
+
+  List<MenuItemWithQuantity> groupMenuItems(List<MenuItem> menuItems) {
+    List<MenuItemWithQuantity> groupedMenuItems = [];
+
+    menuItems.forEach((MenuItem menuItem) {
+      bool inList = groupedMenuItems
+              .where(
+                (groupedMenuItem) => groupedMenuItem.menuItem.id == menuItem.id,
+              )
+              .length >
+          0;
+
+      if (inList) {
+        int idx = groupedMenuItems.indexWhere(
+          (groupedMenuItem) => groupedMenuItem.menuItem.id == menuItem.id,
+        );
+        groupedMenuItems[idx].quantity += 1;
+      } else {
+        groupedMenuItems.add(
+          MenuItemWithQuantity(
+            menuItem: menuItem,
+            quantity: 1,
+          ),
+        );
+      }
+    });
+
+    return groupedMenuItems;
   }
 }

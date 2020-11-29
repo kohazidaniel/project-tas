@@ -10,7 +10,6 @@ import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
-import 'package:tas/ui/widgets/star_rating.dart';
 import 'package:tas/viewmodels/customer/active_reservation_model.dart';
 
 class ActiveReservationView extends StatelessWidget {

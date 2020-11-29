@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tas/models/rating.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/rating_dialog.dart';
@@ -89,8 +90,16 @@ class ActiveReservationViewModel extends BaseModel {
             alternativeButton: "Kihagyás",
             accentColor: primaryColor,
             starColor: Colors.yellow,
-            onSubmitPressed: (int rating) async {
-              await _firestoreService.rateRestaurant(rating, restaurant.id);
+            onSubmitPressed: (int rating, String comment) async {
+              await _firestoreService.rateRestaurant(
+                Rating(
+                  userName: _authService.currentUser.fullName,
+                  comment: comment,
+                  rating: rating,
+                ),
+                restaurant.id,
+                reservationId,
+              );
             },
             onAlternativePressed: () {
               Navigator.pop(context);

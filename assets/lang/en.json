@@ -61,5 +61,14 @@
         "when_title": "When are you coming?",
         "number_of_people_title": "Number of people",
         "people": "People"
+    },
+    "reservationStatus": {
+        "unseen_inactive": "Inactive",
+        "seen_inactive": "Inactive",
+        "active": "Active",
+        "active_paying": "Waiting for payment",
+        "closed": "Paid",
+        "cancelled": "Cancelled",
+        "unknown": "Unknown"
     }
 }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/shared/ui_helpers.dart';
 
 class _RatingDialogState extends State<RatingDialog> {
+  final _commentController = TextEditingController();
   int _rating = 0;
+  FocusNode _commentFocusNode = FocusNode();
 
   List<Widget> _buildStarRatingButtons() {
     List<Widget> buttons = [];
@@ -19,6 +21,7 @@ class _RatingDialogState extends State<RatingDialog> {
             setState(() {
               _rating = rateValue;
             });
+            _commentFocusNode.requestFocus();
           });
       buttons.add(starRatingButton);
     }
@@ -58,7 +61,12 @@ class _RatingDialogState extends State<RatingDialog> {
             visible: _rating > 0,
             child: Column(
               children: <Widget>[
-                const Divider(),
+                TextFormField(
+                  controller: _commentController,
+                  focusNode: _commentFocusNode,
+                  cursorColor: primaryColor,
+                ),
+                verticalSpaceTiny,
                 FlatButton(
                   child: Text(
                     widget.submitButton,
@@ -69,7 +77,7 @@ class _RatingDialogState extends State<RatingDialog> {
                   ),
                   onPressed: () {
                     Navigator.pop(context);
-                    widget.onSubmitPressed(_rating);
+                    widget.onSubmitPressed(_rating, _commentController.text);
                   },
                 ),
                 Visibility(
@@ -115,7 +123,7 @@ class RatingDialog extends StatefulWidget {
   final String negativeComment;
   final Color starColor;
   final Color accentColor;
-  final ValueSetter<int> onSubmitPressed;
+  final Function onSubmitPressed;
   final VoidCallback onAlternativePressed;
 
   RatingDialog({

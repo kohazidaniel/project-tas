@@ -18,7 +18,6 @@ class Circle extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Draw the mid point
     Paint line = new Paint();
     line.strokeCap = StrokeCap.round;
     line.color = color;

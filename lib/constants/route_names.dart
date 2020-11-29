@@ -10,3 +10,4 @@ const String BookTableViewRoute = "BookTableView";
 const String ReservationViewRoute = "ReservationView";
 const String ListByCategoriesViewRoute = "ListByCategoriesViewRoute";
 const String ActiveReservationViewRoute = "ActiveReservationViewRoute";
+const String RestaurantReservationViewRoute = "RestaurantReservationViewRoute";

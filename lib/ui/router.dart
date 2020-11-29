@@ -11,6 +11,7 @@ import 'package:tas/ui/views/notification_view.dart';
 import 'package:tas/ui/views/customer/place_details_view.dart';
 import 'package:tas/ui/views/restaurant/new_restaurant_stepper_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_main_view.dart';
+import 'package:tas/ui/views/restaurant/restaurant_reservation_view.dart';
 import 'package:tas/ui/views/signup_view.dart';
 import 'package:tas/ui/views/startup_view.dart';
 
@@ -81,6 +82,13 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: ActiveReservationView(
+          reservationId: settings.arguments,
+        ),
+      );
+    case RestaurantReservationViewRoute:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: RestaurantReservationView(
           reservationId: settings.arguments,
         ),
       );

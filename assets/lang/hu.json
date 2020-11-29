@@ -61,5 +61,14 @@
         "when_title": "Hányra jöttök?",
         "number_of_people_title": "Hányan jöttök?",
         "people": "fő"
+    },
+    "reservationStatus": {
+        "unseen_inactive": "Lefoglalva",
+        "seen_inactive": "Lefoglalva",
+        "active": "Folyamatban",
+        "active_paying": "Fizetésre vár",
+        "closed": "Kifizetve",
+        "cancelled": "Törölve",
+        "unknown": "Ismeretlen"
     }
 }

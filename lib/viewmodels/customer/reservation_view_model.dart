@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
@@ -116,5 +117,41 @@ class ReservationViewModel extends BaseModel {
             .isAfter(
               DateTime.now(),
             );
+  }
+
+  String getReservationStatus(String status, BuildContext context) {
+    switch (status) {
+      case ReservationStatus.CLOSED:
+        return FlutterI18n.translate(
+          context,
+          'reservationStatus.${ReservationStatus.CLOSED}',
+        );
+      case ReservationStatus.ACTIVE:
+        return FlutterI18n.translate(
+          context,
+          'reservationStatus.${ReservationStatus.ACTIVE}',
+        );
+      case ReservationStatus.ACTIVE_PAYING:
+        return FlutterI18n.translate(
+          context,
+          'reservationStatus.${ReservationStatus.ACTIVE_PAYING}',
+        );
+      case ReservationStatus.CANCELLED:
+        return FlutterI18n.translate(
+          context,
+          'reservationStatus.${ReservationStatus.CANCELLED}',
+        );
+      case ReservationStatus.SEEN_INACTIVE:
+      case ReservationStatus.UNSEEN_INACTIVE:
+        return FlutterI18n.translate(
+          context,
+          'reservationStatus.${ReservationStatus.SEEN_INACTIVE}',
+        );
+      default:
+        return FlutterI18n.translate(
+          context,
+          'reservationStatus.unknown',
+        );
+    }
   }
 }

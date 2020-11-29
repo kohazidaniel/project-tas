@@ -3,6 +3,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/services/navigation_service.dart';
+import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
 
 class SliderItem extends StatelessWidget {
@@ -95,8 +96,11 @@ class SliderItem extends StatelessWidget {
                             ratings.reduce((a, b) => a + b) / ratings.length,
                         size: 10.0,
                       ),
+                      horizontalSpaceTiny,
                       Text(
-                        "${ratings.reduce((a, b) => a + b) / ratings.length} (${ratings.length} ${FlutterI18n.translate(context, "review")})",
+                        (ratings.reduce((a, b) => a + b) / ratings.length)
+                                .toStringAsFixed(1) +
+                            " (${ratings.length} ${FlutterI18n.translate(context, "review")})",
                         style: TextStyle(
                           fontSize: 11.0,
                         ),

@@ -3,6 +3,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/shared/app_colors.dart';
+import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
@@ -134,10 +135,12 @@ class PlaceDetailsView extends StatelessWidget {
                                 model.restaurant.ratings.length,
                             size: 11.0,
                           ),
-                          SizedBox(width: 10.0),
+                          horizontalSpaceTiny,
                           Text(
-                            "${model.restaurant.ratings.reduce((a, b) => a + b) / model.restaurant.ratings.length} " +
-                                "(${model.restaurant.ratings.length} ${FlutterI18n.translate(context, "review")})",
+                            (model.restaurant.ratings.reduce((a, b) => a + b) /
+                                        model.restaurant.ratings.length)
+                                    .toStringAsFixed(1) +
+                                " (${model.restaurant.ratings.length} ${FlutterI18n.translate(context, "review")})",
                             style: TextStyle(
                               fontSize: 11.0,
                             ),
