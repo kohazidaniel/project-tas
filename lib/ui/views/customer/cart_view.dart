@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
@@ -11,8 +11,8 @@ import 'package:tas/viewmodels/customer/cart_view_model.dart';
 class CartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<CartViewModel>.withConsumer(
-      viewModel: CartViewModel(),
+    return ViewModelBuilder<CartViewModel>.reactive(
+      viewModelBuilder: () => CartViewModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         body: Padding(

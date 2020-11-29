@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
@@ -15,8 +15,8 @@ class BookTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<BookTableViewModel>.withConsumer(
-      viewModel: BookTableViewModel(restaurantId: restaurantId),
+    return ViewModelBuilder<BookTableViewModel>.reactive(
+      viewModelBuilder: () => BookTableViewModel(restaurantId: restaurantId),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         body: FutureBuilder<Restaurant>(

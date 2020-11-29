@@ -1,18 +1,18 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/reservation_with_user.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
-import 'package:tas/viewmodels/restaurant/restaurant_reservations_list_filter_view.dart';
+import 'package:tas/ui/views/restaurant/restaurant_reservations_list_filter_view.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_reservations_list_view_model.dart';
 
 class RestaurantReservationsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<RestaurantReservationsListViewModel>.withConsumer(
-      viewModel: RestaurantReservationsListViewModel(),
+    return ViewModelBuilder<RestaurantReservationsListViewModel>.reactive(
+      viewModelBuilder: () => RestaurantReservationsListViewModel(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(

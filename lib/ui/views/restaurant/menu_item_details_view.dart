@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
 import 'package:smart_select/smart_select.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/shared_styles.dart';
@@ -28,8 +28,10 @@ class MenuItemDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<MenuItemDetailsViewModel>.withConsumer(
-      viewModel: MenuItemDetailsViewModel(selectedMenuItem: selectedCartItem),
+    return ViewModelBuilder<MenuItemDetailsViewModel>.reactive(
+      viewModelBuilder: () => MenuItemDetailsViewModel(
+        selectedMenuItem: selectedCartItem,
+      ),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,

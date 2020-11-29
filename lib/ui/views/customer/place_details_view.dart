@@ -1,44 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
 import 'package:tas/viewmodels/customer/place_details_view_model.dart';
-
-List comments = [
-  {
-    "img": "assets/images/cm4.jpg",
-    "comment": "Nulla porttitor accumsan tincidunt. Vestibulum ante "
-        "ipsum primis in faucibus orci luctus et ultrices posuere "
-        "cubilia Curae",
-    "name": "Jane Doe"
-  },
-  {
-    "img": "assets/images/cm4.jpg",
-    "comment": "Nulla porttitor accumsan tincidunt. Vestibulum ante "
-        "ipsum primis in faucibus orci luctus et ultrices posuere "
-        "cubilia Curae",
-    "name": "Jane Joe"
-  },
-  {
-    "img": "assets/images/cm4.jpg",
-    "comment": "Nulla porttitor accumsan tincidunt. Vestibulum ante "
-        "ipsum primis in faucibus orci luctus et ultrices posuere "
-        "cubilia Curae",
-    "name": "Mary Jane"
-  },
-  {
-    "img": "assets/images/cm4.jpg",
-    "comment": "Nulla porttitor accumsan tincidunt. Vestibulum ante "
-        "ipsum primis in faucibus orci luctus et ultrices posuere "
-        "cubilia Curae",
-    "name": "Jane Jones"
-  }
-];
 
 class PlaceDetailsView extends StatelessWidget {
   final String restaurantId;
@@ -47,8 +16,8 @@ class PlaceDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<PlaceDetailsViewModel>.withConsumer(
-      viewModel: PlaceDetailsViewModel(restaurantId: restaurantId),
+    return ViewModelBuilder<PlaceDetailsViewModel>.reactive(
+      viewModelBuilder: () => PlaceDetailsViewModel(restaurantId: restaurantId),
       onModelReady: (model) => model.getViewData(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(

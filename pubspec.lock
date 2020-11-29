@@ -357,6 +357,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0-nullsafety.4"
+  nested:
+    dependency: transitive
+    description:
+      name: nested
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
+  observable_ish:
+    dependency: transitive
+    description:
+      name: observable_ish
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.4"
   path:
     dependency: transitive
     description:
@@ -405,14 +419,7 @@ packages:
       name: provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.0"
-  provider_architecture:
-    dependency: "direct main"
-    description:
-      name: provider_architecture
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
+    version: "4.3.2+2"
   quiver:
     dependency: transitive
     description:
@@ -460,6 +467,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.4"
+  stacked:
+    dependency: "direct main"
+    description:
+      name: stacked
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.6"
   stream_channel:
     dependency: transitive
     description:

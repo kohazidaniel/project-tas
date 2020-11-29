@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:sliver_fab/sliver_fab.dart';
 import 'package:tas/models/reservation_with_restaurant_and_menuitems.dart';
 import 'package:tas/ui/shared/app_colors.dart';
@@ -18,8 +18,9 @@ class ActiveReservationView extends StatelessWidget {
   ActiveReservationView({this.reservationId});
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<ActiveReservationViewModel>.withConsumer(
-      viewModel: ActiveReservationViewModel(reservationId: reservationId),
+    return ViewModelBuilder<ActiveReservationViewModel>.reactive(
+      viewModelBuilder: () =>
+          ActiveReservationViewModel(reservationId: reservationId),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         body: StreamBuilder(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_user_and_menuitems.dart';
 import 'package:tas/ui/shared/app_colors.dart';
@@ -15,8 +15,10 @@ class RestaurantReservationView extends StatelessWidget {
   RestaurantReservationView({this.reservationId});
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<RestaurantReservationViewModel>.withConsumer(
-      viewModel: RestaurantReservationViewModel(reservationId: reservationId),
+    return ViewModelBuilder<RestaurantReservationViewModel>.reactive(
+      viewModelBuilder: () => RestaurantReservationViewModel(
+        reservationId: reservationId,
+      ),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(

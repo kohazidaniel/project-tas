@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/reservation_view_model.dart';
+import 'package:stacked/stacked.dart';
 
 class ReservationView extends StatelessWidget {
   final String reservationId;
@@ -15,8 +15,8 @@ class ReservationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<ReservationViewModel>.withConsumer(
-      viewModel: ReservationViewModel(reservationId),
+    return ViewModelBuilder<ReservationViewModel>.reactive(
+      viewModelBuilder: () => ReservationViewModel(reservationId),
       onModelReady: (model) => model.getReservation(),
       builder: (context, model, child) => Scaffold(
         body: model.reservation == null || model.restaurant == null

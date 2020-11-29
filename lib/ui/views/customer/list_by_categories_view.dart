@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
-import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/viewmodels/customer/list_by_categories_view_model.dart';
 
 class ListByCategoriesView extends StatelessWidget {
@@ -12,8 +11,8 @@ class ListByCategoriesView extends StatelessWidget {
   ListByCategoriesView({this.restaurantType});
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<ListByCategoriesViewModel>.withConsumer(
-      viewModel: ListByCategoriesViewModel(),
+    return ViewModelBuilder<ListByCategoriesViewModel>.reactive(
+      viewModelBuilder: () => ListByCategoriesViewModel(),
       onModelReady: (model) {},
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,

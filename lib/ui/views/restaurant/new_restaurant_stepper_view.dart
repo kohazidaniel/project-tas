@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/category_card.dart';
@@ -25,8 +25,8 @@ class NewRestaurantStepperView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<NewRestaurantStepperViewModel>.withConsumer(
-      viewModel: NewRestaurantStepperViewModel(),
+    return ViewModelBuilder<NewRestaurantStepperViewModel>.reactive(
+      viewModelBuilder: () => NewRestaurantStepperViewModel(),
       builder: (context, model, child) => Scaffold(
           body: new WillPopScope(
         child: new Material(

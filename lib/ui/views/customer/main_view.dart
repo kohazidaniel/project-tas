@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/customer/cart_view.dart';
 import 'package:tas/ui/views/customer/favourite_view.dart';
@@ -16,8 +16,8 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      child: ViewModelProvider<MainViewModel>.withConsumer(
-        viewModel: MainViewModel(),
+      child: ViewModelBuilder<MainViewModel>.reactive(
+        viewModelBuilder: () => MainViewModel(),
         builder: (context, model, child) => Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,

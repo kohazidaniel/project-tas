@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
@@ -10,8 +10,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class TasMapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<TasMapViewModel>.withConsumer(
-      viewModel: TasMapViewModel(),
+    return ViewModelBuilder<TasMapViewModel>.reactive(
+      viewModelBuilder: () => TasMapViewModel(),
       onModelReady: (model) => model.getViewData(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,

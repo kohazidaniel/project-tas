@@ -1,7 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/viewmodels/startup_view_model.dart';
 
 class StartUpView extends StatelessWidget {
@@ -9,8 +9,8 @@ class StartUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<StartUpViewModel>.withConsumer(
-      viewModel: StartUpViewModel(),
+    return ViewModelBuilder<StartUpViewModel>.reactive(
+      viewModelBuilder: () => StartUpViewModel(),
       onModelReady: (model) {
         model.handleStartUpLogic();
       },

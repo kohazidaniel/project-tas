@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/viewmodels/notifications_view_model.dart';
 
 class NotificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<NotificationViewModel>.withConsumer(
-        viewModel: NotificationViewModel(),
+    return ViewModelBuilder<NotificationViewModel>.reactive(
+        viewModelBuilder: () => NotificationViewModel(),
         builder: (context, model, child) => Scaffold(
               backgroundColor: backgroundColor,
               appBar: AppBar(

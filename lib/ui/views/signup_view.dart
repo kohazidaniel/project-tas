@@ -1,11 +1,11 @@
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/expansion_list.dart';
 import 'package:tas/ui/widgets/input_field.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/ui/widgets/text_link.dart';
 import 'package:tas/viewmodels/signup_view_model.dart';
 
@@ -20,8 +20,8 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<SignUpViewModel>.withConsumer(
-      viewModel: SignUpViewModel(context),
+    return ViewModelBuilder<SignUpViewModel>.reactive(
+      viewModelBuilder: () => SignUpViewModel(context),
       builder: (context, model, child) => Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50.0),

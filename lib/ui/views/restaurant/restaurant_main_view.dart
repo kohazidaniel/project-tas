@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/notification_view.dart';
@@ -17,11 +17,11 @@ class RestaurantMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      child: ViewModelProvider<RestaurantMainViewModel>.withConsumer(
+      child: ViewModelBuilder<RestaurantMainViewModel>.reactive(
+        viewModelBuilder: () => RestaurantMainViewModel(),
         onModelReady: (model) {
           model.getUserRestaurant();
         },
-        viewModel: RestaurantMainViewModel(),
         builder: (context, model, child) => Scaffold(
           key: _drawerKey,
           appBar: AppBar(

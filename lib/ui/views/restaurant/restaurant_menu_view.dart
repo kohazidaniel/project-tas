@@ -1,7 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/views/restaurant/menu_item_details_view.dart';
@@ -18,8 +18,10 @@ class RestaurantMenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<RestaurantMenuViewModel>.withConsumer(
-      viewModel: RestaurantMenuViewModel(restaurantId: restaurantId),
+    return ViewModelBuilder<RestaurantMenuViewModel>.reactive(
+      viewModelBuilder: () => RestaurantMenuViewModel(
+        restaurantId: restaurantId,
+      ),
       onModelReady: (model) {
         model.listenToPosts();
       },

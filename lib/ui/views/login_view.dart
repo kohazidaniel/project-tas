@@ -1,4 +1,5 @@
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/services/navigation_service.dart';
@@ -7,7 +8,6 @@ import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/input_field.dart';
 import 'package:tas/ui/widgets/text_link.dart';
 import 'package:flutter/material.dart';
-import 'package:provider_architecture/provider_architecture.dart';
 import 'package:tas/viewmodels/login_view_model.dart';
 import 'package:flare_flutter/flare_actor.dart';
 
@@ -19,8 +19,8 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        child: ViewModelProvider<LoginViewModel>.withConsumer(
-          viewModel: LoginViewModel(context),
+        child: ViewModelBuilder<LoginViewModel>.reactive(
+          viewModelBuilder: () => LoginViewModel(context),
           builder: (context, model, child) => Scaffold(
               backgroundColor: Colors.white,
               body: Padding(

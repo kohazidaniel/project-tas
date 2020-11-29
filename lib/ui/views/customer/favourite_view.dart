@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:provider_architecture/provider_architecture.dart';
+import 'package:stacked/stacked.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/grid_card.dart';
@@ -9,8 +9,8 @@ import 'package:tas/viewmodels/customer/favourite_view_model.dart';
 class FavouriteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelProvider<FavouriteViewModel>.withConsumer(
-      viewModel: FavouriteViewModel(),
+    return ViewModelBuilder<FavouriteViewModel>.reactive(
+      viewModelBuilder: () => FavouriteViewModel(),
       onModelReady: (model) => model.getViewData(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
