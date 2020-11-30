@@ -23,4 +23,10 @@ class MainViewModel extends BaseModel {
     return _firestoreService
         .listenToUnSeenReservationListLength(_authService.currentUser.id);
   }
+
+  Stream<int> listenToUnSeenNotificationListLength() {
+    return _firestoreService.listenToUnSeenNotificationListLength(
+      _authService.currentUser.id,
+    );
+  }
 }

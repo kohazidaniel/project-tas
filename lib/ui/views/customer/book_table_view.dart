@@ -6,6 +6,7 @@ import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
+import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/viewmodels/customer/book_table_view_model.dart';
 
 class BookTableView extends StatelessWidget {
@@ -229,19 +230,7 @@ class BookTableView extends StatelessWidget {
                   ],
                 );
               } else {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        child: CircularProgressIndicator(),
-                        width: 60,
-                        height: 60,
-                      ),
-                    ],
-                  ),
-                );
+                return BusyOverlay();
               }
             }),
       ),

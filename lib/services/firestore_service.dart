@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tas/models/menu_item.dart';
+import 'package:tas/models/tas_notification.dart';
 import 'package:tas/models/rating.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
@@ -39,6 +40,13 @@ class FirestoreService {
   final StreamController<ReservationWithUserAndMenuItems>
       _reservationWithUserAndMenuItemsController =
       StreamController<ReservationWithUserAndMenuItems>.broadcast();
+
+  final StreamController<List<TasNotification>>
+      _userNotificationListController =
+      StreamController<List<TasNotification>>.broadcast();
+
+  final StreamController<int> _userNotificationListLengthController =
+      StreamController<int>.broadcast();
 
   Future createUser(TasUser user) async {
     try {
@@ -524,5 +532,32 @@ class FirestoreService {
         user: user,
       );
     });
+  }
+
+  Stream<List<TasNotification>> listenNotificationList(String userId) {
+    _notifications.snapshots().listen((notificationSnapshot) {
+      var notifications = notificationSnapshot.docs
+          .map((snapshot) => TasNotification.fromData(snapshot.data()))
+          .where((mappedItem) => mappedItem.userId == userId)
+          .toList();
+
+      _userNotificationListController.add(notifications);
+    });
+
+    return _userNotificationListController.stream;
+  }
+
+  Stream<int> listenToUnSeenNotificationListLength(String userId) {
+    _notifications.snapshots().listen((notificationSnapshot) {
+      var notifications = notificationSnapshot.docs
+          .map((snapshot) => TasNotification.fromData(snapshot.data()))
+          .where(
+              (mappedItem) => mappedItem.userId == userId && !mappedItem.seen)
+          .toList();
+
+      _userNotificationListLengthController.add(notifications.length);
+    });
+
+    return _userNotificationListLengthController.stream;
   }
 }

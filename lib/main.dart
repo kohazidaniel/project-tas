@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => Navigator(
         key: locator<DialogService>().dialogNavigationKey,
         onGenerateRoute: (settings) => MaterialPageRoute(
-            builder: (context) => DialogManager(child: child)),
+          builder: (context) => DialogManager(child: child),
+        ),
       ),
       navigatorKey: locator<NavigationService>().navigationKey,
       theme: ThemeData(

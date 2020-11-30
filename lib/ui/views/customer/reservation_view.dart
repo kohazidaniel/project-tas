@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/ui/shared/app_colors.dart';
@@ -103,9 +104,9 @@ class ReservationView extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  model.getReservationStatus(
-                                    model.reservation.status,
+                                  FlutterI18n.translate(
                                     context,
+                                    'reservationStatus.${model.reservation.status}',
                                   ),
                                 )
                               ],

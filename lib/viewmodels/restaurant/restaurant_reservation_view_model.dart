@@ -4,9 +4,7 @@ import 'package:tas/locator.dart';
 import 'package:tas/models/menu_item.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_user_and_menuitems.dart';
-import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/firestore_service.dart';
-import 'package:tas/services/navigation_service.dart';
 import 'package:tas/ui/widgets/blinking_point.dart';
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +12,6 @@ import 'package:tas/viewmodels/customer/active_reservation_model.dart';
 
 class RestaurantReservationViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final AuthService _authenticationService = locator<AuthService>();
-  final NavigationService _navigationService = locator<NavigationService>();
 
   final String reservationId;
   RestaurantReservationViewModel({this.reservationId});

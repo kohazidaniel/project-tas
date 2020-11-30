@@ -5,11 +5,14 @@ import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
+import 'package:tas/services/push_notification_service.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
   final NavigationService _navigationService = locator<NavigationService>();
+  final PushNotificationService _pushNotificationService =
+      locator<PushNotificationService>();
 
   TasUser _currentUser;
   TasUser get currentUser => _currentUser;
@@ -51,6 +54,8 @@ class AuthService {
         fullName: fullName,
         userRole: userRole,
         favouriteRestaurants: [],
+        fcmToken: await _pushNotificationService.getFcmToken(),
+        inProgressReservationId: "",
       );
 
       await _firestoreService.createUser(_currentUser);

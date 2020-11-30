@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/shared_styles.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/show_up.dart';
@@ -74,6 +75,7 @@ class _InputFieldState extends State<InputField> {
             children: <Widget>[
               Expanded(
                 child: TextFormField(
+                  cursorColor: primaryColor,
                   controller: widget.controller,
                   keyboardType: widget.textInputType,
                   focusNode: widget.fieldFocusNode,

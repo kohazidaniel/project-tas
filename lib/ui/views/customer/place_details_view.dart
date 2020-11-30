@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
@@ -91,32 +90,41 @@ class PlaceDetailsView extends StatelessWidget {
                       ),
                       maxLines: 2,
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
-                      child: Row(
-                        children: <Widget>[
-                          SmoothStarRating(
-                            starCount: 5,
-                            color: Colors.yellow,
-                            allowHalfRating: true,
-                            rating: model.restaurant.ratings
-                                    .reduce((a, b) => a + b) /
-                                model.restaurant.ratings.length,
-                            size: 11.0,
-                          ),
-                          horizontalSpaceTiny,
-                          Text(
-                            (model.restaurant.ratings.reduce((a, b) => a + b) /
-                                        model.restaurant.ratings.length)
-                                    .toStringAsFixed(1) +
-                                " (${model.restaurant.ratings.length} ${FlutterI18n.translate(context, "review")})",
+                    model.restaurant.ratings.isNotEmpty
+                        ? Padding(
+                            padding: EdgeInsets.only(bottom: 5.0, top: 2.0),
+                            child: Row(
+                              children: <Widget>[
+                                SmoothStarRating(
+                                  starCount: 5,
+                                  color: Colors.yellow,
+                                  allowHalfRating: true,
+                                  rating: model.restaurant.ratings
+                                          .reduce((a, b) => a + b) /
+                                      model.restaurant.ratings.length,
+                                  size: 11.0,
+                                ),
+                                horizontalSpaceTiny,
+                                Text(
+                                  (model.restaurant.ratings
+                                                  .reduce((a, b) => a + b) /
+                                              model.restaurant.ratings.length)
+                                          .toStringAsFixed(1) +
+                                      " (${model.restaurant.ratings.length} ${FlutterI18n.translate(context, "review")})",
+                                  style: TextStyle(
+                                    fontSize: 11.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Text(
+                            'Nincs értékelés',
                             style: TextStyle(
                               fontSize: 11.0,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
                     Text(
                       model.restaurant.address,
                       style: TextStyle(

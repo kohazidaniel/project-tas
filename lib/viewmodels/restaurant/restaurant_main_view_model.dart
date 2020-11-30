@@ -19,4 +19,10 @@ class RestaurantMainViewModel extends BaseModel {
         .getUserRestaurant(_authenticationService.currentUser.id);
     notifyListeners();
   }
+
+  Stream<int> listenToUnSeenNotificationListLength() {
+    return _firestoreService.listenToUnSeenNotificationListLength(
+      _authenticationService.currentUser.id,
+    );
+  }
 }

@@ -1,4 +1,3 @@
-import 'package:tas/models/reservation.dart';
 import 'package:tas/ui/views/customer/active_reservation_view.dart';
 import 'package:tas/ui/views/customer/book_table_view.dart';
 import 'package:tas/ui/views/customer/list_by_categories_view.dart';

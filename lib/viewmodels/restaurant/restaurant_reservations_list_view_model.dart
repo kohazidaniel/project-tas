@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_i18n/flutter_i18n.dart';
+import 'dart:async';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
@@ -53,48 +52,20 @@ class RestaurantReservationsListViewModel extends BaseModel {
     return true;
   }
 
-  String getReservationStatus(String status, BuildContext context) {
-    switch (status) {
-      case ReservationStatus.CLOSED:
-        return FlutterI18n.translate(
-          context,
-          'reservationStatus.${ReservationStatus.CLOSED}',
-        );
-      case ReservationStatus.ACTIVE:
-        return FlutterI18n.translate(
-          context,
-          'reservationStatus.${ReservationStatus.ACTIVE}',
-        );
-      case ReservationStatus.ACTIVE_PAYING:
-        return FlutterI18n.translate(
-          context,
-          'reservationStatus.${ReservationStatus.ACTIVE_PAYING}',
-        );
-      case ReservationStatus.CANCELLED:
-        return FlutterI18n.translate(
-          context,
-          'reservationStatus.${ReservationStatus.CANCELLED}',
-        );
-      case ReservationStatus.SEEN_INACTIVE:
-      case ReservationStatus.UNSEEN_INACTIVE:
-        return FlutterI18n.translate(
-          context,
-          'reservationStatus.${ReservationStatus.SEEN_INACTIVE}',
-        );
-      default:
-        return FlutterI18n.translate(
-          context,
-          'reservationStatus.unknown',
-        );
-    }
-  }
-
   void updateStatusFilterOptions(String statusTitle) {
     int index = _statusFilterList.indexWhere(
       (option) => option.title == statusTitle,
     );
     _statusFilterList[index].isSelected = !_statusFilterList[index].isSelected;
-    _statusFilterListValues.add(_statusFilterList[index].filterValue);
+
+    if (_statusFilterListValues.contains(
+      _statusFilterList[index].filterValue,
+    )) {
+      _statusFilterListValues.remove(_statusFilterList[index].filterValue);
+    } else {
+      _statusFilterListValues.add(_statusFilterList[index].filterValue);
+    }
+
     notifyListeners();
   }
 

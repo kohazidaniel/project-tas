@@ -62,11 +62,13 @@ class BookTableViewModel extends BaseModel {
         TimeOfDay.now().replacing(hour: TimeOfDay.now().hour + 2),
       );
       if (currentTimeInMinutes > selectedTimeInMinutes) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Legalább 2 órával előbb foglalj asztalt'),
-          backgroundColor: Colors.red[400],
-        ));
+        Scaffold.of(context).hideCurrentSnackBar();
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Legalább 2 órával előbb foglalj asztalt'),
+            backgroundColor: Colors.red[400],
+          ),
+        );
 
         setBusy(false);
         return;
@@ -75,13 +77,15 @@ class BookTableViewModel extends BaseModel {
 
     if (selectedTimeInMinutes > closingTimeInMinutes ||
         selectedTimeInMinutes < openingTimeInMinutes) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-          'Nyitvatartás: ${restaurant.openingTime} - ${restaurant.closingTime}',
+      Scaffold.of(context).hideCurrentSnackBar();
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Nyitvatartás: ${restaurant.openingTime} - ${restaurant.closingTime}',
+          ),
+          backgroundColor: Colors.red[400],
         ),
-        backgroundColor: Colors.red[400],
-      ));
+      );
 
       setBusy(false);
       return;

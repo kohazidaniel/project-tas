@@ -1,6 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:stacked/stacked.dart';
+import 'package:tas/locator.dart';
 import 'package:tas/models/reservation_with_user.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/badge.dart';
@@ -12,7 +14,8 @@ class RestaurantReservationsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RestaurantReservationsListViewModel>.reactive(
-      viewModelBuilder: () => RestaurantReservationsListViewModel(),
+      viewModelBuilder: () => locator<RestaurantReservationsListViewModel>(),
+      disposeViewModel: false,
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
@@ -124,9 +127,9 @@ class RestaurantReservationsListView extends StatelessWidget {
                             DataCell(Text(reservationWithUser.user.fullName)),
                             DataCell(
                               Text(
-                                model.getReservationStatus(
-                                  reservationWithUser.reservation.status,
+                                FlutterI18n.translate(
                                   context,
+                                  'reservationStatus.${reservationWithUser.reservation.status}',
                                 ),
                               ),
                             ),

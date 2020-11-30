@@ -5,7 +5,6 @@ import 'package:tas/locator.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/star_rating.dart';
-import 'dart:math';
 
 class GridCard extends StatelessWidget {
   final NavigationService _navigationService = locator<NavigationService>();

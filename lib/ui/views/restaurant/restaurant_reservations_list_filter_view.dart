@@ -11,7 +11,8 @@ class RestaurantReservationsListFilterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<RestaurantReservationsListViewModel>.reactive(
-      viewModelBuilder: () => RestaurantReservationsListViewModel(),
+      viewModelBuilder: () => locator<RestaurantReservationsListViewModel>(),
+      disposeViewModel: false,
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: backgroundColor,

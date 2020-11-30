@@ -139,6 +139,7 @@ class NewRestaurantStepperViewModel extends BaseModel {
           address: addressController.text,
           openingTime: _openingTime.format(context),
           closingTime: _closingTime.format(context),
+          ratings: [],
         ),
       );
 

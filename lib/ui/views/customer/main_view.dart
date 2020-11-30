@@ -59,16 +59,26 @@ class MainView extends StatelessWidget {
                   ),
                 ),
                 openColor: primaryColor,
-                closedBuilder:
-                    (BuildContext context, VoidCallback openContainer) {
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: IconBadge(
-                      icon: Icons.notifications,
-                      size: 22.0,
-                      badgeValue: 0,
-                      color: primaryColor,
-                    ),
+                closedBuilder: (
+                  BuildContext context,
+                  VoidCallback openContainer,
+                ) {
+                  return StreamBuilder<int>(
+                    stream: model.listenToUnSeenNotificationListLength(),
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<int> snapshot,
+                    ) {
+                      return Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: IconBadge(
+                          icon: Icons.notifications,
+                          size: 22.0,
+                          badgeValue: snapshot.hasData ? snapshot.data : 0,
+                          color: primaryColor,
+                        ),
+                      );
+                    },
                   );
                 },
               ),
