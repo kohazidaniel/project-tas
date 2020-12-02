@@ -34,15 +34,6 @@ class RestaurantReservationsListViewModel extends BaseModel {
 
   List<String> _statusFilterListValues = [];
 
-  String getFormattedDate(DateTime dateTime) {
-    DateFormat formatter = new DateFormat.yMMMMd('hu');
-
-    return formatter.format(dateTime) +
-        ' ${dateTime.hour}:' +
-        '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
-        '${dateTime.minute}';
-  }
-
   void navToReservation(String reservationId) {
     _navigationService.navigateTo(
       RestaurantReservationViewRoute,

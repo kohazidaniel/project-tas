@@ -8,6 +8,7 @@ import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
 import 'package:tas/ui/views/restaurant/restaurant_reservations_list_filter_view.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_reservations_list_view_model.dart';
 
 class RestaurantReservationsListView extends StatelessWidget {
@@ -158,7 +159,7 @@ class RestaurantReservationsListView extends StatelessWidget {
                             ),
                             DataCell(
                               Text(
-                                model.getFormattedDate(
+                                DateTimeUtils.getFormattedDate(
                                   reservationWithUser
                                       .reservation.reservationDate
                                       .toDate(),

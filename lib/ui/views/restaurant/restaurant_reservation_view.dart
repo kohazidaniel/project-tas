@@ -7,6 +7,7 @@ import 'package:tas/models/reservation_with_user.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_reservation_view_model.dart';
 
 class RestaurantReservationView extends StatelessWidget {
@@ -70,7 +71,7 @@ class RestaurantReservationView extends StatelessWidget {
                                 snapshot.data.user.fullName,
                               ),
                               subtitle: Text(
-                                model.getFormattedDate(
+                                DateTimeUtils.getFormattedDate(
                                   snapshot.data.reservation.reservationDate
                                       .toDate(),
                                 ),

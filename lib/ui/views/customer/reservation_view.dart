@@ -6,6 +6,7 @@ import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/customer/reservation_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -147,7 +148,7 @@ class ReservationView extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  model.getFormattedDate(
+                                  DateTimeUtils.getFormattedDate(
                                     model.reservation.reservationDate.toDate(),
                                   ),
                                 )

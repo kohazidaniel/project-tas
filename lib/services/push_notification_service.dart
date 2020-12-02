@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 import 'package:tas/locator.dart';
 import 'package:tas/models/tas_notification.dart';
-import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 

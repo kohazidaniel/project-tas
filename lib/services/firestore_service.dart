@@ -12,6 +12,7 @@ import 'package:tas/models/reservation_with_user.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
 import 'package:tas/services/push_notification_service.dart';
+import 'package:tas/utils/datetime_utils.dart';
 
 class FirestoreService {
   final CollectionReference _users =
@@ -48,8 +49,11 @@ class FirestoreService {
   final StreamController<int> _userNotificationListLengthController =
       StreamController<int>.broadcast();
 
-  final StreamController<List<OrderItem>> _orderItemsController =
-      StreamController<List<OrderItem>>.broadcast();
+  final StreamController<List<Reservation>> _todaysReservationsController =
+      StreamController<List<Reservation>>.broadcast();
+
+  final StreamController<List<Reservation>> _weeklyReservationsController =
+      StreamController<List<Reservation>>.broadcast();
 
   final PushNotificationService _pushNotificationService =
       locator<PushNotificationService>();
@@ -611,24 +615,41 @@ class FirestoreService {
     }
   }
 
-  Stream<List<OrderItem>> listenToOrders(String restaurantId) {
+  Stream<List<Reservation>> listenToTodaysReservations(String restaurantId) {
     _reservations.snapshots().listen((reservationsSnapshot) {
       var reservations = reservationsSnapshot.docs
           .map((snapshot) => Reservation.fromData(snapshot.data()))
-          .where((mappedItem) => mappedItem.restaurantId == restaurantId)
+          .where(
+            (mappedItem) =>
+                mappedItem.restaurantId == restaurantId &&
+                DateTimeUtils.calculateDifferenceInDays(
+                        mappedItem.reservationDate.toDate()) ==
+                    0,
+          )
           .toList();
 
-      var orderItems = [];
-
-      reservations.forEach((reservation) {
-        reservation.orders.forEach((order) {
-          orderItems.add(order);
-        });
-      });
-
-      _orderItemsController.add(orderItems);
+      _todaysReservationsController.add(reservations);
     });
 
-    return _orderItemsController.stream;
+    return _todaysReservationsController.stream;
+  }
+
+  Stream<List<Reservation>> listenToWeeklyReservations(String restaurantId) {
+    _reservations.snapshots().listen((reservationsSnapshot) {
+      var reservations = reservationsSnapshot.docs
+          .map((snapshot) => Reservation.fromData(snapshot.data()))
+          .where(
+            (mappedItem) =>
+                mappedItem.restaurantId == restaurantId &&
+                DateTimeUtils.calculateDifferenceInDays(
+                        mappedItem.reservationDate.toDate()) <=
+                    7,
+          )
+          .toList();
+
+      _weeklyReservationsController.add(reservations);
+    });
+
+    return _weeklyReservationsController.stream;
   }
 }

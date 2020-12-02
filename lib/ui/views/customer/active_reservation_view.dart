@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stacked/stacked.dart';
-import 'package:sliver_fab/sliver_fab.dart';
 import 'package:tas/models/order_item.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';

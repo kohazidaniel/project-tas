@@ -43,15 +43,6 @@ class RestaurantReservationViewModel extends BaseModel {
     await _firestoreService.closeReservation(reservationId);
   }
 
-  String getFormattedDate(DateTime dateTime) {
-    DateFormat formatter = new DateFormat.yMMMMd('hu');
-
-    return formatter.format(dateTime) +
-        ' ${dateTime.hour}:' +
-        '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
-        '${dateTime.minute}';
-  }
-
   Widget getTrailing(String reservationStatus) {
     switch (reservationStatus) {
       case ReservationStatus.ACTIVE:

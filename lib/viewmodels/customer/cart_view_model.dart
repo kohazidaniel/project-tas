@@ -31,15 +31,6 @@ class CartViewModel extends BaseModel {
     return _firestoreService.getRestaurantById(restaurantId);
   }
 
-  String getFormattedDate(DateTime dateTime) {
-    DateFormat formatter = new DateFormat.yMMMMd('hu');
-
-    return formatter.format(dateTime) +
-        ' ${dateTime.hour}:' +
-        '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
-        '${dateTime.minute}';
-  }
-
   void navToReservation(Reservation reservation) {
     if (reservation.status == ReservationStatus.ACTIVE) {
       _navigationService.navigateTo(

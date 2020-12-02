@@ -13,6 +13,9 @@ import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_reservations_list_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
 import 'package:tas/ui/widgets/blinking_point.dart';
+import 'package:tas/ui/widgets/indicator.dart';
+import 'package:tas/ui/widgets/tas_bar_chart.dart';
+import 'package:tas/ui/widgets/tas_pie_chart.dart';
 import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_main_view_model.dart';
 
@@ -201,6 +204,59 @@ class RestaurantMainView extends StatelessWidget {
                                   ],
                                 ),
                               ),
+                            );
+                          }
+                          return SizedBox.shrink();
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                    StreamBuilder<List<Reservation>>(
+                      stream: model.listenToTodaysReservations(),
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<List<Reservation>> snapshot,
+                      ) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.isNotEmpty) {
+                            List<Indicator> indicators = model.getIndicators(
+                              snapshot.data,
+                              context,
+                            );
+                            List<ChartColorAndValue> chartColorsAndValues =
+                                model.getChartColorsAndValues(
+                              snapshot.data,
+                            );
+
+                            return TasPieChart(
+                              indicators: indicators,
+                              chartColorsAndValues: chartColorsAndValues,
+                              title: 'Foglalások',
+                              subtitle: 'Napi bontásban',
+                            );
+                          }
+                          return SizedBox.shrink();
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                    StreamBuilder<List<Reservation>>(
+                      stream: model.listenToWeeklyReservations(),
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<List<Reservation>> snapshot,
+                      ) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data.isNotEmpty) {
+                            List<WeekDayWithValue> weekDayValues =
+                                model.getWeekDayValuesList(
+                              snapshot.data,
+                            );
+
+                            return TasBarChart(
+                              title: 'Foglalások',
+                              subtitle: 'Heti bontásban',
+                              weekDayValues: weekDayValues,
                             );
                           }
                           return SizedBox.shrink();

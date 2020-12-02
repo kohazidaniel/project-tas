@@ -21,4 +21,11 @@ class DateTimeUtils {
         '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
         '${dateTime.minute}';
   }
+
+  static int calculateDifferenceInDays(DateTime date) {
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
+  }
 }

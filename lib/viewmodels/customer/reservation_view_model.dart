@@ -52,15 +52,6 @@ class ReservationViewModel extends BaseModel {
     _navigationService.pop();
   }
 
-  String getFormattedDate(DateTime dateTime) {
-    DateFormat formatter = new DateFormat.yMMMMd('hu');
-
-    return formatter.format(dateTime) +
-        ' ${dateTime.hour}:' +
-        '${dateTime.minute.toString().length == 1 ? '0' : ''}' +
-        '${dateTime.minute}';
-  }
-
   Future<void> startReservation() async {
     setBusy(true);
 

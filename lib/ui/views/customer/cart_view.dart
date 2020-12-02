@@ -6,6 +6,7 @@ import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/busy_overlay.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/customer/cart_view_model.dart';
 
 class CartView extends StatelessWidget {
@@ -54,9 +55,11 @@ class CartView extends StatelessWidget {
 
                       return ListTile(
                         title: Text(restaurant.name),
-                        subtitle: Text(model.getFormattedDate(
-                          reservation.reservationDate.toDate(),
-                        )),
+                        subtitle: Text(
+                          DateTimeUtils.getFormattedDate(
+                            reservation.reservationDate.toDate(),
+                          ),
+                        ),
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(
                             restaurant.thumbnailUrl,

@@ -119,5 +119,23 @@
         "date": "Dátum",
         "people": "Fő",
         "review": "Értékelés"
+    },
+    "barChartDays": {
+        "monday": "Hétfő",
+        "tuesday": "Kedd",
+        "wednesday": "Szerda",
+        "thursday": "Csütörtök",
+        "friday": "Péntek",
+        "saturday": "Szombat",
+        "sunday": "Vasárnap",
+        "shorten": {
+            "monday": "H",
+            "tuesday": "K",
+            "wednesday": "SZ",
+            "thursday": "CS",
+            "friday": "P",
+            "saturday": "SZ",
+            "sunday": "V"
+        }
     }
 }

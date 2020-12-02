@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:tas/locator.dart';
@@ -50,7 +51,7 @@ class RestaurantReservationsListFilterView extends StatelessWidget {
                             bottom: 8,
                           ),
                           child: Text(
-                            'Státusz',
+                            FlutterI18n.translate(context, 'status'),
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 18,
@@ -123,7 +124,7 @@ class RestaurantReservationsListFilterView extends StatelessWidget {
                                   bottom: 8,
                                 ),
                                 child: Text(
-                                  'Dátum',
+                                  FlutterI18n.translate(context, 'date'),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: 18.0,
