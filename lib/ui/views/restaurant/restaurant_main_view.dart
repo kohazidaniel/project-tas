@@ -3,6 +3,8 @@ import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:stacked/stacked.dart';
+import 'package:tas/models/reservation.dart';
+import 'package:tas/models/reservation_with_user.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/views/notification_view.dart';
@@ -10,6 +12,8 @@ import 'package:tas/ui/views/profile_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_menu_view.dart';
 import 'package:tas/ui/views/restaurant/restaurant_reservations_list_view.dart';
 import 'package:tas/ui/widgets/badge.dart';
+import 'package:tas/ui/widgets/blinking_point.dart';
+import 'package:tas/utils/datetime_utils.dart';
 import 'package:tas/viewmodels/restaurant/restaurant_main_view_model.dart';
 
 class RestaurantMainView extends StatelessWidget {
@@ -24,6 +28,7 @@ class RestaurantMainView extends StatelessWidget {
           model.getUserRestaurant();
         },
         builder: (context, model, child) => Scaffold(
+          backgroundColor: backgroundColor,
           key: _drawerKey,
           appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -95,6 +100,116 @@ class RestaurantMainView extends StatelessWidget {
                     },
                   );
                 },
+              ),
+            ],
+          ),
+          body: ListView(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    StreamBuilder<List<ReservationWithUser>>(
+                      stream: model.listenToRestaurantReservations(),
+                      builder: (
+                        BuildContext context,
+                        AsyncSnapshot<List<ReservationWithUser>> snapshot,
+                      ) {
+                        if (snapshot.hasData) {
+                          List<ReservationWithUser> activeReservations =
+                              snapshot.data
+                                  .where((e) =>
+                                      e.reservation.status ==
+                                      ReservationStatus.ACTIVE)
+                                  .toList();
+
+                          if (activeReservations.isNotEmpty) {
+                            return Card(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 4.0,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8.0,
+                                  vertical: 16.0,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    verticalSpaceSmall,
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 16.0,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Aktív foglalások',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w800,
+                                            ),
+                                          ),
+                                          BlinkingPoint(
+                                            xCoor: -30.0,
+                                            yCoor: 0.0,
+                                            pointColor: Colors.red,
+                                            pointSize: 10.0,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    verticalSpaceSmall,
+                                    ...List.generate(
+                                      activeReservations.length,
+                                      (int index) {
+                                        ReservationWithUser
+                                            reservationWithUser =
+                                            activeReservations[index];
+                                        return ListTile(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          title: Text(
+                                            reservationWithUser.user.fullName,
+                                          ),
+                                          subtitle: Text(
+                                            DateTimeUtils.getFormattedDate(
+                                              reservationWithUser
+                                                  .reservation.reservationDate
+                                                  .toDate(),
+                                            ),
+                                          ),
+                                          leading: CircleAvatar(
+                                            backgroundImage: AssetImage(
+                                              "assets/images/cm4.jpg",
+                                            ),
+                                            radius: 20.0,
+                                            backgroundColor: Colors.grey[200],
+                                          ),
+                                          onTap: () => model.navToReservation(
+                                            reservationWithUser.reservation.id,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                          return SizedBox.shrink();
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

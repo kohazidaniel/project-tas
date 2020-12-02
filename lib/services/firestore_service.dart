@@ -48,6 +48,9 @@ class FirestoreService {
   final StreamController<int> _userNotificationListLengthController =
       StreamController<int>.broadcast();
 
+  final StreamController<List<OrderItem>> _orderItemsController =
+      StreamController<List<OrderItem>>.broadcast();
+
   final PushNotificationService _pushNotificationService =
       locator<PushNotificationService>();
 
@@ -482,7 +485,7 @@ class FirestoreService {
   ) {
     return _reservations
         .where('restaurantId', isEqualTo: restaurantId)
-        // .orderBy('reservationDate', descending: true)
+        .orderBy('reservationDate', descending: true)
         .snapshots()
         .asyncMap(
           (QuerySnapshot reservationSnap) => restaurantReservationToPairs(
@@ -606,5 +609,26 @@ class FirestoreService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  Stream<List<OrderItem>> listenToOrders(String restaurantId) {
+    _reservations.snapshots().listen((reservationsSnapshot) {
+      var reservations = reservationsSnapshot.docs
+          .map((snapshot) => Reservation.fromData(snapshot.data()))
+          .where((mappedItem) => mappedItem.restaurantId == restaurantId)
+          .toList();
+
+      var orderItems = [];
+
+      reservations.forEach((reservation) {
+        reservation.orders.forEach((order) {
+          orderItems.add(order);
+        });
+      });
+
+      _orderItemsController.add(orderItems);
+    });
+
+    return _orderItemsController.stream;
   }
 }
