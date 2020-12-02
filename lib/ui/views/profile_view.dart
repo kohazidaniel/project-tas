@@ -15,6 +15,31 @@ class ProfileView extends StatelessWidget {
       onModelReady: (model) => model.getRestaurant(),
       builder: (context, model, child) => Scaffold(
         backgroundColor: backgroundColor,
+        appBar: model.getUser().userRole == 'RESTAURANT'
+            ? AppBar(
+                backgroundColor: backgroundColor,
+                automaticallyImplyLeading: false,
+                centerTitle: true,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.keyboard_arrow_left,
+                    color: primaryColor,
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                title: Text(
+                  FlutterI18n.translate(context, "profile"),
+                  style: TextStyle(
+                    color: primaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                elevation: 2.0,
+              )
+            : PreferredSize(
+                child: SizedBox.shrink(),
+                preferredSize: Size(0, 0),
+              ),
         body: ListView(
           children: <Widget>[
             Row(
@@ -162,7 +187,7 @@ class ProfileView extends StatelessWidget {
                             children = <Widget>[
                               ListTile(
                                 title: Text(
-                                  'Név',
+                                  FlutterI18n.translate(context, "name"),
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,
@@ -174,7 +199,7 @@ class ProfileView extends StatelessWidget {
                               ),
                               ListTile(
                                 title: Text(
-                                  'Leírás',
+                                  FlutterI18n.translate(context, "description"),
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,
@@ -186,7 +211,7 @@ class ProfileView extends StatelessWidget {
                               ),
                               ListTile(
                                 title: Text(
-                                  'Cím',
+                                  FlutterI18n.translate(context, "address"),
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,
@@ -198,7 +223,10 @@ class ProfileView extends StatelessWidget {
                               ),
                               ListTile(
                                 title: Text(
-                                  'Nyitvatartás',
+                                  FlutterI18n.translate(
+                                    context,
+                                    "opening_hours",
+                                  ),
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.w700,

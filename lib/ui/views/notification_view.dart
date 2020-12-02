@@ -50,21 +50,57 @@ class NotificationView extends StatelessWidget {
                         ),
                         ListTile(
                           leading: CircleAvatar(
-                            backgroundColor: Colors.green,
+                            backgroundColor: primaryColor,
                             child: Icon(
-                              Icons.new_releases,
+                              Icons.notifications,
                               color: Colors.white,
                             ),
                           ),
                           title: Text(notification.content),
-                          onTap: () {},
+                          onTap: () => model.navToNotificationRoute(
+                            notification,
+                          ),
+                          onLongPress: () => model.deleteNotification(
+                            notification.id,
+                          ),
+                          trailing: notification.seen
+                              ? SizedBox.shrink()
+                              : Container(
+                                  padding: EdgeInsets.all(1),
+                                  decoration: new BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  constraints: BoxConstraints(
+                                    maxWidth: 10,
+                                    maxHeight: 10,
+                                  ),
+                                ),
                         )
                       ],
                     );
                   },
                 );
               } else {
-                return Text('asd');
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.notifications_none,
+                        size: 64.0,
+                        color: Colors.grey[400],
+                      ),
+                      Text(
+                        FlutterI18n.translate(context, 'no_notifications'),
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                );
               }
             } else {
               return BusyOverlay();

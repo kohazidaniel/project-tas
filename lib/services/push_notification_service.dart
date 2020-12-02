@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 import 'package:tas/locator.dart';
+import 'package:tas/models/tas_notification.dart';
+import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -18,33 +20,29 @@ class PushNotificationService {
     }
 
     _fcm.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('onMessage: $message');
-      },
+      onMessage: (Map<String, dynamic> message) async {},
       onLaunch: (Map<String, dynamic> message) async {
-        print('onLaunch: $message');
         _serialiseAndNavigate(message);
       },
       onResume: (Map<String, dynamic> message) async {
-        print('onResume: $message');
         _serialiseAndNavigate(message);
       },
     );
   }
 
-  void _serialiseAndNavigate(Map<String, dynamic> message) {
+  void _serialiseAndNavigate(Map<String, dynamic> message) async {
     var notificationData = message['data'];
-    var view = notificationData['view'];
 
-    if (view != null) {
-      // Navigate to the create post view
-      if (view == 'create_post') {
-        print('hello');
-      }
-    }
+    _navigationService.navigateTo(
+      notificationData['navigationRoute'],
+      arguments: notificationData['navigationId'],
+    );
   }
 
-  Future<void> sendAndRetrieveMessage() async {
+  Future<void> sendAndPushNotification(
+    TasNotification notification,
+    String fcmToken,
+  ) async {
     await http.post(
       'https://fcm.googleapis.com/fcm/send',
       headers: <String, String>{
@@ -54,16 +52,16 @@ class PushNotificationService {
       body: jsonEncode(
         <String, dynamic>{
           'notification': <String, dynamic>{
-            'body': 'this is a body',
-            'title': 'this is a title'
+            'body': notification.content,
+            'title': 'Új értesítés'
           },
           'priority': 'high',
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'id': '1',
-            'status': 'done'
+            'navigationRoute': notification.navigationRoute,
+            'navigationId': notification.navigationId,
           },
-          'to': await _fcm.getToken(),
+          'to': fcmToken,
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tas/models/order_item.dart';
 import 'package:tas/models/rating.dart';
 
 class Reservation {
@@ -7,7 +8,7 @@ class Reservation {
   final String restaurantId;
   final Timestamp reservationDate;
   final int numberOfPeople;
-  final List<dynamic> orderedMenuItemIds;
+  final List<OrderItem> orders;
   final int total;
   final String status;
   final Rating rating;
@@ -19,7 +20,7 @@ class Reservation {
     this.reservationDate,
     this.numberOfPeople,
     this.total,
-    this.orderedMenuItemIds,
+    this.orders,
     this.status,
     this.rating,
   });
@@ -30,7 +31,11 @@ class Reservation {
         restaurantId = data['restaurantId'],
         reservationDate = data['reservationDate'],
         numberOfPeople = data['numberOfPeople'],
-        orderedMenuItemIds = data['orderedMenuItemIds'],
+        orders = (data['orders'] as List)
+            .map(
+              (orderItem) => OrderItem.fromData(orderItem),
+            )
+            .toList(),
         total = data['total'],
         status = data['status'],
         rating =
@@ -43,7 +48,11 @@ class Reservation {
       'restaurantId': restaurantId,
       'reservationDate': reservationDate,
       'numberOfPeople': numberOfPeople,
-      'orderedMenuItemIds': orderedMenuItemIds,
+      'orders': orders
+          .map(
+            (orderItem) => orderItem.toJson(),
+          )
+          .toList(),
       'total': total,
       'status': status,
       'rating': rating,

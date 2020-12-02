@@ -140,6 +140,7 @@ class NewRestaurantStepperViewModel extends BaseModel {
           openingTime: _openingTime.format(context),
           closingTime: _closingTime.format(context),
           ratings: [],
+          fcmToken: _authenticationService.currentUser.fcmToken,
         ),
       );
 

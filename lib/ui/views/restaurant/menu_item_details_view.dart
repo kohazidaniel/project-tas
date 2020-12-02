@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:stacked/stacked.dart';
 import 'package:tas/models/menu_item.dart';
@@ -36,7 +37,9 @@ class MenuItemDetailsView extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text(
-            isUpdating ? 'Frissítés' : 'Létrehozás',
+            isUpdating
+                ? FlutterI18n.translate(context, 'update')
+                : FlutterI18n.translate(context, 'create'),
             style: TextStyle(color: primaryColor),
           ),
           actions: [
@@ -116,14 +119,14 @@ class MenuItemDetailsView extends StatelessWidget {
                 InputField(
                   validationMessage: model.nameErrorMessage,
                   controller: nameController,
-                  placeholder: 'Név',
+                  placeholder: FlutterI18n.translate(context, 'name'),
                   nextFocusNode: model.descriptionNode,
                 ),
                 horizontalSpaceSmall,
                 InputField(
                   validationMessage: model.descriptionErrorMessage,
                   controller: descriptionController,
-                  placeholder: 'Leírás',
+                  placeholder: FlutterI18n.translate(context, 'description'),
                   fieldFocusNode: model.descriptionNode,
                   nextFocusNode: model.priceNode,
                 ),
@@ -131,7 +134,7 @@ class MenuItemDetailsView extends StatelessWidget {
                 InputField(
                   validationMessage: model.priceErrorMessage,
                   controller: priceController,
-                  placeholder: 'Ár',
+                  placeholder: FlutterI18n.translate(context, 'price'),
                   inputPostfix: 'Ft',
                   fieldFocusNode: model.priceNode,
                   enterPressed: () => model.priceNode.unfocus(),
@@ -140,9 +143,12 @@ class MenuItemDetailsView extends StatelessWidget {
                 Container(
                   decoration: fieldDecortaion,
                   child: SmartSelect<String>.single(
-                    title: 'Kategória',
-                    placeholder: 'Válassz ki egy kategóriát',
-                    modalTitle: 'Kategóriák',
+                    title: FlutterI18n.translate(context, 'category'),
+                    placeholder: FlutterI18n.translate(
+                      context,
+                      'choose_category',
+                    ),
+                    modalTitle: FlutterI18n.translate(context, 'categories'),
                     value: model.selectedType,
                     choiceItems: [
                       S2Choice<String>(value: 'beer', title: 'Sör'),
@@ -170,7 +176,9 @@ class MenuItemDetailsView extends StatelessWidget {
                 ),
                 SizedBox(height: 10.0),
                 BusyButton(
-                  title: isUpdating ? 'Frissítés' : 'Létrehozás',
+                  title: isUpdating
+                      ? FlutterI18n.translate(context, 'update')
+                      : FlutterI18n.translate(context, 'create'),
                   busy: model.busy,
                   onPressed: () => model.addMenuItem(
                     name: nameController.text,

@@ -14,6 +14,7 @@ import 'package:flare_flutter/flare_actor.dart';
 class LoginView extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwordFocusNode = FocusNode();
   final NavigationService _navigationService = locator<NavigationService>();
 
   @override
@@ -56,24 +57,26 @@ class LoginView extends StatelessWidget {
                       controller: emailController,
                       validationMessage: model.loginEmailErrorMessage,
                       textInputType: TextInputType.emailAddress,
+                      nextFocusNode: passwordFocusNode,
                     ),
                     InputField(
                       placeholder: FlutterI18n.translate(context, "password"),
                       password: true,
                       controller: passwordController,
                       validationMessage: model.loginPasswordErrorMessage,
+                      fieldFocusNode: passwordFocusNode,
+                      enterPressed: () => model.login(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ),
                     ),
                     BusyButton(
                       title: FlutterI18n.translate(context, "login"),
                       busy: model.busy,
-                      onPressed: () {
-                        if (!model.busy) {
-                          model.login(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                        }
-                      },
+                      onPressed: () => model.login(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ),
                     ),
                     verticalSpaceMedium,
                     Row(

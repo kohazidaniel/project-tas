@@ -10,8 +10,11 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="tas"
+        android:label="TAS"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+          android:name="com.google.firebase.messaging.default_notification_icon"
+          android:resource="@mipmap/ic_stat_tas" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

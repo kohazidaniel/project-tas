@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
@@ -41,14 +42,20 @@ class NewRestaurantStepperView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hurrá 🎉,',
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.hurray',
+                        ),
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        'új hely a láthatáron',
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.new_place_on_sight',
+                        ),
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
@@ -61,24 +68,38 @@ class NewRestaurantStepperView extends StatelessWidget {
                   physics: ClampingScrollPhysics(),
                   steps: [
                     new Step(
-                      title: const Text('Név'),
+                      title: Text(FlutterI18n.translate(
+                        context,
+                        'new_restaurant_stepper.name',
+                      )),
                       isActive: true,
                       state: StepState.indexed,
                       content: InputField(
                         controller: nameController,
-                        placeholder: 'Név',
+                        placeholder: FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.name',
+                        ),
                         validationMessage: model.restaurantNameErrorMessage,
                         enterPressed: () => model.onStepContinue(),
                         nextFocusNode: model.descriptionNode,
                       ),
                     ),
                     new Step(
-                      title: const Text('Leírás'),
+                      title: Text(
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.description',
+                        ),
+                      ),
                       isActive: true,
                       state: StepState.indexed,
                       content: InputField(
                         controller: descriptionController,
-                        placeholder: 'Leírás',
+                        placeholder: FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.description',
+                        ),
                         validationMessage:
                             model.restaurantDescriptionErrorMessage,
                         enterPressed: () => model.onStepContinue(),
@@ -86,7 +107,12 @@ class NewRestaurantStepperView extends StatelessWidget {
                       ),
                     ),
                     new Step(
-                      title: const Text('Típus'),
+                      title: Text(
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.type',
+                        ),
+                      ),
                       isActive: true,
                       state: StepState.indexed,
                       content: Column(
@@ -125,7 +151,12 @@ class NewRestaurantStepperView extends StatelessWidget {
                       ),
                     ),
                     new Step(
-                      title: const Text('Kép hozzáadása'),
+                      title: Text(
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.add_photo',
+                        ),
+                      ),
                       isActive: true,
                       state: StepState.indexed,
                       content: Column(
@@ -174,12 +205,20 @@ class NewRestaurantStepperView extends StatelessWidget {
                       ),
                     ),
                     new Step(
-                      title: const Text('Cím megadása'),
+                      title: Text(
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.add_address',
+                        ),
+                      ),
                       isActive: true,
                       state: StepState.indexed,
                       content: InputField(
                         controller: model.addressController,
-                        placeholder: 'Cím',
+                        placeholder: FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.address',
+                        ),
                         validationMessage: model.restaurantAddressErrorMessage,
                         isLocation: true,
                         getLocation: () => model.getCurrentPosition(),
@@ -188,7 +227,12 @@ class NewRestaurantStepperView extends StatelessWidget {
                       ),
                     ),
                     new Step(
-                      title: const Text('Nyitvatartás'),
+                      title: Text(
+                        FlutterI18n.translate(
+                          context,
+                          'new_restaurant_stepper.opening_hours',
+                        ),
+                      ),
                       isActive: true,
                       state: StepState.indexed,
                       content: Column(
@@ -223,8 +267,14 @@ class NewRestaurantStepperView extends StatelessWidget {
                   controlsBuilder: (context, {onStepCancel, onStepContinue}) =>
                       BusyButton(
                     title: model.currStep == model.totalSteps
-                        ? 'Létrehozás'
-                        : 'Tovább',
+                        ? FlutterI18n.translate(
+                            context,
+                            'new_restaurant_stepper.create',
+                          )
+                        : FlutterI18n.translate(
+                            context,
+                            'new_restaurant_stepper.next_step',
+                          ),
                     onPressed: onStepContinue,
                     busy: model.busy,
                   ),

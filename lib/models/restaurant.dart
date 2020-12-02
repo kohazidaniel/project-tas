@@ -11,21 +11,22 @@ class Restaurant {
   final String address;
   final String openingTime;
   final String closingTime;
+  final String fcmToken;
 
-  Restaurant({
-    this.id,
-    this.ownerId,
-    this.name,
-    this.description,
-    this.restaurantTypes,
-    this.ratings,
-    this.thumbnailUrl,
-    this.latitude,
-    this.longitude,
-    this.address,
-    this.openingTime,
-    this.closingTime,
-  });
+  Restaurant(
+      {this.id,
+      this.ownerId,
+      this.name,
+      this.description,
+      this.restaurantTypes,
+      this.ratings,
+      this.thumbnailUrl,
+      this.latitude,
+      this.longitude,
+      this.address,
+      this.openingTime,
+      this.closingTime,
+      this.fcmToken});
 
   Restaurant.fromData(Map<String, dynamic> data)
       : id = data['id'],
@@ -39,7 +40,8 @@ class Restaurant {
         longitude = data['longitude'],
         address = data['address'],
         openingTime = data['openingTime'],
-        closingTime = data['closingTime'];
+        closingTime = data['closingTime'],
+        fcmToken = data['fcmToken'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -55,6 +57,7 @@ class Restaurant {
       'address': address,
       'openingTime': openingTime,
       'closingTime': closingTime,
+      'fcmToken': fcmToken,
     };
   }
 }

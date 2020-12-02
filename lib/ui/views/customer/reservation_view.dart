@@ -53,7 +53,10 @@ class ReservationView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Asztalfoglalás',
+                                      FlutterI18n.translate(
+                                        context,
+                                        'book_a_table',
+                                      ),
                                       style: TextStyle(
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.bold,
@@ -97,7 +100,7 @@ class ReservationView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Státusz',
+                                  FlutterI18n.translate(context, 'status'),
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
@@ -137,7 +140,7 @@ class ReservationView extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Dátum',
+                                  FlutterI18n.translate(context, 'date'),
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold,
@@ -167,14 +170,20 @@ class ReservationView extends StatelessWidget {
                         verticalSpaceSmall,
                         model.canStartReservation()
                             ? BusyButton(
-                                title: 'Itt vagyunk',
+                                title: FlutterI18n.translate(
+                                  context,
+                                  'we_are_here',
+                                ),
                                 onPressed: () => model.startReservation(),
                               )
                             : SizedBox.shrink(),
                         verticalSpaceSmall,
                         model.canDeleteReservation()
                             ? BusyButton(
-                                title: 'Törlés',
+                                title: FlutterI18n.translate(
+                                  context,
+                                  'delete',
+                                ),
                                 onPressed: () => model.deleteReservation(),
                               )
                             : SizedBox.shrink(),

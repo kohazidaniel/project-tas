@@ -21,10 +21,8 @@ class RestaurantMenuView extends StatelessWidget {
     return ViewModelBuilder<RestaurantMenuViewModel>.reactive(
       viewModelBuilder: () => RestaurantMenuViewModel(
         restaurantId: restaurantId,
+        reservationId: reservationId,
       ),
-      onModelReady: (model) {
-        model.listenToPosts();
-      },
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
           backgroundColor: backgroundColor,
@@ -44,7 +42,7 @@ class RestaurantMenuView extends StatelessWidget {
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50.0),
             child: StreamBuilder<List<MenuItem>>(
-              stream: model.listenToPosts(),
+              stream: model.listenToMenuItems(),
               builder: (
                 BuildContext context,
                 AsyncSnapshot<List<MenuItem>> snapshot,
@@ -157,7 +155,7 @@ class RestaurantMenuView extends StatelessWidget {
           ],
         ),
         body: StreamBuilder<List<MenuItem>>(
-          stream: model.listenToPosts(),
+          stream: model.listenToMenuItems(),
           builder: (
             BuildContext context,
             AsyncSnapshot<List<MenuItem>> snapshot,
@@ -176,7 +174,7 @@ class RestaurantMenuView extends StatelessWidget {
                         color: Colors.grey[400],
                       ),
                       Text(
-                        'Üres az itallap',
+                        FlutterI18n.translate(context, 'empty_menu_list'),
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontWeight: FontWeight.bold,
@@ -243,7 +241,7 @@ class RestaurantMenuView extends StatelessWidget {
         ),
         bottomNavigationBar: AnimatedContainer(
           duration: Duration(milliseconds: 250),
-          height: model.cartMenuItemIds.length > 0 ? 55.0 : 0.0,
+          height: model.orders.length > 0 ? 55.0 : 0.0,
           child: BottomAppBar(
             child: new Row(
               mainAxisSize: MainAxisSize.max,
@@ -257,7 +255,7 @@ class RestaurantMenuView extends StatelessWidget {
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                        text: 'Összesen: ',
+                        text: '${FlutterI18n.translate(context, 'sum')}: ',
                       ),
                       TextSpan(
                         text: '${model.total} Ft',
@@ -269,10 +267,10 @@ class RestaurantMenuView extends StatelessWidget {
                   ),
                 ),
                 AnimatedButton(
-                  onTap: () => model.orderMenuItems(reservationId),
+                  onTap: () => model.orderMenuItems(),
                   animationDuration: const Duration(milliseconds: 1000),
-                  initialText: "RENDELÉS",
-                  finalText: "MEGRENDELVE",
+                  initialText: FlutterI18n.translate(context, 'order'),
+                  finalText: FlutterI18n.translate(context, 'ordered'),
                   iconData: Icons.check,
                   iconSize: 20.0,
                   buttonStyle: AnimatedButtonStyle(

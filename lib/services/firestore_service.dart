@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tas/locator.dart';
 import 'package:tas/models/menu_item.dart';
+import 'package:tas/models/order_item.dart';
 import 'package:tas/models/tas_notification.dart';
 import 'package:tas/models/rating.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/reservation_with_restaurant.dart';
-import 'package:tas/models/reservation_with_restaurant_and_menuitems.dart';
 import 'package:tas/models/reservation_with_user.dart';
-import 'package:tas/models/reservation_with_user_and_menuitems.dart';
 import 'package:tas/models/restaurant.dart';
 import 'package:tas/models/tas_user.dart';
+import 'package:tas/services/push_notification_service.dart';
 
 class FirestoreService {
   final CollectionReference _users =
@@ -33,13 +34,12 @@ class FirestoreService {
   final StreamController<bool> _userReservationInProgressController =
       StreamController<bool>.broadcast();
 
-  final StreamController<ReservationWithRestaurantAndMenuItems>
-      _reservationWithRestaurantAndMenuItemsController =
-      StreamController<ReservationWithRestaurantAndMenuItems>.broadcast();
+  final StreamController<ReservationWithRestaurant>
+      _reservationWithRestaurantController =
+      StreamController<ReservationWithRestaurant>.broadcast();
 
-  final StreamController<ReservationWithUserAndMenuItems>
-      _reservationWithUserAndMenuItemsController =
-      StreamController<ReservationWithUserAndMenuItems>.broadcast();
+  final StreamController<ReservationWithUser> _reservationWithUserController =
+      StreamController<ReservationWithUser>.broadcast();
 
   final StreamController<List<TasNotification>>
       _userNotificationListController =
@@ -47,6 +47,9 @@ class FirestoreService {
 
   final StreamController<int> _userNotificationListLengthController =
       StreamController<int>.broadcast();
+
+  final PushNotificationService _pushNotificationService =
+      locator<PushNotificationService>();
 
   Future createUser(TasUser user) async {
     try {
@@ -71,7 +74,6 @@ class FirestoreService {
       return (userData.data()['favouriteRestaurants'] as List<dynamic>)
           .cast<String>();
     } catch (e) {
-      print(e);
       return [];
     }
   }
@@ -126,7 +128,7 @@ class FirestoreService {
     await _menuItems.doc(menuItemId).delete();
   }
 
-  Stream<List<MenuItem>> listenToMenuItemsRealTime(String restaurantId) {
+  Stream<List<MenuItem>> listenToMenuItems(String restaurantId) {
     _menuItems
         .orderBy('menuItemType', descending: true)
         .snapshots()
@@ -270,8 +272,7 @@ class FirestoreService {
     }
   }
 
-  Stream<ReservationWithUserAndMenuItems>
-      listenToReservationWithUserAndMenuItems(
+  Stream<ReservationWithUser> listenToReservationWithUser(
     String reservationId,
   ) {
     _reservations
@@ -282,34 +283,22 @@ class FirestoreService {
         reservationSnapshot.data(),
       );
 
-      List<MenuItem> menuItems = [];
-
-      reservation.orderedMenuItemIds.forEach((menuItemId) async {
-        var menuItemData = await _menuItems.doc(menuItemId).get();
-
-        menuItems.add(MenuItem.fromData(
-          menuItemData.data(),
-        ));
-      });
-
       var userData = await _users.doc(reservation.userId).get();
 
-      _reservationWithUserAndMenuItemsController.add(
-        ReservationWithUserAndMenuItems(
+      _reservationWithUserController.add(
+        ReservationWithUser(
           reservation: reservation,
           user: TasUser.fromData(
             userData.data(),
           ),
-          menuItems: menuItems,
         ),
       );
     });
 
-    return _reservationWithUserAndMenuItemsController.stream;
+    return _reservationWithUserController.stream;
   }
 
-  Stream<ReservationWithRestaurantAndMenuItems>
-      listenToReservationWithRestaurantAndMenuItems(
+  Stream<ReservationWithRestaurant> listenToReservationWithRestaurant(
     String reservationId,
   ) {
     _reservations
@@ -320,28 +309,20 @@ class FirestoreService {
         reservationSnapshot.data(),
       );
 
-      List<MenuItem> menuItems = [];
-
-      reservation.orderedMenuItemIds.forEach((menuItemId) async {
-        var menuItemData = await _menuItems.doc(menuItemId).get();
-
-        menuItems.add(MenuItem.fromData(
-          menuItemData.data(),
-        ));
-      });
-
       var restaurantData =
           await _restaurants.doc(reservation.restaurantId).get();
 
-      _reservationWithRestaurantAndMenuItemsController
-          .add(ReservationWithRestaurantAndMenuItems(
-        reservation: reservation,
-        menuItems: menuItems,
-        restaurant: Restaurant.fromData(restaurantData.data()),
-      ));
+      _reservationWithRestaurantController.add(
+        ReservationWithRestaurant(
+          reservation: reservation,
+          restaurant: Restaurant.fromData(
+            restaurantData.data(),
+          ),
+        ),
+      );
     });
 
-    return _reservationWithRestaurantAndMenuItemsController.stream;
+    return _reservationWithRestaurantController.stream;
   }
 
   Future<void> startReservation(String reservationId, String userId) async {
@@ -373,9 +354,11 @@ class FirestoreService {
     _reservations.snapshots().listen((reservationSnapshot) {
       var menuItems = reservationSnapshot.docs
           .map((snapshot) => Reservation.fromData(snapshot.data()))
-          .where((mappedItem) =>
-              mappedItem.userId == userId &&
-              mappedItem.status == ReservationStatus.UNSEEN_INACTIVE)
+          .where(
+            (mappedItem) =>
+                mappedItem.userId == userId &&
+                mappedItem.status == ReservationStatus.UNSEEN_INACTIVE,
+          )
           .toList();
       _unSeenReservationListLengthController.add(menuItems.length);
     });
@@ -414,7 +397,7 @@ class FirestoreService {
   }
 
   Future<void> orderMenuItems(
-    List<String> menuItemIds,
+    List<OrderItem> orders,
     int total,
     String reservationId,
   ) async {
@@ -424,10 +407,7 @@ class FirestoreService {
       Reservation reservation = Reservation.fromData(reservationSnap.data());
 
       _reservations.doc(reservationId).update({
-        'orderedMenuItemIds': [
-          ...reservation.orderedMenuItemIds,
-          ...menuItemIds,
-        ],
+        'orders': FieldValue.arrayUnion(orders.map((e) => e.toJson()).toList()),
         'total': total + reservation.total,
       });
     } catch (e) {
@@ -541,6 +521,8 @@ class FirestoreService {
           .where((mappedItem) => mappedItem.userId == userId)
           .toList();
 
+      notifications.sort((a, b) => b.createDate.compareTo(a.createDate));
+
       _userNotificationListController.add(notifications);
     });
 
@@ -559,5 +541,70 @@ class FirestoreService {
     });
 
     return _userNotificationListLengthController.stream;
+  }
+
+  Future sendNotification(TasNotification notification, String fcmToken) async {
+    try {
+      await _pushNotificationService.sendAndPushNotification(
+        notification,
+        fcmToken,
+      );
+
+      await _notifications.doc(notification.id).set(notification.toJson());
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future setNofiticationSeen(String notificationId) async {
+    try {
+      await _notifications.doc(notificationId).update({'seen': true});
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future completeOrder(String reservationId, String orderItemId) async {
+    try {
+      var reservationSnap = await _reservations.doc(reservationId).get();
+
+      Reservation reservation = Reservation.fromData(reservationSnap.data());
+
+      int index =
+          reservation.orders.indexWhere((order) => order.id == orderItemId);
+
+      if (index >= 0) {
+        reservation.orders[index].completed = true;
+      }
+
+      await _reservations.doc(reservationId).update({
+        'orders': reservation.orders.map((e) => e.toJson()).toList(),
+      });
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future updateFcmToken({
+    String userId,
+    String fcmToken,
+    String restaurantId,
+  }) async {
+    try {
+      await _users.doc(userId).update({'fcmToken': fcmToken});
+      if (restaurantId.isNotEmpty) {
+        await _restaurants.doc(restaurantId).update({'fcmToken': fcmToken});
+      }
+    } catch (e) {
+      return e.message;
+    }
+  }
+
+  Future deleteNotification(String notificationId) async {
+    try {
+      await _notifications.doc(notificationId).delete();
+    } catch (e) {
+      return e.message;
+    }
   }
 }

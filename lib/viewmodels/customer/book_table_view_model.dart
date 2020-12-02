@@ -106,7 +106,7 @@ class BookTableViewModel extends BaseModel {
         numberOfPeople: _numberOfPeople,
         restaurantId: restaurantId,
         reservationDate: reservationTimeStamp,
-        orderedMenuItemIds: [],
+        orders: [],
         total: 0,
         userId: _authenticationService.currentUser.id,
       ),

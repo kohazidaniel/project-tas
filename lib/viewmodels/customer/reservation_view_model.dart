@@ -1,14 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tas/constants/route_names.dart';
 import 'package:tas/locator.dart';
 import 'package:tas/models/reservation.dart';
 import 'package:tas/models/restaurant.dart';
+import 'package:tas/models/tas_notification.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/dialog_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
 
 class ReservationViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -60,6 +63,19 @@ class ReservationViewModel extends BaseModel {
 
   Future<void> startReservation() async {
     setBusy(true);
+
+    await _firestoreService.sendNotification(
+      TasNotification(
+        id: Uuid().v1(),
+        content: '${_authService.currentUser.fullName} foglalást indított el',
+        createDate: Timestamp.now(),
+        navigationId: reservation.id,
+        navigationRoute: RestaurantReservationViewRoute,
+        seen: false,
+        userId: restaurant.id,
+      ),
+      restaurant.fcmToken,
+    );
 
     await _firestoreService.startReservation(
       reservation.id,

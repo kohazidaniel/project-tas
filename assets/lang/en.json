@@ -16,6 +16,7 @@
     "categories": "Categories",
     "places_nearby": "Places nearby",
     "recommended_places": "Recommended places",
+    "empty_menu_list": "Drink menu is empty",
     "favourite_places": "Favourite places",
     "quantity": "Quantity",
     "review": "Review",
@@ -23,11 +24,34 @@
     "description": "Description",
     "drink_menu": "Drink menu",
     "book_a_table": "Book a table",
+    "close_reservation": "Close reservation",
+    "profile": "Profile",
+    "fullfil": "Completed",
+    "reservation": "Reservation",
+    "reservations": "Reservations",
     "active_reservation": "Active reservation",
     "find_your_favourites": "Find your favourite places",
     "no_reservations": "There are no reservations",
+    "no_orders": "You haven't ordered anything",
+    "no_notifications": "No notifications",
+    "view_menu_item_list": "Check out our menu",
+    "completed_orders": "Completed orders",
+    "pending_orders": "Pending orders",
+    "total": "Total",
+    "pay": "Pay",
+    "no_review": "No reviews",
+    "status": "Status",
+    "date": "Date",
+    "we_are_here": "We are here",
+    "delete": "Delete",
+    "update": "Update",
+    "create": "Create",
+    "sum": "Total",
+    "order": "Order",
+    "ordered": "Order is done",
     "search_places": "Search...",
     "opening_hours": "Opening hours",
+    "address": "Address",
     "details": "Details",
     "validation_messages": {
         "missing_email": "Missing email",
@@ -39,7 +63,7 @@
         "wrong_password": "Your password is wrong",
         "user_not_found": "User with this email doesn't exist",
         "user_disabled": "User with this email has been disabled",
-        "default": "An undefined Error happened"
+        "default": "An undefined error happened"
     },
     "menuItemTypes": {
         "beer": "Beer",
@@ -70,5 +94,26 @@
         "closed": "Paid",
         "cancelled": "Cancelled",
         "unknown": "Unknown"
+    },
+    "new_restaurant_stepper": {
+        "hurray": "Hurray 🎉,",
+        "new_place_on_sight": "new place on sight",
+        "name": "Name",
+        "description": "Description",
+        "type": "Type",
+        "add_photo": "Add photo",
+        "add_address": "Add address",
+        "address": "Cím",
+        "opening_hours": "Opening hours",
+        "create": "Create",
+        "next_step": "Next"
+    },
+    "reservation_list_title_row": {
+        "name": "Name",
+        "status": "Status",
+        "payment": "Payment",
+        "date": "Date",
+        "people": "People",
+        "review": "Review"
     }
 }

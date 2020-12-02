@@ -119,7 +119,7 @@ class PlaceDetailsView extends StatelessWidget {
                             ),
                           )
                         : Text(
-                            'Nincs értékelés',
+                            FlutterI18n.translate(context, 'no_review'),
                             style: TextStyle(
                               fontSize: 11.0,
                               fontWeight: FontWeight.w300,

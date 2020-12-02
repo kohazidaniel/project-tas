@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:stacked/stacked.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
@@ -144,11 +145,30 @@ class RestaurantMainView extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(
+                    Icons.person,
+                    color: Colors.grey[800],
+                  ),
+                  title: Text(
+                    FlutterI18n.translate(context, 'profile'),
+                    style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ProfileView();
+                      }),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
                     Icons.menu_book,
                     color: Colors.grey[800],
                   ),
                   title: Text(
-                    'Itallap',
+                    FlutterI18n.translate(context, 'drink_menu'),
                     style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
                   ),
                   onTap: () {
@@ -167,7 +187,7 @@ class RestaurantMainView extends StatelessWidget {
                     color: Colors.grey[800],
                   ),
                   title: Text(
-                    'Asztalfoglalások',
+                    FlutterI18n.translate(context, 'book_a_table'),
                     style: TextStyle(fontSize: 16.0, color: Colors.grey[800]),
                   ),
                   onTap: () {

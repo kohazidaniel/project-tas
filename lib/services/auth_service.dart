@@ -66,21 +66,19 @@ class AuthService {
     }
   }
 
-  // Kijelentkezik, majd a bejelentkezési felületre navigál
   Future signOut() async {
     _firebaseAuth
         .signOut()
         .then((_) => _navigationService.navigateToLoginPage());
   }
 
-  // Lekéri hogy be van e jelenetkezve a felhasználó, ha igen akkor az adatait is lekéri
   Future<bool> isUserLoggedIn() async {
     var user = _firebaseAuth.currentUser;
     await _populateCurrentUser(user);
     return user != null;
   }
 
-  Future<void> refreshUser() async {
+  Future refreshUser() async {
     var user = _firebaseAuth.currentUser;
     await _populateCurrentUser(user);
   }
@@ -91,6 +89,8 @@ class AuthService {
       if (_currentUser.userRole == 'RESTAURANT') {
         _userRestaurant =
             await _firestoreService.getUserRestaurant(_currentUser.id);
+      } else {
+        _userRestaurant = null;
       }
     }
   }

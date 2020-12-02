@@ -21,6 +21,19 @@ class StartUpViewModel extends BaseModel {
       bool doesUserHaveRestaurant = await _firestoreService
           .doesUserHaveRestaurant(_authService.currentUser.id);
 
+      String fcmToken = await _pushNotificationService.getFcmToken();
+
+      if (fcmToken != _authService.currentUser.fcmToken) {
+        await _firestoreService.updateFcmToken(
+          userId: _authService.currentUser.id,
+          fcmToken: fcmToken,
+          restaurantId: _authService.userRestaurant != null
+              ? _authService.userRestaurant.id
+              : "",
+        );
+        await _authService.refreshUser();
+      }
+
       switch (_authService.currentUser.userRole) {
         case "CUSTOMER":
           _navigationService.navigateTo(MainViewRoute);

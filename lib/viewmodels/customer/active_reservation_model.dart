@@ -1,16 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tas/constants/route_names.dart';
+import 'package:tas/models/order_item.dart';
 import 'package:tas/models/rating.dart';
+import 'package:tas/models/reservation_with_restaurant.dart';
 import 'package:tas/models/restaurant.dart';
+import 'package:tas/models/tas_notification.dart';
 import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/widgets/rating_dialog.dart';
 import 'package:tas/locator.dart';
-import 'package:tas/models/menu_item.dart';
-import 'package:tas/models/reservation_with_restaurant_and_menuitems.dart';
 import 'package:tas/services/auth_service.dart';
 import 'package:tas/services/dialog_service.dart';
 import 'package:tas/services/firestore_service.dart';
 import 'package:tas/services/navigation_service.dart';
 import 'package:tas/viewmodels/base_model.dart';
+import 'package:uuid/uuid.dart';
 
 class ActiveReservationViewModel extends BaseModel {
   final FirestoreService _firestoreService = locator<FirestoreService>();
@@ -21,40 +25,10 @@ class ActiveReservationViewModel extends BaseModel {
   final String reservationId;
   ActiveReservationViewModel({this.reservationId});
 
-  Stream<ReservationWithRestaurantAndMenuItems>
-      listenToReservationWithRestaurantAndMenuItems() {
-    return _firestoreService.listenToReservationWithRestaurantAndMenuItems(
+  Stream<ReservationWithRestaurant> listenToReservationWithRestaurant() {
+    return _firestoreService.listenToReservationWithRestaurant(
       reservationId,
     );
-  }
-
-  List<MenuItemWithQuantity> groupMenuItems(List<MenuItem> menuItems) {
-    List<MenuItemWithQuantity> groupedMenuItems = [];
-
-    menuItems.forEach((MenuItem menuItem) {
-      bool inList = groupedMenuItems
-              .where(
-                (groupedMenuItem) => groupedMenuItem.menuItem.id == menuItem.id,
-              )
-              .length >
-          0;
-
-      if (inList) {
-        int idx = groupedMenuItems.indexWhere(
-          (groupedMenuItem) => groupedMenuItem.menuItem.id == menuItem.id,
-        );
-        groupedMenuItems[idx].quantity += 1;
-      } else {
-        groupedMenuItems.add(
-          MenuItemWithQuantity(
-            menuItem: menuItem,
-            quantity: 1,
-          ),
-        );
-      }
-    });
-
-    return groupedMenuItems;
   }
 
   void setReservationStatusToPay(
@@ -73,10 +47,24 @@ class ActiveReservationViewModel extends BaseModel {
     );
 
     if (dialogResponse.confirmed) {
+      await _firestoreService.sendNotification(
+        TasNotification(
+          id: Uuid().v1(),
+          content: '${_authService.currentUser.fullName} lezárta a foglalást',
+          navigationId: reservationId,
+          navigationRoute: RestaurantReservationViewRoute,
+          seen: false,
+          userId: restaurant.id,
+          createDate: Timestamp.now(),
+        ),
+        restaurant.fcmToken,
+      );
+
       await _firestoreService.setReservationStatusToPay(
         reservationId,
         _authService.currentUser.id,
       );
+
       await _authService.refreshUser();
 
       await showDialog(
@@ -111,11 +99,22 @@ class ActiveReservationViewModel extends BaseModel {
       _navigationService.pop();
     }
   }
-}
 
-class MenuItemWithQuantity {
-  final MenuItem menuItem;
-  int quantity;
+  List<OrderItem> groupOrdersById(List<OrderItem> completedOrders) {
+    List<OrderItem> groupedOrders = [];
 
-  MenuItemWithQuantity({this.menuItem, this.quantity});
+    completedOrders.forEach((OrderItem order) {
+      int index = groupedOrders.indexWhere(
+        (completedOrder) => completedOrder.menuItem.id == order.menuItem.id,
+      );
+
+      if (index >= 0) {
+        groupedOrders[index].quantity += order.quantity;
+      } else {
+        groupedOrders.add(order);
+      }
+    });
+
+    return groupedOrders;
+  }
 }

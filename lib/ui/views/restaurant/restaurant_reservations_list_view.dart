@@ -22,7 +22,7 @@ class RestaurantReservationsListView extends StatelessWidget {
           backgroundColor: backgroundColor,
           centerTitle: true,
           title: Text(
-            'Asztalfoglalások',
+            FlutterI18n.translate(context, 'reservations'),
             style: TextStyle(color: primaryColor),
           ),
           actions: <Widget>[
@@ -79,37 +79,55 @@ class RestaurantReservationsListView extends StatelessWidget {
                       columns: <DataColumn>[
                         DataColumn(
                           label: Text(
-                            'Név',
+                            FlutterI18n.translate(
+                              context,
+                              'reservation_list_title_row.name',
+                            ),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         DataColumn(
                           label: Text(
-                            'Státusz',
+                            FlutterI18n.translate(
+                              context,
+                              'reservation_list_title_row.status',
+                            ),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         DataColumn(
                           label: Text(
-                            'Fizetendő',
+                            FlutterI18n.translate(
+                              context,
+                              'reservation_list_title_row.payment',
+                            ),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         DataColumn(
                           label: Text(
-                            'Dátum',
+                            FlutterI18n.translate(
+                              context,
+                              'reservation_list_title_row.date',
+                            ),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         DataColumn(
                           label: Text(
-                            'Fő',
+                            FlutterI18n.translate(
+                              context,
+                              'reservation_list_title_row.people',
+                            ),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         DataColumn(
                           label: Text(
-                            'Értékelés',
+                            FlutterI18n.translate(
+                              context,
+                              'reservation_list_title_row.review',
+                            ),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -165,7 +183,12 @@ class RestaurantReservationsListView extends StatelessWidget {
                                         ),
                                       ],
                                     )
-                                  : Text('Nincs értékelve'),
+                                  : Text(
+                                      FlutterI18n.translate(
+                                        context,
+                                        'no_review',
+                                      ),
+                                    ),
                             ),
                           ],
                         );
