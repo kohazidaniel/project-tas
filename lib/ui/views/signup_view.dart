@@ -1,6 +1,7 @@
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:stacked/stacked.dart';
 import 'package:tas/locator.dart';
+import 'package:tas/ui/shared/app_colors.dart';
 import 'package:tas/ui/shared/ui_helpers.dart';
 import 'package:tas/ui/widgets/busy_button.dart';
 import 'package:tas/ui/widgets/expansion_list.dart';
@@ -23,6 +24,7 @@ class SignUpView extends StatelessWidget {
     return ViewModelBuilder<SignUpViewModel>.reactive(
       viewModelBuilder: () => SignUpViewModel(context),
       builder: (context, model, child) => Scaffold(
+        backgroundColor: backgroundColor,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 50.0),
           child: Column(

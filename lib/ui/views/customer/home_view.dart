@@ -119,6 +119,14 @@ class HomeView extends StatelessWidget {
                         autoPlay: false,
                       ),
                       items: model.restaurants
+                          .where((restaurant) {
+                            if (restaurant.ratings.isEmpty) return false;
+                            if (restaurant.ratings.reduce((a, b) => a + b) /
+                                    restaurant.ratings.length >=
+                                4) return true;
+
+                            return false;
+                          })
                           .map(
                             (restaurant) => SliderItem(
                               name: restaurant.name,
