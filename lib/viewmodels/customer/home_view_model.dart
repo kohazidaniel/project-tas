@@ -107,7 +107,7 @@ class HomeViewModel extends BaseModel {
           _currentPosition.latitude,
           _currentPosition.longitude,
         ) <
-        3000;
+        1000;
   }
 
   void addToFavourites(String restaurantId) {
